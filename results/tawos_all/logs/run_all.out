@@ -1,0 +1,65 @@
+planning late_closure Logistic regression done
+planning late_closure Random forest done
+planning late_closure Logistic regression done
+planning late_closure Random forest done
+planning late_closure Gradient boosting done
+planning seriously_late Logistic regression done
+planning late_closure Logistic regression done
+planning late_closure Random forest done
+planning late_closure Gradient boosting done
+planning seriously_late Logistic regression done
+planning seriously_late Random forest done
+planning seriously_late Gradient boosting done
+planning spillover Logistic regression done
+planning spillover Random forest done
+planning spillover Gradient boosting done
+planning serious_spillover Logistic regression done
+planning serious_spillover Random forest done
+planning serious_spillover Gradient boosting done
+planning scope_churn Logistic regression done
+planning scope_churn Random forest done
+planning scope_churn Gradient boosting done
+planning serious_spillover_20 Logistic regression done
+planning serious_spillover_20 Random forest done
+planning serious_spillover_20 Gradient boosting done
+planning serious_spillover_50 Logistic regression done
+planning serious_spillover_50 Random forest done
+planning serious_spillover_50 Gradient boosting done
+planning seriously_late_7 Logistic regression done
+planning seriously_late_7 Random forest done
+planning seriously_late_7 Gradient boosting done
+planning scope_churn_50 Logistic regression done
+planning scope_churn_50 Random forest done
+planning scope_churn_50 Gradient boosting done
+planning serious_spillover_median Logistic regression done
+planning serious_spillover_median Random forest done
+planning serious_spillover_median Gradient boosting done
+insprint spillover 0.25 Logistic regression done
+insprint spillover 0.25 Random forest done
+insprint spillover 0.25 Gradient boosting done
+insprint spillover 0.5 Logistic regression done
+insprint spillover 0.5 Random forest done
+insprint spillover 0.5 Gradient boosting done
+insprint late_closure 0.25 Logistic regression done
+insprint late_closure 0.25 Random forest done
+insprint late_closure 0.25 Gradient boosting done
+insprint late_closure 0.5 Logistic regression done
+insprint late_closure 0.5 Random forest done
+insprint late_closure 0.5 Gradient boosting done
+insprint serious_spillover 0.25 Logistic regression done
+insprint serious_spillover 0.25 Random forest done
+insprint serious_spillover 0.25 Gradient boosting done
+insprint serious_spillover 0.5 Logistic regression done
+insprint serious_spillover 0.5 Random forest done
+insprint serious_spillover 0.5 Gradient boosting done
+insprint seriously_late 0.25 Logistic regression done
+insprint seriously_late 0.25 Random forest done
+insprint seriously_late 0.25 Gradient boosting done
+insprint seriously_late 0.5 Logistic regression done
+insprint seriously_late 0.5 Random forest done
+insprint seriously_late 0.5 Gradient boosting done
+external late_closure done
+external seriously_late done
+external spillover done
+external serious_spillover done
+external scope_churn done

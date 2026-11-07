@@ -57,7 +57,7 @@ python -m jr.run all
 ## Making the full TAWOS export
 
 1. Open your TAWOS database in MySQL Workbench.
-2. Run `data_export/01_count_sprints.sql` and save the result as `data_export/tawos_sprint_counts.csv`. This shows how many projects pass the 30-sprint rule.
-3. Run `data_export/02_export_all_projects.sql`. Save its three results, with a header row, as `data/raw/tawos_all/tawos_sprint.csv`, `tawos_issue.csv` and `tawos_change_log.csv`.
+2. Run `data_export/01_count_sprints.sql` and save the result as `data_export/tawos_sprint_counts.csv` (done 7 Nov 2026: 36 projects, 32 with 30+ usable sprints, 29 after removing the three that overlap the outside set).
+3. Run `data_export/02_export_all_projects.sql`. It writes three files into MySQL's secure_file_priv folder (`C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\` by default). Move them to `data/raw/tawos_all/` as `tawos_sprint.csv`, `tawos_issue.csv` and `tawos_change_log.csv`.
 
 Install with `pip install -r requirements.txt`. Our run used Python 3.13, scikit-learn 1.9.1 and pandas 3.0. Seed 42.

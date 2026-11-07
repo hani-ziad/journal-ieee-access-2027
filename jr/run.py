@@ -167,10 +167,25 @@ def save(df: pd.DataFrame, name: str):
     df.to_csv(jr.RESULTS / name, index=False)
 
 
+def unit(key: str, fn):
+    """Run one unit of work once. Results are cached in results/<cohort>/cache/<key>.pkl so an
+    interrupted run resumes where it stopped. Every unit seeds its own bootstrap generator from
+    the key, so the numbers do not depend on where a run was interrupted."""
+    import pickle
+    cache = jr.RESULTS / "cache"
+    cache.mkdir(parents=True, exist_ok=True)
+    path = cache / (key + ".pkl")
+    if path.exists():
+        return pickle.loads(path.read_bytes())
+    seed = jr.SEED + int.from_bytes(key.encode(), "little") % 1_000_000
+    out = fn(np.random.default_rng(seed))
+    path.write_bytes(pickle.dumps(out))
+    return out
+
+
 # ---------------------------------------------------------------- planning
 def run_planning():
     f = pd.read_csv(jr.DATA / "planning_frame.csv", parse_dates=["start_date"])
-    rng = np.random.default_rng(jr.SEED)
     aucs, diffs, reps, dec = [], [], [], []
     for oname, (pop, y) in {**OUTCOMES, **SENSITIVITY}.items():
         fr = population(f, pop).dropna(subset=[y]).copy()
@@ -178,35 +193,42 @@ def run_planning():
         split = "split_full" if pop == "full" else "split_nonempty"
         main = oname in OUTCOMES
         for model, mname in MODELS.items():
-            for protocol in ("time", "lopo"):
-                te, s = scores(fr, y, model, PLAN_SETS, protocol, split)
-                for name in PLAN_SETS:
-                    aucs.append({"outcome": oname, "protocol": protocol, "model": mname, "features": name,
-                                 "n": len(te), "positives": int(te[y].sum()), "auc": safe_auc(te[y], s[name])})
-                primary = main and model == PRIMARY_MODEL and protocol == PRIMARY_PROTOCOL
-                base = {"outcome": oname, "protocol": protocol, "model": mname}
-                for a, b in PLAN_DIFFS:
-                    diffs.append(diff_row(base, te, y, s, a, b, rng, primary))
-                if primary and pop == "nonempty":
-                    # provenance check: the same comparison on sprints whose committed story points
-                    # all come from recorded history (no static fallback)
-                    keep = te["sp_fallback_share"] == 0
-                    if keep.sum() >= 30 and te.loc[keep, y].nunique() == 2:
-                        tk = te[keep]
-                        sk = {k: v.loc[tk.index] for k, v in s.items()}
-                        for a, b in PLAN_DIFFS:
-                            diffs.append(diff_row({**base, "protocol": "time, no SP fallback"}, tk, y, sk, a, b, rng, False))
-                        for name in PLAN_SETS:
-                            aucs.append({"outcome": oname, "protocol": "time, no SP fallback", "model": mname,
-                                         "features": name, "n": len(tk), "positives": int(tk[y].sum()),
-                                         "auc": safe_auc(tk[y], sk[name])})
-            if main:
-                for r in repeats(fr, y, model, PLAN_SETS):
-                    reps.append({"outcome": oname, "model": mname, **r})
-                tr, te = fr[fr[split] == "train"], fr[fr[split] == "test"]
-                for name, (num, proj) in PLAN_SETS.items():
-                    dec.append({"outcome": oname, "model": mname, "features": name,
-                                **decision(model, num, proj, tr, te, y)})
+
+            def work(rng, model=model, mname=mname):
+                ua, ud, ur, uc = [], [], [], []
+                for protocol in ("time", "lopo"):
+                    te, s = scores(fr, y, model, PLAN_SETS, protocol, split)
+                    for name in PLAN_SETS:
+                        ua.append({"outcome": oname, "protocol": protocol, "model": mname, "features": name,
+                                   "n": len(te), "positives": int(te[y].sum()), "auc": safe_auc(te[y], s[name])})
+                    primary = main and model == PRIMARY_MODEL and protocol == PRIMARY_PROTOCOL
+                    base = {"outcome": oname, "protocol": protocol, "model": mname}
+                    for a, b in PLAN_DIFFS:
+                        ud.append(diff_row(base, te, y, s, a, b, rng, primary))
+                    if primary and pop == "nonempty":
+                        # provenance check: the same comparison on sprints whose committed story points
+                        # all come from recorded history (no static fallback)
+                        keep = te["sp_fallback_share"] == 0
+                        if keep.sum() >= 30 and te.loc[keep, y].nunique() == 2:
+                            tk = te[keep]
+                            sk = {k: v.loc[tk.index] for k, v in s.items()}
+                            for a, b in PLAN_DIFFS:
+                                ud.append(diff_row({**base, "protocol": "time, no SP fallback"}, tk, y, sk, a, b, rng, False))
+                            for name in PLAN_SETS:
+                                ua.append({"outcome": oname, "protocol": "time, no SP fallback", "model": mname,
+                                           "features": name, "n": len(tk), "positives": int(tk[y].sum()),
+                                           "auc": safe_auc(tk[y], sk[name])})
+                if main:
+                    for r in repeats(fr, y, model, PLAN_SETS):
+                        ur.append({"outcome": oname, "model": mname, **r})
+                    tr, te = fr[fr[split] == "train"], fr[fr[split] == "test"]
+                    for name, (num, proj) in PLAN_SETS.items():
+                        uc.append({"outcome": oname, "model": mname, "features": name,
+                                   **decision(model, num, proj, tr, te, y)})
+                return ua, ud, ur, uc
+
+            ua, ud, ur, uc = unit(f"planning_{oname}_{model}", work)
+            aucs += ua; diffs += ud; reps += ur; dec += uc
             print("planning", oname, mname, "done", flush=True)
     save(pd.DataFrame(aucs), "planning_auc.csv")
     save(pd.DataFrame(diffs), "planning_differences.csv")
@@ -220,7 +242,6 @@ def run_planning():
 # ---------------------------------------------------------------- in-sprint
 def run_insprint():
     c = pd.read_csv(jr.DATA / "checkpoint_frame.csv", parse_dates=["start_date"])
-    rng = np.random.default_rng(jr.SEED + 1)
     aucs, diffs = [], []
     for oname in IN_OUTCOMES:
         y = OUTCOMES[oname][1]
@@ -228,16 +249,23 @@ def run_insprint():
             fr = c[c.checkpoint == cp].dropna(subset=[y]).copy()
             fr[y] = fr[y].astype(int)
             for model, mname in MODELS.items():
-                for protocol in ("time", "lopo"):
-                    te, s = scores(fr, y, model, IN_SETS, protocol, "split_nonempty")
-                    for name in IN_SETS:
-                        aucs.append({"outcome": oname, "checkpoint": cp, "protocol": protocol, "model": mname,
-                                     "features": name, "n": len(te), "positives": int(te[y].sum()),
-                                     "auc": safe_auc(te[y], s[name])})
-                    primary = model == PRIMARY_MODEL and protocol == PRIMARY_PROTOCOL
-                    base = {"outcome": oname, "checkpoint": cp, "protocol": protocol, "model": mname}
-                    for a, b in IN_DIFFS:
-                        diffs.append(diff_row(base, te, y, s, a, b, rng, primary))
+
+                def work(rng, model=model, mname=mname):
+                    ua, ud = [], []
+                    for protocol in ("time", "lopo"):
+                        te, s = scores(fr, y, model, IN_SETS, protocol, "split_nonempty")
+                        for name in IN_SETS:
+                            ua.append({"outcome": oname, "checkpoint": cp, "protocol": protocol, "model": mname,
+                                       "features": name, "n": len(te), "positives": int(te[y].sum()),
+                                       "auc": safe_auc(te[y], s[name])})
+                        primary = model == PRIMARY_MODEL and protocol == PRIMARY_PROTOCOL
+                        base = {"outcome": oname, "checkpoint": cp, "protocol": protocol, "model": mname}
+                        for a, b in IN_DIFFS:
+                            ud.append(diff_row(base, te, y, s, a, b, rng, primary))
+                    return ua, ud
+
+                ua, ud = unit(f"insprint_{oname}_{cp}_{model}", work)
+                aucs += ua; diffs += ud
                 print("insprint", oname, cp, mname, "done", flush=True)
     save(pd.DataFrame(aucs), "insprint_auc.csv")
     save(pd.DataFrame(diffs), "insprint_differences.csv")
