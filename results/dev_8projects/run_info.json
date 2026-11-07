@@ -1,0 +1,6 @@
+{
+ "cohort": "dev_8projects",
+ "raw": "/home/claude/journal-ieee-access-2027/data/raw/tawos_8projects",
+ "seed": 42,
+ "bootstrap": 2000
+}

@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+# the full TAWOS export is too large for GitHub; make it locally with data_export/
+data/raw/tawos_all/
+data/tawos_all/
