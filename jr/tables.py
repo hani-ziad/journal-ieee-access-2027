@@ -162,8 +162,64 @@ def theory_numbers():
     write("numbers", "".join(f"\\newcommand{{\\{k}}}{{{v}}}\n" for k, v in macros.items()))
 
 
+def binomial_tables():
+    a = pd.read_csv(jr.RESULTS / "binomial_auc.csv").set_index(["outcome", "model"]).auc
+    c = pd.read_csv(jr.RESULTS / "binomial_calibration.csv")
+    sc = pd.read_csv(jr.RESULTS / "calibration.csv")  # same model and test sprints for the scope set
+    sc = sc[(sc.stage == "planning") & (sc.features == "scope")].rename(columns={"features": "model"})
+    c = pd.concat([c, sc[c.columns.intersection(sc.columns)]]).set_index(["outcome", "model"])
+    rows = []
+    for m, lab in (("scope", "Gradient boosting, scope"), ("binomial", "Binomial, no learning"),
+                   ("beta-binomial", "Beta-binomial, one parameter"), ("strict+new", "Gradient boosting, strict+new")):
+        cells = []
+        for o in ("spillover", "serious_spillover"):
+            cells.append(f3(a[(o, m)]))
+            cells.append(f"{c.loc[(o, m), 'slope']:.2f}" if (o, m) in c.index else "--")
+        rows.append(f"{lab} & " + " & ".join(cells) + " \\\\")
+    write("binomial", "\n".join(rows) + "\n")
+    v = pd.read_csv(jr.RESULTS / "binomial_variance.csv")
+    rows = [f"{r.n_band.replace('-', '--')} & {r.sprints} & {r.var_observed:.3f} & {r.var_binomial:.3f} & {r.var_betabinomial:.3f} \\\\"
+            for r in v.itertuples()]
+    write("binomial_variance", "\n".join(rows) + "\n")
+    info = json.loads((jr.RESULTS / "binomial.json").read_text())
+    with open(OUT / "numbers.tex", "a") as fh:
+        fh.write(f"\\newcommand{{\\Rhat}}{{{info['r_hat']:.2f}}}\n")
+        fh.write(f"\\newcommand{{\\DispRatio}}{{{info['dispersion_ratio_train']:.1f}}}\n")
+        fh.write(f"\\newcommand{{\\LRstat}}{{{info['lr_stat']:,.0f}}}\n")
+
+
+def confirm_table():
+    d = pd.read_csv(jr.RESULTS / "confirm_differences.csv")
+    full_p = pd.read_csv(jr.RESULTS / "planning_differences.csv")
+    full_i = pd.read_csv(jr.RESULTS / "insprint_differences.csv")
+    rows = []
+    spec = [("H1", "planning", "strict+new - strict", list(NAMES), [None]),
+            ("H4", "planning", "strict+new - scope", list(NAMES), [None]),
+            ("H2", "in-sprint", "ours - worki", ["spillover", "serious_spillover"], [0.25, 0.5]),
+            ("H3", "in-sprint", "ours - choet", ["spillover", "serious_spillover", "late_closure", "seriously_late"], [0.25, 0.5])]
+    for h, st, comp, outs, cps in spec:
+        for o in outs:
+            for cp in cps:
+                q = d[(d.stage == st) & (d.outcome == o) & (d.comparison == comp)]
+                if cp is not None:
+                    q = q[q.checkpoint == cp]
+                    fq = full_i[(full_i.primary == True) & (full_i.outcome == o) & (full_i.comparison == comp) & (full_i.checkpoint == cp)]  # noqa: E712
+                else:
+                    fq = full_p[(full_p.primary == True) & (full_p.outcome == o) & (full_p.comparison == comp)]  # noqa: E712
+                r, fr = q.iloc[0], fq.iloc[0]
+                lab = NAMES[o] + ("" if cp is None else f", {int(cp * 100)}\\%")
+                mark = lambda lo: "$\\checkmark$" if lo > 0 else ""
+                rows.append(f"{h} & {lab} & {d3(fr.delta)} & {mark(fr.ci_low)} & {d3(r.delta)} & "
+                            f"{ci(r.ci_low, r.ci_high)} & {mark(r.ci_low)} \\\\")
+        rows.append("\\midrule")
+    write("confirm", "\n".join(rows[:-1]) + "\n")
+
+
 if __name__ == "__main__":
     labels_table(); planning_auc_table(); primary_planning_table(); insprint_auc_table()
     primary_insprint_table(); external_table(); calibration_table(); theory_numbers()
+    binomial_tables()
+    if (jr.RESULTS / "confirm_differences.csv").exists():
+        confirm_table()
     for p in sorted(OUT.glob("*.tex")):
         print("==", p.name); print(p.read_text())

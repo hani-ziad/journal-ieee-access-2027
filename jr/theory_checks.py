@@ -59,4 +59,18 @@ for macro, val in (("PiZero", f"{p1['pi0']:.3f}"), ("AucAll", f"{p1['auc_all']:.
                    ("SpearmanPS", f"{p2['spearman_prev_sens']:.2f}")):
     check(f"macro {macro} = {val}", f"\\newcommand{{\\{macro}}}{{{val}}}" in tex)
 
+# Proposition 3 (beta-binomial variance), checked by simulation, and the variance table
+import numpy as np  # noqa: E402
+rng = np.random.default_rng(jr.SEED)
+for qq, nn, rr in ((0.3, 10, 0.18), (0.6, 4, 0.05), (0.2, 25, 0.4)):
+    a, b = (1 - qq) * (1 - rr) / rr, qq * (1 - rr) / rr
+    rho = rng.binomial(nn, rng.beta(a, b, 400_000)) / nn
+    theory = qq * (1 - qq) / nn * (1 + (nn - 1) * rr)
+    check(f"Var[rho] formula q={qq} n={nn} r={rr}", abs(rho.var() - theory) / theory < 0.01)
+b = json.loads((jr.RESULTS / "binomial.json").read_text())
+v = pd.read_csv(jr.RESULTS / "binomial_variance.csv")
+check("r_hat > 0 (issues of a sprint are positively correlated)", b["r_hat"] > 0)
+check("observed variance above binomial in every size band", bool((v.var_observed > v.var_binomial).all()))
+check("observed/binomial variance ratio grows with sprint size", bool((v.var_observed / v.var_binomial).is_monotonic_increasing))
+
 print("FAILS:", fails)

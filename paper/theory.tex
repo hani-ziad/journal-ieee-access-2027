@@ -4,7 +4,7 @@
 \section{Formal Setting}
 \label{sec:theory}
 
-This section fixes what ``no hindsight'' means for a Jira export and derives three consequences. Each one turns a pattern that is easy to miss into a prediction the experiments can check: how empty sprints inflate ROC-AUC, why a threshold fitted on one group of teams does not carry to another, and how the two spillover labels should differ.
+This section fixes what ``no hindsight'' means for a Jira export and derives four consequences. Each one turns a pattern that is easy to miss into a prediction the experiments can check: how empty sprints inflate ROC-AUC, why a threshold fitted on one group of teams does not carry to another, how the two spillover labels should differ, and why a simple model of sprint completion can rank sprints well yet give probabilities that are too extreme.
 
 \subsection{The event log and the sprint state}
 
@@ -61,7 +61,7 @@ Youden's index picks the threshold that maximises sensitivity plus specificity, 
 
 \begin{proposition}
 \label{prop:youden}
-A Youden threshold fitted on a population with prevalence $\pi_{\mathrm{train}}$ is cost-optimal on a population with prevalence $\pi$ only if the implied cost ratio (\ref{eq:youden}) is the same, that is, only if $\pi = \pi_{\mathrm{train}}$. For a calibrated score the cost-optimal rule warns when $p \ge p^{*} = c_{\mathrm{FP}} / (c_{\mathrm{FP}} + c_{\mathrm{FN}})$, which does not depend on prevalence. A fixed score threshold carried to a team with lower prevalence therefore acts like a rule that prices a miss at only $(1 - \pi_{\mathrm{train}}) / \pi_{\mathrm{train}}$ false alarms, and its sensitivity falls with $\pi$.
+A Youden threshold fitted on a population with prevalence $\pi_{\mathrm{train}}$ is cost-optimal on a population with prevalence $\pi$ only if the implied cost ratio (\ref{eq:youden}) is the same, that is, only if $\pi = \pi_{\mathrm{train}}$. For a calibrated score the cost-optimal rule warns when $p \ge p^{*} = c_{\mathrm{FP}} / (c_{\mathrm{FP}} + c_{\mathrm{FN}})$, which does not depend on prevalence \cite{elkan2001}. A fixed score threshold carried to a team with lower prevalence therefore acts like a rule that prices a miss at only $(1 - \pi_{\mathrm{train}}) / \pi_{\mathrm{train}}$ false alarms, and its sensitivity falls with $\pi$.
 \end{proposition}
 
 The link between a threshold rule and the cost ratio it implies is standard in the ROC literature \cite{hernandez2012}. What we add is its use to explain why a threshold that worked on TAWOS misses most failures on some new teams.
@@ -75,7 +75,29 @@ Suppose each committed issue of sprint $s$ is finished by the planned end indepe
 \Pr[y^{\mathrm{sp}}_s = 1] &= 1 - q_s^{\,n_s}, \label{eq:any}\\
 \mathbb{E}[\rho_s] &= 1 - q_s, \qquad \mathrm{Var}[\rho_s] = \frac{q_s (1 - q_s)}{n_s}. \label{eq:ratio}
 \end{align}
-Two predictions follow. By (\ref{eq:any}) the ``any'' label is driven by $n_s$ and saturates fast: at the cohort's median carry ratio, \CarryMedian, $q_s \approx \Qhat$ and a sprint of three issues already spills with probability \PSpillThree. The median nonempty sprint commits \MedianIssues{} issues, and \NonemptySpill\% of nonempty sprints spill. So committed scope should carry most of what can be known about plain spillover. By (\ref{eq:ratio}) a threshold label on $\rho_s$ is driven by $1 - q_s$, the team's completion rate, with $n_s$ entering only through the variance. Serious spillover should therefore depend on planning-time history and capacity rather than on scope, and the gap between scope-only and history-aware models should be larger for it than for plain spillover. Section~\ref{sec:results} tests both. The model ignores dependence between issues and scope changes during the sprint. It is a reading aid, not a claim about how teams work.
+Two predictions follow. By (\ref{eq:any}) the ``any'' label is driven by $n_s$ and saturates fast: at the cohort's median carry ratio, \CarryMedian, $q_s \approx \Qhat$ and a sprint of three issues already spills with probability \PSpillThree. The median nonempty sprint commits \MedianIssues{} issues, and \NonemptySpill\% of nonempty sprints spill. So committed scope should carry most of what can be known about plain spillover. By (\ref{eq:ratio}) a threshold label on $\rho_s$ is driven by $1 - q_s$, the team's completion rate, with $n_s$ entering only through the variance. Serious spillover should therefore depend on planning-time history and capacity rather than on scope, and the gap between scope-only and history-aware models should be larger for it than for plain spillover. Section~\ref{sec:results} tests both.
+
+The model also gives a predictor with no learning at all. Estimate $q_s$ from the team's last finished sprints, which is admissible, and read the risk of either label off the binomial distribution. If this one-number-per-team model ranks sprints nearly as well as a learned model, then most of what the learned model does is estimate $q_s$.
+
+\subsection{When issues do not finish independently}
+
+The binomial model assumes that the issues of a sprint finish independently. They plausibly do not: a blocked dependency, a sick developer or an underestimated epic holds back several issues at once. A standard way to allow for this \cite{skellam1948} is to let the unfinished probability $p_s$ itself vary from sprint to sprint around $1 - q_s$, with a beta distribution whose spread is set by one parameter $r \in (0, 1)$, the correlation between two issues of the same sprint. The count left unfinished is then beta-binomial.
+
+\begin{proposition}
+\label{prop:overdisp}
+If $p_s \sim \mathrm{Beta}\big((1-q_s)(1-r)/r,\ q_s(1-r)/r\big)$ and, given $p_s$, each committed issue is left unfinished independently with probability $p_s$, then $\mathbb{E}[\rho_s] = 1 - q_s$ and
+\begin{equation}
+\mathrm{Var}[\rho_s] = \frac{q_s (1 - q_s)}{n_s}\,\big(1 + (n_s - 1)\, r\big).
+\label{eq:overdisp}
+\end{equation}
+As $n_s$ grows, $\mathrm{Var}[\rho_s] \to r\, q_s (1 - q_s)$ rather than to zero, and $\Pr[\rho_s \ge \tau] \to \Pr[p_s \ge \tau]$ rather than to 0 or 1.
+\end{proposition}
+
+\begin{proof}
+By the law of total variance, $\mathrm{Var}[\rho_s] = \mathbb{E}[p_s(1-p_s)]/n_s + \mathrm{Var}[p_s]$. For the beta distribution above, $\mathrm{Var}[p_s] = r\,q_s(1-q_s)$ and $\mathbb{E}[p_s(1-p_s)] = (1-r)\,q_s(1-q_s)$. Adding the two terms gives (\ref{eq:overdisp}). Given $p_s$, $\rho_s \to p_s$ as $n_s$ grows, which gives the limits.
+\end{proof}
+
+Two things follow. If $r > 0$, the binomial model's variance is too small by the factor $1 + (n_s - 1) r$, which grows with the size of the sprint, so the binomial probabilities will be too extreme for large sprints. And committed scope matters even less for serious spillover than the binomial model says, because a large sprint no longer averages its luck away. Section~\ref{sec:results} estimates $r$ and checks both. Neither model covers scope added during the sprint. They are reading aids, not claims about how teams work.
 
 \subsection{Warnings as decisions}
 

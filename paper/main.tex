@@ -8,6 +8,7 @@
 \usepackage{multirow}
 \usepackage{cite}
 \usepackage{url}
+\def\UrlBreaks{\do\/\do-\do.}
 \usepackage{graphicx}
 \newtheorem{proposition}{Proposition}
 \newtheorem{definition}{Definition}
@@ -26,7 +27,7 @@
 \maketitle
 
 \begin{abstract}
-Sprint-risk models are usually built from a present-day Jira export, which shows how a sprint ended rather than what the team knew when it began. Studies also report their own features on their own data, so it is not known which kinds of signal actually carry the prediction. We address both problems. We state formally what a feature may use at prediction time and derive three consequences: empty sprints inflate ROC-AUC by a computable amount, a threshold fitted on one group of teams implies a cost ratio that does not hold for another, and a simple binomial model says which spillover label history should help with. We then score six feature families on the same 4,235 sprints from 29 TAWOS projects under one time-ordered protocol, with five outcomes: late closure and spillover, and three labels new to this study (serious spillover, seriously late, scope churn). Progress counts dominate during the sprint. Burndown-shape features, built after a recent study, add nothing on top of progress counts and, for lateness early in the sprint, rank worse than committed scope alone. Planning-time team history adds about 0.05 to 0.07 AUC on top of progress counts for the spillover labels. Four new planning-time features add about 0.03 AUC for spillover and serious spillover and nothing for lateness. Serious spillover is the most useful new label: history beats scope by 0.10 AUC, as the binomial model predicts, although our own pre-stated hypothesis said the opposite. On ten outside projects from MariaDB and MongoDB, none of the history gains transfer.
+Sprint-risk models are usually trained on a present-day Jira export, which shows how a sprint ended rather than what the team knew when it began, and each study reports its own features on its own data. We state formally what a feature may use at prediction time and derive four consequences: empty sprints inflate ROC-AUC by an exact amount, a fitted threshold carries a hidden cost ratio, a binomial model says which spillover label team history should help with, and a beta-binomial extension says how far that model's probabilities can be trusted. We then score six feature families on the same 4,235 sprints from 29 TAWOS projects under one time-ordered protocol, for late closure, spillover and three new labels. Progress counts dominate during the sprint, and burndown-shape features add nothing to them. Team history adds 0.05 to 0.07 AUC on top of progress counts for the spillover labels and little for lateness. Four new planning-time features add about 0.03 AUC for the two spillover labels. Serious spillover is the most useful new label: history beats scope by 0.10 AUC, which the binomial model predicted and our own hypothesis did not. A binomial predictor with one estimated number per team and no learning comes within 0.03 AUC of gradient boosting, but its probabilities are too extreme, because the issues of a sprint do not finish independently. On 21 projects that played no part in forming the hypotheses, the in-sprint and serious-spillover results replicate. On ten outside projects, none of the history gains transfer.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -37,32 +38,40 @@ Agile software development, data leakage, Jira, machine learning, mining softwar
 
 \IEEEPARstart{A}{} Scrum team commits to a set of issues at the start of each sprint. Some sprints end with work left over, and some are closed in Jira days after their planned end. Both are visible to everyone once the sprint is over. The useful question is whether they can be seen coming, at planning or early in the sprint, from what the tracker already records.
 
-Several studies have tried \cite{choet2018,sprint2vec,hearty2009,perez2024,obike2025}. Two things make their results hard to use. The first is hindsight. A Jira export is a snapshot taken years later: an issue's sprint field, story points and status are the final values unless the change log is replayed. A model trained on the snapshot can learn from facts that did not exist at planning, and its accuracy then says little about what a team would see in practice \cite{kaufman2012,kapoor2023}. The second is that every study brings its own features, labels, data and protocol. If one paper reports a good AUC with burndown features and another with iteration counts, nobody can tell which kind of signal does the work, because the two numbers were never measured on the same sprints.
+Several studies have tried \cite{choet2018,sprint2vec,hearty2009,perez2024,obike2025}, and industrial work has studied what makes delivery late \cite{kula2022}. Two things make their results hard to use. The first is hindsight. A Jira export is a snapshot taken years later: an issue's sprint field, story points and status are the final values unless the change log is replayed. A model trained on the snapshot can learn from facts that did not exist at planning, and its accuracy then says little about what a team would see in practice \cite{kaufman2012,kapoor2023}. The second is that every study brings its own features, labels, data and protocol. If one paper reports a good AUC with burndown features and another with iteration counts, nobody can tell which kind of signal does the work, because the two numbers were never measured on the same sprints.
 
 This paper takes both problems in turn. Our earlier work \cite{abusharkh2027} rebuilt the board as it stood on the first day of each sprint for eight TAWOS projects \cite{tawos}, and showed how much two common mistakes inflate the results. Here we turn the same reconstruction into a benchmark. We extend it to every TAWOS project with enough sprints (29 projects, 4,235 sprints), state the no-hindsight rule formally, and score six feature families side by side on the same sprints, the same labels and the same split.
 
 The contributions are as follows.
 \begin{enumerate}
-\item \emph{A formal setting with checkable consequences} (Section~\ref{sec:theory}). We define an admissible feature as one that depends only on events logged before the prediction time, and derive three results: an exact decomposition of how empty sprints inflate ROC-AUC, the cost ratio a Youden threshold silently assumes, and a binomial model that says which spillover label history should help with. Each result is checked against our data.
+\item \emph{A formal setting with checkable consequences} (Section~\ref{sec:theory}). We define an admissible feature as one that depends only on events logged before the prediction time, and derive four results: an exact decomposition of how empty sprints inflate ROC-AUC, the cost ratio a Youden threshold silently assumes, a binomial model that says which spillover label history should help with, and a beta-binomial extension that says when that model's probabilities can be trusted. Each result is checked against our data, and the binomial model is also scored as a predictor with no learning.
 \item \emph{A head-to-head benchmark} (Sections~\ref{sec:setup} to \ref{sec:results}). Committed scope, planning-time team history, four new planning-time features, in-sprint progress counts, burndown-shape features after P\'erez Castillo et al.\ \cite{perez2024}, and the iteration features of Choetkiertikul et al.\ \cite{choet2018} that a public export supports, all scored under one protocol with one stated primary analysis and two kinds of bootstrap interval.
 \item \emph{Three new outcome labels with a verdict on each}: serious spillover, seriously late and scope churn. We report which ones a model can rank and which ones look like team habit.
-\item \emph{An outside test} on ten projects from two organisations that are not in TAWOS, which shows where the gains stop.
+\item \emph{A confirmation set and an outside test.} We repeat every hypothesis test on the 21 projects that played no part in writing the hypotheses, and test on ten projects from two organisations that are not in TAWOS, which shows where the gains stop.
 \end{enumerate}
 
-The short answer is that progress counts carry most of the in-sprint signal, burndown shape adds nothing, team history helps with how much is left over but not with when the sprint closes, and none of the history gains survive a move to another organisation. We wrote our hypotheses down before the full run (Section~\ref{sec:protocol}) and report where they failed. One failed in an instructive way: we expected history to add nothing to serious spillover, and the theory in Section~\ref{sec:theory} predicted the opposite. The theory was right.
+The short answer is that progress counts carry most of the in-sprint signal, burndown shape adds nothing, team history helps with how much is left over but not with when the sprint closes, and none of the history gains survive a move to another organisation. At planning time, most of what a learned model does is estimate one number per team: a binomial predictor built on the team's recent completion rate nearly matches it. We wrote our hypotheses down before the full run (Section~\ref{sec:protocol}) and report where they failed. One failed in an instructive way: we expected history to add nothing to serious spillover, and the theory in Section~\ref{sec:theory} predicted the opposite. The theory was right.
 
 \section{Related Work}
 \label{sec:related}
 
-\subsection{Predicting iteration outcomes}
+\subsection{Predicting sprint and iteration outcomes}
 
-Choetkiertikul et al.\ \cite{choet2018} predicted how much of an iteration's committed work would be delivered, using iteration-level counts (issues and points at start, added, removed, done, to do) together with issue-level and team features, on five open-source projects. Sprint2Vec \cite{sprint2vec} learns a sprint embedding from issue text and developer activity. Hearty et al.\ \cite{hearty2009} modelled velocity in XP with a dynamic Bayesian network. More recently, P\'erez Castillo et al.\ \cite{perez2024} graded finished sprints from eleven burndown-shape indicators (R1 to R11) computed in their Worki tool, and Obike et al.\ \cite{obike2025} scored sprint deliverability with a weighted index. Effort estimation \cite{choet2019,porru2016,tawosi2023} is a neighbouring problem: it predicts the size of an issue, not the fate of a sprint.
+Choetkiertikul et al.\ \cite{choet2018} predicted how much of an iteration's committed work would be delivered, using iteration-level counts (issues and points at start, added, removed, done, to do) together with issue-level and team features, on open-source projects. The same group predicted risks and delays at the level of single issues \cite{choet2015,choet2017}, and Sprint2Vec \cite{sprint2vec} learns a sprint embedding from issue text and developer activity. Hearty et al.\ \cite{hearty2009} modelled velocity in XP with a dynamic Bayesian network. In industry, Kula et al.\ studied the factors behind on-time delivery in large-scale agile development \cite{kula2022} and predicted delays of user stories from team dynamics \cite{kula2021}. More recently, P\'erez Castillo et al.\ \cite{perez2024} graded finished sprints from eleven burndown-shape indicators (R1 to R11) computed in their Worki tool, and Obike et al.\ \cite{obike2025} scored sprint deliverability with a weighted index. Effort estimation \cite{choet2019,porru2016,fu2023,tawosi2023} is a neighbouring problem: it predicts the size of an issue, not the fate of a sprint.
 
-These studies differ in data, labels and validation, and in how strictly features are limited to what was known at prediction time. In cross-validation over iterations, a training fold can hold iterations that happened after the test ones \cite{choet2018}. No study compares the feature families on common data. We do not claim to reproduce any of them. We implement the parts of two feature families that a public export supports and score them on our sprints, which measures the families, not the papers.
+All of this work rests on issue-tracker data, and public Jira datasets \cite{tawos,ortu2015,montgomery2022} have made it reproducible. They are, however, exports taken long after the fact. The studies above differ in data, labels and validation, and in how strictly features are limited to what was known at prediction time. In cross-validation over iterations, a training fold can hold iterations that happened after the test ones \cite{choet2018}. No study compares the feature families on common data. We do not claim to reproduce any of them. We implement the parts of two feature families that a public export supports and score them on our sprints, which measures the families, not the papers.
 
 \subsection{Leakage and time-aware evaluation}
 
-Leakage, where a model sees information it would not have when deployed, is a known cause of inflated results \cite{kaufman2012,kapoor2023}. In software analytics, random splits mix past and future \cite{bangash2020}, and labels that are only known later leak into features \cite{jimenez2019}. Predictive process monitoring \cite{teinemaa2019} faces the same problem with event logs and evaluates predictions at prefixes of a case. Alarm-based monitoring \cite{fahrenkrog2022} treats a warning as a decision with a cost, which is the view we take in Section~\ref{sec:theory}. Our earlier work \cite{abusharkh2027} showed, on eight TAWOS projects, that two reproduced leakage mistakes inflated F1 by up to 0.24 and that shuffling sprints before splitting added 0.07 AUC. The present paper reuses that reconstruction but none of its results.
+Leakage, where a model sees information it would not have when deployed, is a known cause of inflated results \cite{kaufman2012,kapoor2023}. In software analytics, the choice of validation technique changes the performance a defect model appears to have \cite{tanti2017}, random splits mix past and future \cite{bangash2020,falessi2020}, and labels that are only known later leak into features \cite{jimenez2019}. Shepperd et al.\ \cite{shepperd2014} found that which research group ran a defect-prediction study explained more of the variation in reported performance than the choice of learner. A common protocol on common data is the remedy we apply here. Our earlier work \cite{abusharkh2027} showed, on eight TAWOS projects, that two reproduced leakage mistakes inflated F1 by up to 0.24 and that shuffling sprints before splitting added 0.07 AUC. The present paper reuses that reconstruction but none of its results.
+
+\subsection{Predictive monitoring and warnings as decisions}
+
+Predictive process monitoring \cite{marquez2018,teinemaa2019} faces the same problem with event logs: it predicts the outcome of a running case from a prefix of its events, and benchmarks compare methods on common logs \cite{difrancesco2018,teinemaa2019}. Our in-sprint checkpoints are prefixes in this sense. Alarm-based monitoring \cite{fahrenkrog2022} treats a warning as a decision with a cost, which is the view we take in Section~\ref{sec:theory}.
+
+\subsection{Ranking, thresholds and calibration}
+
+ROC-AUC measures ranking \cite{fawcett2006}. It says nothing about where to set a threshold, and its use for comparing classifiers has known limits \cite{hand2009,hernandez2012}. A cost-optimal threshold for a calibrated score follows from the costs alone \cite{elkan2001}, which is why calibration matters. The Brier score \cite{brier1950} and the calibration slope \cite{vancalster2019} measure it, and boosted trees are known to produce distorted probabilities unless checked \cite{niculescu2005}.
 
 \input{theory}
 
@@ -138,9 +147,9 @@ One asymmetry matters for reading the results. The strict and ours sets include 
 
 \subsection{Models and protocol}
 
-We use logistic regression with balanced class weights, a random forest (300 trees, depth 5) and histogram gradient boosting (depth 3, learning rate 0.05, 200 iterations), all from scikit-learn \cite{sklearn} with fixed settings and seed 42. There is no hyperparameter search.
+We use logistic regression with balanced class weights, a random forest \cite{breiman2001} (300 trees, depth 5) and histogram gradient boosting \cite{friedman2001} (depth 3, learning rate 0.05, 200 iterations), all from scikit-learn \cite{sklearn} with fixed settings and seed 42. There is no hyperparameter search.
 
-The \emph{primary analysis} is gradient boosting on a per-project time split: the first 70\% of each project's sprints by start date for training, the rest for testing (1,288 test sprints, 814 of them nonempty). For each outcome and each comparison we report one paired AUC difference with two 95\% bootstrap intervals from 2,000 resamples: one that resamples whole projects, which is the test, and one that resamples sprints, which is reported beside it. Everything else is secondary and read as a pattern: the other two models, leave-one-project-out testing, five time-ordered repeats (training on the first 40\% to 80\% of each project and testing on the next 20\%), and the outside projects (trained on all of TAWOS, without the project feature and without story points, which MariaDB does not record). Decision thresholds are fixed by Youden's index on out-of-fold training scores, never on the test set.
+The \emph{primary analysis} is gradient boosting on a per-project time split: the first 70\% of each project's sprints by start date for training, the rest for testing (1,288 test sprints, 814 of them nonempty). For each outcome and each comparison we report one paired AUC difference with two 95\% bootstrap intervals from 2,000 resamples: one that resamples whole projects \cite{field2007}, which is the test, and one that resamples sprints, which is reported beside it. Everything else is secondary and read as a pattern: the other two models, leave-one-project-out testing, five time-ordered repeats (training on the first 40\% to 80\% of each project and testing on the next 20\%), and the outside projects (trained on all of TAWOS, without the project feature and without story points, which MariaDB does not record). Decision thresholds are fixed by Youden's index \cite{youden1950} on out-of-fold training scores, never on the test set.
 
 \subsection{Hypotheses}
 
@@ -151,7 +160,7 @@ We wrote the study plan, the primary analysis and four hypotheses into a dated p
 \item \textbf{H3} (planning context on top of progress counts, ours minus choet): positive and below 0.05 for every outcome.
 \item \textbf{H4} (new labels can be ranked, strict+new minus scope): positive for seriously late and scope churn, about zero for serious spillover.
 \end{itemize}
-The plan was written after a development run on eight of the 29 projects, which are part of the final cohort. Section~\ref{sec:threats} discusses what that means.
+The plan was written after a development run on eight of the 29 projects, which hold 2,602 of the 4,235 sprints. The other 21 projects had not been looked at when the hypotheses were written. We therefore repeat every hypothesis test on those 21 projects alone, training and testing on them only, as a confirmation set (Section~\ref{sec:confirm}).
 
 \section{Results}
 \label{sec:results}
@@ -280,6 +289,65 @@ Outcome & Stage & Brier & Ref. & ECE & Slope \\
 
 With a Youden threshold from the training folds, the planning-time model flags serious spillover with sensitivity 0.73 at specificity 0.69, spillover with 0.68 at 0.85, and late closure with 0.62 at 0.76.
 
+\subsection{Confirmation on the untouched projects}
+\label{sec:confirm}
+
+Table~\ref{tab:confirm} repeats every hypothesis comparison on the 21 projects that played no part in writing the hypotheses (502 test sprints, 303 of them nonempty). The in-sprint results replicate. H2 holds in all four comparisons (0.141 to 0.260), and H3 holds for both spillover labels at both checkpoints (0.060 to 0.109), while for the two late labels its intervals again include zero. At planning time, the gain from the new features replicates for serious spillover (0.033 [0.004, 0.078]) but not for spillover (0.010 [$-$0.014, 0.036]), so we treat the spillover part of H1 as unconfirmed. History beats scope for both spillover labels (0.096 and 0.178) and, as in the full cohort, not clearly for the other labels. The confirmation set is smaller and its intervals are wider. Where a sign changes (scope churn in H1), the result did not hold in the full cohort either.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Every hypothesis comparison on the full cohort and on the confirmation set of 21 projects not used in the development run (gradient boosting, time split). $\checkmark$: project-level interval above zero.}
+\label{tab:confirm}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}llrcrcc@{}}
+\toprule
+& & \multicolumn{2}{c}{29 projects} & \multicolumn{3}{c}{21 untouched projects} \\
+\cmidrule(lr){3-4}\cmidrule(l){5-7}
+& Outcome & $\Delta$ & & $\Delta$ & Projects & \\
+\midrule
+\tabinput{tables/confirm.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{A model with no learning}
+
+Table~\ref{tab:binomial} scores the binomial model of Section~\ref{sec:theory} as a predictor. For each sprint, $q_s$ is the pooled completion rate of the team's last three finished sprints known at the start, or the training-set rate where there is no history. Nothing else is fitted. Its ranking comes close to gradient boosting: 0.858 against 0.865 for spillover (difference 0.007 [$-$0.018, 0.043]) and 0.752 against 0.775 for serious spillover (0.023 [$-$0.017, 0.072]). For serious spillover it beats scope alone by 0.081 [0.005, 0.144]. Most of what the learned model adds over scope at planning time is therefore an estimate of one number per team.
+
+\begin{table}[t]
+\centering
+\small
+\caption{The binomial model as a predictor on the nonempty test sprints (814). AUC and calibration slope (1 is ideal).}
+\label{tab:binomial}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& \multicolumn{2}{c}{Spillover} & \multicolumn{2}{c}{Serious sp.} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+Model & AUC & Slope & AUC & Slope \\
+\midrule
+\tabinput{tables/binomial.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+Its probabilities are another matter. The calibration slopes are 0.40 and 0.25, so the binomial model is far too sure of itself. Table~\ref{tab:variance} shows why. In every band of sprint size the observed variance of the carry ratio is larger than the binomial variance, by a factor of 1.7 for sprints of one to three issues and 5.8 for sprints of 16 or more. A gap that grows with sprint size is what Proposition~\ref{prop:overdisp} predicts when $r > 0$. The ratio of observed to binomial variance over the training sprints, the quantity behind Tarone's test of binomial fit \cite{tarone1979}, is \DispRatio, and the maximum-likelihood estimate is $r = \Rhat$ (likelihood-ratio statistic \LRstat{} against $r = 0$). The beta-binomial model matches the observed variance for large sprints (0.041 against 0.044) and raises the slopes to 0.58 and 0.46, at a small cost in ranking (0.010 and 0.013 AUC). Neither is as well calibrated as gradient boosting (slopes 0.95 and 0.88). The learning is needed mostly for trustworthy probabilities, not for the ranking.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Variance of the carry ratio around $1 - \hat q_s$ on the training sprints, by committed issues: observed, binomial (\ref{eq:ratio}) and beta-binomial (\ref{eq:overdisp}) with $r = \Rhat$.}
+\label{tab:variance}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Issues & Sprints & Observed & Binomial & Beta-bin. \\
+\midrule
+\tabinput{tables/binomial_variance.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Further checks}
 
 \emph{Provenance.} On the \NoFallbackTest{} nonempty test sprints with no story-point fallback, the new features add 0.023 [$-$0.007, 0.051] for spillover and 0.027 [$-$0.001, 0.053] for serious spillover: the same size as the primary result, with intervals that just touch zero. The gain is not an artefact of fallback values, but this subset alone would not establish it.
@@ -297,14 +365,14 @@ With a Youden threshold from the training folds, the planning-time model flags s
 \label{fig:primary}
 \end{figure}
 
-Fig.~\ref{fig:primary} puts all 22 comparisons on one scale. H1 holds for spillover and serious spillover and is about zero for lateness, as predicted, but misses for scope churn. H2 holds. H3 holds in direction for every outcome and clears zero for the spillover labels, with a larger gain than predicted for serious spillover. H4 fails: serious spillover, predicted to be unrankable beyond scope, gives the largest gain, and the other two new labels pass only on the sprint-level interval.
+Fig.~\ref{fig:primary} puts all 22 comparisons on one scale. H1 holds for spillover and serious spillover and is about zero for lateness, as predicted, but misses for scope churn. H2 holds. H3 holds in direction for every outcome and clears zero for the spillover labels, with a larger gain than predicted for serious spillover. H4 fails: serious spillover, predicted to be unrankable beyond scope, gives the largest gain, and the other two new labels pass only on the sprint-level interval. On the 21 untouched projects, H2, H3 for the spillover labels, H1 for serious spillover and the serious-spillover gain over scope all replicate; H1 for spillover does not.
 
 \section{Discussion}
 \label{sec:discussion}
 
 \subsection{What a team can take from this}
 
-Three things. First, during a sprint, simple progress counts (how much is done, how much is left, how fast it is going) carry nearly all of the signal, and their warnings for leftover work are calibrated. Burndown-shape indicators add nothing on top of them and, for lateness, do worse than knowing the sprint's size. Second, before a sprint starts, the team's own recent history is what says how much will be left over, and the four new features add a little to it. Third, none of this travels. A model trained on other organisations' teams is no better than a size rule, and a threshold carried from one team to another changes what a miss is worth (Proposition~\ref{prop:youden}). A team that wants these warnings has to fit them on its own history.
+Three things. First, during a sprint, simple progress counts (how much is done, how much is left, how fast it is going) carry nearly all of the signal, and their warnings for leftover work are calibrated. Burndown-shape indicators add nothing on top of them and, for lateness, do worse than knowing the sprint's size. Second, before a sprint starts, the team's own recent history is what says how much will be left over. Most of it is one number, the share of committed issues the team finished in its last few sprints, and a team can use that number directly through the binomial model; the four new features add a little to it. Third, none of this travels. A model trained on other organisations' teams is no better than a size rule, and a threshold carried from one team to another changes what a miss is worth (Proposition~\ref{prop:youden}). A team that wants these warnings has to fit them on its own history.
 
 \subsection{Why lateness is hard}
 
@@ -317,15 +385,15 @@ Late closure is the moment someone pressed ``Complete sprint'' in Jira. That dep
 
 \emph{Internal.} The reconstruction depends on the change log. Where it is missing, story points fall back on the exported value; we measured the share and repeated the main comparisons without it. Issue type, priority and assignee are left out because only their final values exist, which also means the choet set lacks team and issue features that its authors used. The strict and ours sets carry the project as a feature; we repeated the main comparisons without it.
 
-\emph{Hypotheses written after a look at the data.} The plan, the primary analysis and the hypotheses were written before the full run but after a development run on eight of the 29 projects, which hold 2,602 of the 4,235 sprints. Some choices were made after that look, most clearly the median-based serious-spillover label, and all of them are logged with dates. The hypotheses are therefore not independent of 8 of the 29 projects. Two things limit the damage: the hypotheses that failed (H4, the size in H3) failed against what the development run had suggested, and the outside projects were never used for any decision.
+\emph{Hypotheses written after a look at the data.} The plan, the primary analysis and the hypotheses were written before the full run but after a development run on eight of the 29 projects, which hold 2,602 of the 4,235 sprints. Some choices were made after that look, most clearly the median-based serious-spillover label, and all of them are logged with dates. The hypotheses are therefore not independent of 8 of the 29 projects. The confirmation set answers most of this concern: the in-sprint hypotheses and the serious-spillover results hold on the 21 projects the development run never saw, while the spillover part of H1 does not, and we report it as unconfirmed. The hypotheses that failed (H4, the size in H3) also failed against what the development run had suggested, and the outside projects were never used for any decision.
 
-\emph{Conclusion.} The four hypotheses rest on 22 paired comparisons with no correction for multiple testing. The project-level interval resamples 29 clusters, which is coarse; we report the sprint-level interval beside it and treat a result as holding only when the project interval clears zero.
+\emph{Conclusion.} The four hypotheses rest on 22 paired comparisons, repeated on the confirmation set, with no correction for multiple testing. The project-level interval resamples 29 clusters, which is coarse; we report the sprint-level interval beside it and treat a result as holding only when the project interval clears zero.
 
 \emph{External.} All projects are open source, and a handful of organisations (Atlassian, Appcelerator and a few others) contribute most TAWOS projects. The outside test covers two more organisations and ten projects, few of which have enough sprints in both classes for every label.
 
 \section{Conclusion}
 
-Under one leakage-aware protocol, the kinds of signal used in the sprint-risk literature differ sharply. Progress counts dominate during a sprint, burndown shape adds nothing, team history explains how much work is left over but not when the sprint is closed, and nothing learned from one organisation's history helps another's. The formal setting turns three of these observations into results that can be checked: empty sprints inflate AUC by an exact amount, a fitted threshold carries a hidden cost ratio, and the choice between ``any'' and ``serious'' spillover decides whether history can matter. The most useful outcome we added is serious spillover in its median-based form. The obvious next step is to ask teams whether the sprints these models flag are the ones they would have wanted to hear about.
+Under one leakage-aware protocol, the kinds of signal used in the sprint-risk literature differ sharply. Progress counts dominate during a sprint, burndown shape adds nothing, team history explains how much work is left over but not when the sprint is closed, and nothing learned from one organisation's history helps another's. The formal setting turns these observations into results that can be checked: empty sprints inflate AUC by an exact amount, a fitted threshold carries a hidden cost ratio, the choice between ``any'' and ``serious'' spillover decides whether history can matter, and issues that do not finish independently explain why a model with no learning ranks well but cannot give trustworthy probabilities. The most useful outcome we added is serious spillover in its median-based form. The obvious next step is to ask teams whether the sprints these models flag are the ones they would have wanted to hear about.
 
 \section*{Data Availability}
 
@@ -333,41 +401,89 @@ Code, export queries, the reconstructed frames, every result file and the dated 
 
 \begin{thebibliography}{99}
 
-\bibitem{choet2018} M. Choetkiertikul, H. K. Dam, T. Tran, A. Ghose, and J. Grundy, ``Predicting delivery capability in iterative software development,'' \emph{IEEE Trans. Softw. Eng.}, vol. 44, no. 6, pp. 551--573, Jun. 2018.
+\bibitem{choet2018} M. Choetkiertikul, H. K. Dam, T. Tran, A. Ghose, and J. Grundy, ``Predicting delivery capability in iterative software development,'' \emph{IEEE Trans. Softw. Eng.}, vol. 44, no. 6, pp. 551--573, Jun. 2018, doi: \url{10.1109/TSE.2017.2693989}.
 
-\bibitem{sprint2vec} M. Choetkiertikul, P. Banyongrakkul, C. Ragkhitwetsagul, S. Tuarob, H. K. Dam, and T. Sunetnanta, ``Sprint2Vec: A deep characterization of sprints in iterative software development,'' \emph{IEEE Trans. Softw. Eng.}, vol. 51, no. 1, pp. 220--242, Jan. 2025.
+\bibitem{sprint2vec} M. Choetkiertikul, P. Banyongrakkul, C. Ragkhitwetsagul, S. Tuarob, H. K. Dam, and T. Sunetnanta, ``Sprint2Vec: A deep characterization of sprints in iterative software development,'' \emph{IEEE Trans. Softw. Eng.}, vol. 51, no. 1, pp. 220--242, Jan. 2025, doi: \url{10.1109/TSE.2024.3509016}.
 
-\bibitem{hearty2009} P. Hearty, N. Fenton, D. Marquez, and M. Neil, ``Predicting project velocity in XP using a learning dynamic Bayesian network model,'' \emph{IEEE Trans. Softw. Eng.}, vol. 35, no. 1, pp. 124--137, Jan. 2009.
+\bibitem{hearty2009} P. Hearty, N. Fenton, D. Marquez, and M. Neil, ``Predicting project velocity in XP using a learning dynamic Bayesian network model,'' \emph{IEEE Trans. Softw. Eng.}, vol. 35, no. 1, pp. 124--137, Jan. 2009, doi: \url{10.1109/TSE.2008.76}.
 
-\bibitem{perez2024} Y. J. P\'erez Castillo, S. D. Orantes Jim\'enez, and P. O. Letelier Torres, ``Sprint management in Agile approach: Progress and velocity evaluation applying machine learning,'' \emph{Information}, vol. 15, no. 11, Art. no. 726, 2024.
+\bibitem{perez2024} Y. J. P\'erez Castillo, S. D. Orantes Jim\'enez, and P. O. Letelier Torres, ``Sprint management in Agile approach: Progress and velocity evaluation applying machine learning,'' \emph{Information}, vol. 15, no. 11, Art. no. 726, 2024, doi: \url{10.3390/info15110726}.
 
-\bibitem{obike2025} P. G. Obike, V. E. Ekong, and O. U. Obot, ``A novel scoring-based Agile sprint deliverability prediction and prioritization using machine learning,'' \emph{Int. J. Comput. Appl.}, vol. 187, no. 49, pp. 40--53, Oct. 2025.
+\bibitem{obike2025} P. G. Obike, V. E. Ekong, and O. U. Obot, ``A novel scoring-based Agile sprint deliverability prediction and prioritization using machine learning,'' \emph{Int. J. Comput. Appl.}, vol. 187, no. 49, pp. 40--53, 2025, doi: \url{10.5120/ijca2025925837}.
 
-\bibitem{kaufman2012} S. Kaufman, S. Rosset, C. Perlich, and O. Stitelman, ``Leakage in data mining: Formulation, detection, and avoidance,'' \emph{ACM Trans. Knowl. Discov. Data}, vol. 6, no. 4, Art. no. 15, 2012.
+\bibitem{kula2022} E. Kula, E. Greuter, A. van Deursen, and G. Gousios, ``Factors affecting on-time delivery in large-scale agile software development,'' \emph{IEEE Trans. Softw. Eng.}, vol. 48, no. 9, pp. 3573--3592, Sep. 2022, doi: \url{10.1109/TSE.2021.3101192}.
 
-\bibitem{kapoor2023} S. Kapoor and A. Narayanan, ``Leakage and the reproducibility crisis in machine-learning-based science,'' \emph{Patterns}, vol. 4, no. 9, Art. no. 100804, 2023.
+\bibitem{kaufman2012} S. Kaufman, S. Rosset, C. Perlich, and O. Stitelman, ``Leakage in data mining: Formulation, detection, and avoidance,'' \emph{ACM Trans. Knowl. Discov. Data}, vol. 6, no. 4, pp. 1--21, 2012, doi: \url{10.1145/2382577.2382579}.
+
+\bibitem{kapoor2023} S. Kapoor and A. Narayanan, ``Leakage and the reproducibility crisis in machine-learning-based science,'' \emph{Patterns}, vol. 4, no. 9, Art. no. 100804, 2023, doi: \url{10.1016/j.patter.2023.100804}.
 
 \bibitem{abusharkh2027} H. AbuSharkh, M. Hanif, and R. Damseh, ``Reconstructing sprint-start Jira state for leakage-aware outcome prediction,'' submitted to the IEEE Canadian Conf. Electr. Comput. Eng. (CCECE), 2027.
 
-\bibitem{tawos} V. Tawosi, A. Al-Subaihin, R. Moussa, and F. Sarro, ``A versatile dataset of agile open source software projects,'' in \emph{Proc. 19th Int. Conf. Mining Softw. Repositories (MSR)}, 2022, pp. 707--711.
+\bibitem{tawos} V. Tawosi, A. Al-Subaihin, R. Moussa, and F. Sarro, ``A versatile dataset of agile open source software projects,'' in \emph{Proc. 19th Int. Conf. Mining Softw. Repositories (MSR)}, 2022, pp. 707--711, doi: \url{10.1145/3524842.3528029}.
 
-\bibitem{choet2019} M. Choetkiertikul, H. K. Dam, T. Tran, T. Pham, A. Ghose, and T. Menzies, ``A deep learning model for estimating story points,'' \emph{IEEE Trans. Softw. Eng.}, vol. 45, no. 7, pp. 637--656, Jul. 2019.
+\bibitem{choet2015} M. Choetkiertikul, H. K. Dam, T. Tran, and A. Ghose, ``Characterization and prediction of issue-related risks in software projects,'' in \emph{Proc. IEEE/ACM 12th Working Conf. Mining Softw. Repositories (MSR)}, 2015, pp. 280--291, doi: \url{10.1109/MSR.2015.33}.
 
-\bibitem{porru2016} S. Porru, A. Murgia, S. Demeyer, M. Marchesi, and R. Tonelli, ``Estimating story points from issue reports,'' in \emph{Proc. 12th Int. Conf. Predictive Models Data Analytics Softw. Eng. (PROMISE)}, 2016, pp. 1--10.
+\bibitem{choet2017} M. Choetkiertikul, H. K. Dam, T. Tran, and A. Ghose, ``Predicting the delay of issues with due dates in software projects,'' \emph{Empir. Softw. Eng.}, vol. 22, no. 3, pp. 1223--1263, 2017, doi: \url{10.1007/s10664-016-9496-7}.
 
-\bibitem{tawosi2023} V. Tawosi, R. Moussa, and F. Sarro, ``Agile effort estimation: Have we solved the problem yet? Insights from a replication study,'' \emph{IEEE Trans. Softw. Eng.}, vol. 49, no. 4, pp. 2677--2697, Apr. 2023.
+\bibitem{kula2021} E. Kula, A. van Deursen, and G. Gousios, ``Modeling team dynamics for the characterization and prediction of delays in user stories,'' in \emph{Proc. 36th IEEE/ACM Int. Conf. Automated Softw. Eng. (ASE)}, 2021, pp. 991--1002, doi: \url{10.1109/ASE51524.2021.9678939}.
 
-\bibitem{bangash2020} A. A. Bangash, H. Sahar, A. Hindle, and K. Ali, ``On the time-based conclusion stability of cross-project defect prediction models,'' \emph{Empir. Softw. Eng.}, vol. 25, no. 6, pp. 5047--5083, 2020.
+\bibitem{choet2019} M. Choetkiertikul, H. K. Dam, T. Tran, T. Pham, A. Ghose, and T. Menzies, ``A deep learning model for estimating story points,'' \emph{IEEE Trans. Softw. Eng.}, vol. 45, no. 7, pp. 637--656, Jul. 2019, doi: \url{10.1109/TSE.2018.2792473}.
 
-\bibitem{jimenez2019} M. Jimenez, R. Rwemalika, M. Papadakis, F. Sarro, Y. Le Traon, and M. Harman, ``The importance of accounting for real-world labelling when predicting software vulnerabilities,'' in \emph{Proc. 27th ACM Joint Meeting Eur. Softw. Eng. Conf. Symp. Found. Softw. Eng. (ESEC/FSE)}, 2019, pp. 695--705.
+\bibitem{porru2016} S. Porru, A. Murgia, S. Demeyer, M. Marchesi, and R. Tonelli, ``Estimating story points from issue reports,'' in \emph{Proc. 12th Int. Conf. Predictive Models Data Analytics Softw. Eng. (PROMISE)}, 2016, pp. 1--10, doi: \url{10.1145/2972958.2972959}.
 
-\bibitem{teinemaa2019} I. Teinemaa, M. Dumas, M. La Rosa, and F. M. Maggi, ``Outcome-oriented predictive process monitoring: Review and benchmark,'' \emph{ACM Trans. Knowl. Discov. Data}, vol. 13, no. 2, Art. no. 17, 2019.
+\bibitem{fu2023} M. Fu and C. Tantithamthavorn, ``GPT2SP: A transformer-based agile story point estimation approach,'' \emph{IEEE Trans. Softw. Eng.}, vol. 49, no. 2, pp. 611--625, Feb. 2023, doi: \url{10.1109/TSE.2022.3158252}.
 
-\bibitem{fahrenkrog2022} S. A. Fahrenkrog-Petersen, N. Tax, I. Teinemaa, M. Dumas, M. de Leoni, F. M. Maggi, and M. Weidlich, ``Fire now, fire later: Alarm-based systems for prescriptive process monitoring,'' \emph{Knowl. Inf. Syst.}, vol. 64, no. 2, pp. 559--587, 2022.
+\bibitem{tawosi2023} V. Tawosi, R. Moussa, and F. Sarro, ``Agile effort estimation: Have we solved the problem yet? Insights from a replication study,'' \emph{IEEE Trans. Softw. Eng.}, vol. 49, no. 4, pp. 2677--2697, Apr. 2023, doi: \url{10.1109/TSE.2022.3228739}.
 
-\bibitem{hernandez2012} J. Hern\'andez-Orallo, P. Flach, and C. Ferri, ``A unified view of performance metrics: Translating threshold choice into expected classification loss,'' \emph{J. Mach. Learn. Res.}, vol. 13, pp. 2813--2869, 2012.
+\bibitem{ortu2015} M. Ortu, G. Destefanis, B. Adams, A. Murgia, M. Marchesi, and R. Tonelli, ``The JIRA repository dataset: Understanding social aspects of software development,'' in \emph{Proc. 11th Int. Conf. Predictive Models Data Analytics Softw. Eng. (PROMISE)}, 2015, pp. 1--4, doi: \url{10.1145/2810146.2810147}.
 
-\bibitem{sklearn} F. Pedregosa et al., ``Scikit-learn: Machine learning in Python,'' \emph{J. Mach. Learn. Res.}, vol. 12, pp. 2825--2830, 2011.
+\bibitem{montgomery2022} L. Montgomery, C. L\"uders, and W. Maalej, ``An alternative issue tracking dataset of public Jira repositories,'' in \emph{Proc. 19th Int. Conf. Mining Softw. Repositories (MSR)}, 2022, pp. 73--77, doi: \url{10.1145/3524842.3528486}.
+
+\bibitem{tanti2017} C. Tantithamthavorn, S. McIntosh, A. E. Hassan, and K. Matsumoto, ``An empirical comparison of model validation techniques for defect prediction models,'' \emph{IEEE Trans. Softw. Eng.}, vol. 43, no. 1, pp. 1--18, Jan. 2017, doi: \url{10.1109/TSE.2016.2584050}.
+
+\bibitem{bangash2020} A. A. Bangash, H. Sahar, A. Hindle, and K. Ali, ``On the time-based conclusion stability of cross-project defect prediction models,'' \emph{Empir. Softw. Eng.}, vol. 25, no. 6, pp. 5047--5083, 2020, doi: \url{10.1007/s10664-020-09878-9}.
+
+\bibitem{falessi2020} D. Falessi, J. Huang, L. Narayana, J. F. Thai, and B. Turhan, ``On the need of preserving order of data when validating within-project defect classifiers,'' \emph{Empir. Softw. Eng.}, vol. 25, no. 6, pp. 4805--4830, 2020, doi: \url{10.1007/s10664-020-09868-x}.
+
+\bibitem{jimenez2019} M. Jimenez, R. Rwemalika, M. Papadakis, F. Sarro, Y. Le Traon, and M. Harman, ``The importance of accounting for real-world labelling when predicting software vulnerabilities,'' in \emph{Proc. 27th ACM Joint Meeting Eur. Softw. Eng. Conf. Symp. Found. Softw. Eng. (ESEC/FSE)}, 2019, pp. 695--705, doi: \url{10.1145/3338906.3338941}.
+
+\bibitem{shepperd2014} M. Shepperd, D. Bowes, and T. Hall, ``Researcher bias: The use of machine learning in software defect prediction,'' \emph{IEEE Trans. Softw. Eng.}, vol. 40, no. 6, pp. 603--616, Jun. 2014, doi: \url{10.1109/TSE.2014.2322358}.
+
+\bibitem{marquez2018} A. E. M\'arquez-Chamorro, M. Resinas, and A. Ruiz-Cort\'es, ``Predictive monitoring of business processes: A survey,'' \emph{IEEE Trans. Serv. Comput.}, vol. 11, no. 6, pp. 962--977, 2018, doi: \url{10.1109/TSC.2017.2772256}.
+
+\bibitem{teinemaa2019} I. Teinemaa, M. Dumas, M. La Rosa, and F. M. Maggi, ``Outcome-oriented predictive process monitoring: Review and benchmark,'' \emph{ACM Trans. Knowl. Discov. Data}, vol. 13, no. 2, pp. 1--57, 2019, doi: \url{10.1145/3301300}.
+
+\bibitem{difrancesco2018} C. Di Francescomarino, C. Ghidini, F. M. Maggi, and F. Milani, ``Predictive process monitoring methods: Which one suits me best?'' in \emph{Business Process Management (BPM)}, Lecture Notes in Computer Science, 2018, pp. 462--479, doi: \url{10.1007/978-3-319-98648-7_27}.
+
+\bibitem{fahrenkrog2022} S. A. Fahrenkrog-Petersen, N. Tax, I. Teinemaa, M. Dumas, M. de Leoni, F. M. Maggi, and M. Weidlich, ``Fire now, fire later: Alarm-based systems for prescriptive process monitoring,'' \emph{Knowl. Inf. Syst.}, vol. 64, no. 2, pp. 559--587, 2022, doi: \url{10.1007/s10115-021-01633-w}.
+
+\bibitem{fawcett2006} T. Fawcett, ``An introduction to ROC analysis,'' \emph{Pattern Recognit. Lett.}, vol. 27, no. 8, pp. 861--874, 2006, doi: \url{10.1016/j.patrec.2005.10.010}.
+
+\bibitem{hand2009} D. J. Hand, ``Measuring classifier performance: A coherent alternative to the area under the ROC curve,'' \emph{Mach. Learn.}, vol. 77, no. 1, pp. 103--123, 2009, doi: \url{10.1007/s10994-009-5119-5}.
+
+\bibitem{hernandez2012} J. Hern\'andez-Orallo, P. Flach, and C. Ferri, ``A unified view of performance metrics: Translating threshold choice into expected classification loss,'' \emph{J. Mach. Learn. Res.}, vol. 13, no. 91, pp. 2813--2869, 2012.
+
+\bibitem{elkan2001} C. Elkan, ``The foundations of cost-sensitive learning,'' in \emph{Proc. 17th Int. Joint Conf. Artif. Intell. (IJCAI)}, 2001, pp. 973--978.
+
+\bibitem{brier1950} G. W. Brier, ``Verification of forecasts expressed in terms of probability,'' \emph{Monthly Weather Rev.}, vol. 78, no. 1, pp. 1--3, 1950, doi: \url{10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2}.
+
+\bibitem{vancalster2019} B. Van Calster, D. J. McLernon, M. van Smeden, L. Wynants, and E. W. Steyerberg, ``Calibration: The Achilles heel of predictive analytics,'' \emph{BMC Med.}, vol. 17, 2019, doi: \url{10.1186/s12916-019-1466-7}.
+
+\bibitem{niculescu2005} A. Niculescu-Mizil and R. Caruana, ``Predicting good probabilities with supervised learning,'' in \emph{Proc. 22nd Int. Conf. Mach. Learn. (ICML)}, 2005, pp. 625--632, doi: \url{10.1145/1102351.1102430}.
+
+\bibitem{skellam1948} J. G. Skellam, ``A probability distribution derived from the binomial distribution by regarding the probability of success as variable between the sets of trials,'' \emph{J. R. Stat. Soc. Ser. B}, vol. 10, no. 2, pp. 257--261, 1948, doi: \url{10.1111/j.2517-6161.1948.tb00014.x}.
+
+\bibitem{breiman2001} L. Breiman, ``Random forests,'' \emph{Mach. Learn.}, vol. 45, no. 1, pp. 5--32, 2001, doi: \url{10.1023/A:1010933404324}.
+
+\bibitem{friedman2001} J. H. Friedman, ``Greedy function approximation: A gradient boosting machine,'' \emph{Ann. Statist.}, vol. 29, no. 5, pp. 1189--1232, 2001, doi: \url{10.1214/aos/1013203451}.
+
+\bibitem{sklearn} F. Pedregosa \emph{et al.}, ``Scikit-learn: Machine learning in Python,'' \emph{J. Mach. Learn. Res.}, vol. 12, no. 85, pp. 2825--2830, 2011.
+
+\bibitem{field2007} C. A. Field and A. H. Welsh, ``Bootstrapping clustered data,'' \emph{J. R. Stat. Soc. Ser. B}, vol. 69, no. 3, pp. 369--390, 2007, doi: \url{10.1111/j.1467-9868.2007.00593.x}.
+
+\bibitem{youden1950} W. J. Youden, ``Index for rating diagnostic tests,'' \emph{Cancer}, vol. 3, no. 1, pp. 32--35, 1950, doi: \url{10.1002/1097-0142(1950)3:1<32::AID-CNCR2820030106>3.0.CO;2-3}.
+
+\bibitem{tarone1979} R. E. Tarone, ``Testing the goodness of fit of the binomial distribution,'' \emph{Biometrika}, vol. 66, no. 3, pp. 585--590, 1979, doi: \url{10.1093/biomet/66.3.585}.
 
 \end{thebibliography}
 

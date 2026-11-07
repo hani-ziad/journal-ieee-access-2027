@@ -1,0 +1,13 @@
+confirm planning late_closure
+confirm planning seriously_late
+confirm planning spillover
+confirm planning serious_spillover
+confirm planning scope_churn
+confirm insprint spillover 0.25
+confirm insprint spillover 0.5
+confirm insprint late_closure 0.25
+confirm insprint late_closure 0.5
+confirm insprint serious_spillover 0.25
+confirm insprint serious_spillover 0.5
+confirm insprint seriously_late 0.25
+confirm insprint seriously_late 0.5

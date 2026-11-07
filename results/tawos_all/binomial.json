@@ -1,0 +1,12 @@
+{
+ "pooled_q_train": 0.3691531497548095,
+ "r_hat": 0.17683451364606503,
+ "lr_stat": 2244.5174442376046,
+ "lr_pvalue": 0.0,
+ "dispersion_ratio_train": 4.480222932761388,
+ "n_train": 1857,
+ "n_test": 814,
+ "q_missing_test": 0.0,
+ "mean_q_hat_test": 0.30368282393138224,
+ "mean_completion_test": 0.3054377284669192
+}

@@ -198,12 +198,86 @@ check("0.728 $\\pm$ 0.013 for late closure", r.loc["late_closure", "std"], 0.013
 
 # ---- abstract
 check("history beats scope by 0.10 AUC", pdiff("serious_spillover", "strict+new - scope"), 0.10, 0.006)
-check("adds about 0.05 to 0.07 AUC on top of progress counts", min(h3), 0.05, 0.005)
-check("adds about 0.05 to 0.07 AUC on top of progress counts", max(h3), 0.07, 0.005)
-check("add about 0.03 AUC for spillover and serious spillover",
+check("Team history adds 0.05 to 0.07 AUC on top of progress counts", min(h3), 0.05, 0.005)
+check("Team history adds 0.05 to 0.07 AUC on top of progress counts", max(h3), 0.07, 0.005)
+check("add about 0.03 AUC for the two spillover labels",
       pdiff("spillover", "strict+new - strict"), 0.03, 0.005)
-check("add about 0.03 AUC for spillover and serious spillover",
+check("add about 0.03 AUC for the two spillover labels",
       pdiff("serious_spillover", "strict+new - strict"), 0.03, 0.005)
+
+# ---- confirmation set (21 projects not in the development run)
+cf = pd.read_csv(R / "confirm_differences.csv")
+ca = pd.read_csv(R / "confirm_auc.csv")
+
+
+def cdiff(stage, o, comp, cp=None, col="delta"):
+    q = cf[(cf.stage == stage) & (cf.outcome == o) & (cf.comparison == comp)]
+    if cp is not None:
+        q = q[q.checkpoint == cp]
+    return float(q[col].iloc[0])
+
+
+check("(502 test sprints, 303 of them nonempty)", ca[ca.stage == "planning"].n.max(), 502, 0)
+check("(502 test sprints, 303 of them nonempty)", ca[(ca.stage == "planning") & (ca.outcome == "spillover")].n.max(), 303, 0)
+check("played no part in writing the hypotheses (502", ca.projects.max(), 21, 0)
+h2c = [cdiff("in-sprint", o, "ours - worki", cp) for o in ("spillover", "serious_spillover") for cp in (0.25, 0.5)]
+check("H2 holds in all four comparisons (0.141 to 0.260)", min(h2c), 0.141)
+check("H2 holds in all four comparisons (0.141 to 0.260)", max(h2c), 0.260)
+for o in ("spillover", "serious_spillover"):
+    for cp in (0.25, 0.5):
+        check("H2 holds in all four comparisons", float(cdiff("in-sprint", o, "ours - worki", cp, "ci_low") > 0), 1, 0)
+        check("H3 holds for both spillover labels at both checkpoints", float(cdiff("in-sprint", o, "ours - choet", cp, "ci_low") > 0), 1, 0)
+h3c = [cdiff("in-sprint", o, "ours - choet", cp) for o in ("spillover", "serious_spillover") for cp in (0.25, 0.5)]
+check("(0.060 to 0.109)", min(h3c), 0.060)
+check("(0.060 to 0.109)", max(h3c), 0.109)
+for o in ("late_closure", "seriously_late"):
+    for cp in (0.25, 0.5):
+        check("for the two late labels its intervals again include zero", float(cdiff("in-sprint", o, "ours - choet", cp, "ci_low") < 0), 1, 0)
+check("serious spillover (0.033 [0.004, 0.078])", cdiff("planning", "serious_spillover", "strict+new - strict"), 0.033)
+check("serious spillover (0.033 [0.004, 0.078])", cdiff("planning", "serious_spillover", "strict+new - strict", col="ci_low"), 0.004)
+check("serious spillover (0.033 [0.004, 0.078])", cdiff("planning", "serious_spillover", "strict+new - strict", col="ci_high"), 0.078)
+check("not for spillover (0.010 [$-$0.014, 0.036])", cdiff("planning", "spillover", "strict+new - strict"), 0.010)
+check("not for spillover (0.010 [$-$0.014, 0.036])", cdiff("planning", "spillover", "strict+new - strict", col="ci_low"), -0.014)
+check("not for spillover (0.010 [$-$0.014, 0.036])", cdiff("planning", "spillover", "strict+new - strict", col="ci_high"), 0.036)
+check("both spillover labels (0.096 and 0.178)", cdiff("planning", "spillover", "strict+new - scope"), 0.096)
+check("both spillover labels (0.096 and 0.178)", cdiff("planning", "serious_spillover", "strict+new - scope"), 0.178)
+for o in ("late_closure", "seriously_late", "scope_churn"):
+    check("not clearly for the other labels", float(cdiff("planning", o, "strict+new - scope", col="ci_low") < 0), 1, 0)
+check("Where a sign changes (scope churn in H1)", float(cdiff("planning", "scope_churn", "strict+new - strict") < 0), 1, 0)
+
+# ---- the binomial model as a predictor
+ba = pd.read_csv(R / "binomial_auc.csv").set_index(["outcome", "model"]).auc
+bd = pd.read_csv(R / "binomial_differences.csv").set_index(["outcome", "comparison"])
+bc = pd.read_csv(R / "binomial_calibration.csv").set_index(["outcome", "model"])
+bv = pd.read_csv(R / "binomial_variance.csv")
+check("0.858 against 0.865 for spillover", ba[("spillover", "binomial")], 0.858)
+check("0.858 against 0.865 for spillover", ba[("spillover", "strict+new")], 0.865)
+check("(difference 0.007 [$-$0.018, 0.043])", bd.loc[("spillover", "strict+new - binomial"), "delta"], 0.007)
+check("(difference 0.007 [$-$0.018, 0.043])", bd.loc[("spillover", "strict+new - binomial"), "ci_low"], -0.018)
+check("(difference 0.007 [$-$0.018, 0.043])", bd.loc[("spillover", "strict+new - binomial"), "ci_high"], 0.043)
+check("0.752 against 0.775 for serious spillover", ba[("serious_spillover", "binomial")], 0.752)
+check("0.752 against 0.775 for serious spillover", ba[("serious_spillover", "strict+new")], 0.775)
+check("(0.023 [$-$0.017, 0.072])", bd.loc[("serious_spillover", "strict+new - binomial"), "delta"], 0.023)
+check("(0.023 [$-$0.017, 0.072])", bd.loc[("serious_spillover", "strict+new - binomial"), "ci_low"], -0.017)
+check("(0.023 [$-$0.017, 0.072])", bd.loc[("serious_spillover", "strict+new - binomial"), "ci_high"], 0.072)
+check("beats scope alone by 0.081 [0.005, 0.144]", bd.loc[("serious_spillover", "binomial - scope"), "delta"], 0.081)
+check("beats scope alone by 0.081 [0.005, 0.144]", bd.loc[("serious_spillover", "binomial - scope"), "ci_low"], 0.005)
+check("beats scope alone by 0.081 [0.005, 0.144]", bd.loc[("serious_spillover", "binomial - scope"), "ci_high"], 0.144)
+check("The calibration slopes are 0.40 and 0.25", bc.loc[("spillover", "binomial"), "slope"], 0.40, 0.005)
+check("The calibration slopes are 0.40 and 0.25", bc.loc[("serious_spillover", "binomial"), "slope"], 0.25, 0.005)
+check("by a factor of 1.7 for sprints of one to three issues", bv.var_observed[0] / bv.var_binomial[0], 1.7, 0.05)
+check("and 5.8 for sprints of 16 or more", bv.var_observed[3] / bv.var_binomial[3], 5.8, 0.05)
+check("In every band of sprint size the observed variance", float((bv.var_observed > bv.var_binomial).all()), 1, 0)
+check("A gap that grows with sprint size", float((bv.var_observed / bv.var_binomial).is_monotonic_increasing), 1, 0)
+check("matches the observed variance for large sprints (0.041 against 0.044)", bv.var_betabinomial[3], 0.041)
+check("matches the observed variance for large sprints (0.041 against 0.044)", bv.var_observed[3], 0.044)
+check("raises the slopes to 0.58 and 0.46", bc.loc[("spillover", "beta-binomial"), "slope"], 0.58, 0.005)
+check("raises the slopes to 0.58 and 0.46", bc.loc[("serious_spillover", "beta-binomial"), "slope"], 0.46, 0.005)
+check("at a small cost in ranking (0.010 and 0.013 AUC)", -bd.loc[("spillover", "beta-binomial - binomial"), "delta"], 0.010)
+check("at a small cost in ranking (0.010 and 0.013 AUC)", -bd.loc[("serious_spillover", "beta-binomial - binomial"), "delta"], 0.013)
+check("(slopes 0.95 and 0.88)", bc.loc[("spillover", "strict+new"), "slope"], 0.95, 0.005)
+check("(slopes 0.95 and 0.88)", bc.loc[("serious_spillover", "strict+new"), "slope"], 0.88, 0.005)
+check("comes within 0.03 AUC of gradient boosting", float(bd.loc[(slice(None), "strict+new - binomial"), "delta"].max() <= 0.03), 1, 0)
 
 print(f"{n - len(fails)} of {n} checks pass")
 print("FAILS:", fails)
