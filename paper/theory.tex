@@ -1,25 +1,25 @@
-% Theory section for the IEEE Access paper. Draft of 7 Nov 2026.
-% Every numbered claim below is checked numerically by jr/theory_checks.py.
+% Formal setting. Every number here comes from tables/numbers.tex, written by jr/tables.py
+% from results/<cohort>/theory_numbers.json, and is checked by jr/theory_checks.py.
 
 \section{Formal Setting}
 \label{sec:theory}
 
-This section fixes what ``no hindsight'' means for the data at hand, and derives three consequences that the experiments then test: how structural negatives inflate ROC-AUC, why a threshold fitted on one group of projects cannot carry to another, and what a minimal model of sprint completion predicts about the two spillover labels.
+This section fixes what ``no hindsight'' means for a Jira export and derives three consequences. Each one turns a pattern that is easy to miss into a prediction the experiments can check: how empty sprints inflate ROC-AUC, why a threshold fitted on one group of teams does not carry to another, and how the two spillover labels should differ.
 
 \subsection{The event log and the sprint state}
 
-A Jira export is an event log $\mathcal{E} = \{(i, f, v^{-}, v^{+}, t)\}$: issue $i$ had field $f$ changed from $v^{-}$ to $v^{+}$ at time $t$. Together with each issue's creation time $\gamma_i$ and resolution time $r_i$ (undefined while the issue is open), the log determines the value of any field at any time by replaying the changes in order. Write $\mathcal{E}_{\le t}$ for the events with time stamp at most $t$, and $\mathcal{F}_t$ for the information they carry together with the sprint calendar, which is fixed at planning. A sprint $s$ has a start $a_s$, a planned end $b_s$ and a closure time $c_s$.
+A Jira export is an event log $\mathcal{E} = \{(i, f, v^{-}, v^{+}, t)\}$: issue $i$ had field $f$ changed from $v^{-}$ to $v^{+}$ at time $t$. With each issue's creation time $\gamma_i$ and resolution time $r_i$ (undefined while the issue is open), the log gives the value of any field at any time by replaying the changes in order. Write $\mathcal{E}_{\le t}$ for the events up to time $t$, and $\mathcal{F}_t$ for what they tell us together with the sprint calendar, which is fixed at planning. A sprint $s$ has a start $a_s$, a planned end $b_s$ and a closure time $c_s$.
 
-The committed set is the state at the start,
+The committed set is the board at the start,
 \begin{equation}
 C_s = \{\, i : s \in \mathrm{sprint}_i(a_s),\ \gamma_i \le a_s,\ r_i \not< a_s \,\},
 \label{eq:committed}
 \end{equation}
-where $\mathrm{sprint}_i(t)$ is the issue's sprint field at time $t$ as replayed from $\mathcal{E}_{\le t}$. The outcomes are functions of the terminal state. With $n_s = |C_s|$ and the carry ratio
+where $\mathrm{sprint}_i(t)$ is the issue's sprint field at time $t$ as replayed from $\mathcal{E}_{\le t}$. The outcomes are read off the end state. With $n_s = |C_s|$ and the carry ratio
 \begin{equation}
 \rho_s = \frac{|\{ i \in C_s : r_i > b_s \}|}{n_s},
 \end{equation}
-spillover is $y^{\mathrm{sp}}_s = \mathbf{1}[\rho_s > 0]$, serious spillover is $y^{\tau}_s = \mathbf{1}[\rho_s \ge \tau]$, late closure is $y^{\mathrm{late}}_s = \mathbf{1}[c_s - b_s > \delta]$ with $\delta$ one day (three for the ``seriously late'' label), and scope churn is $\mathbf{1}[m_s / n_s \ge \theta]$ with $m_s$ the issues added after $a_s$ and still in the sprint at $b_s$.
+spillover is $y^{\mathrm{sp}}_s = \mathbf{1}[\rho_s > 0]$, serious spillover is $y^{\tau}_s = \mathbf{1}[\rho_s \ge \tau]$, late closure is $y^{\mathrm{late}}_s = \mathbf{1}[c_s - b_s > \delta]$ with $\delta$ one day (three for ``seriously late''), and scope churn is $\mathbf{1}[m_s / n_s \ge \theta]$, where $m_s$ counts issues added after $a_s$ and still in the sprint at $b_s$.
 
 \subsection{Admissible features}
 
@@ -27,31 +27,33 @@ spillover is $y^{\mathrm{sp}}_s = \mathbf{1}[\rho_s > 0]$, serious spillover is 
 A feature $x(s, t)$ for sprint $s$ at prediction time $t$ is admissible if it is a function of $\mathcal{F}_t$ alone, that is, of $\mathcal{E}_{\le t}$ and the sprint calendar.
 \end{definition}
 
-Two features that look like planning-time quantities fail this test in a present-day export. First, a history feature that summarises sprint $u$ of the same project is admissible at $a_s$ only if $u$'s outcome was known by then, $\max(b_u, c_u) \le a_s$; a ``previous sprint'' chosen by start date alone violates this whenever sprints overlap, which happens for 71\% of the sprints in our cohort. Second, a field value read from the static export is $\mathcal{F}_\infty$-measurable, not $\mathcal{F}_{a_s}$-measurable, so wherever the log records no change for a field the replay falls back on a value that may postdate planning. We record the share of committed issues affected, $\phi_s$ (the story-point fallback share), and repeat the main comparisons on sprints with $\phi_s = 0$. Both rules are mechanical, and both are violated by evaluations that read features off a final snapshot.
+Two common practices break this rule. First, a history feature that summarises an earlier sprint $u$ of the same project is admissible at $a_s$ only if $u$'s outcome was known by then, $\max(b_u, c_u) \le a_s$. A ``previous sprint'' picked by start date alone breaks this whenever sprints overlap, which happens for \OverlapShare\% of the sprints in our cohort. Second, a field read from the static export is $\mathcal{F}_\infty$-measurable, not $\mathcal{F}_{a_s}$-measurable. Wherever the log records no change for a field, the replay has to fall back on a value that may postdate planning. We record the share of committed issues affected, $\phi_s$, and repeat the main comparisons on sprints with $\phi_s = 0$. Issue type, priority and assignee are left out altogether, because the export only holds their final values.
 
-\subsection{Structural negatives inflate ROC-AUC}
+\subsection{Empty sprints inflate ROC-AUC}
 
-A sprint with $n_s = 0$ cannot spill, so it is a negative by construction. Keeping such sprints in a spillover evaluation rewards the model for something it did not learn.
+A sprint with $n_s = 0$ cannot spill, so it is a negative by construction. Keeping such sprints in a spillover evaluation rewards the model for something it did not have to learn.
 
 \begin{proposition}
 \label{prop:auc}
-Let the negatives of a test set be split into structural negatives $N_0$ and ordinary negatives $N_1$, with $\pi_0 = |N_0| / (|N_0| + |N_1|)$. Then
+Split the negatives of a test set into structural negatives $N_0$ and ordinary negatives $N_1$, and let $\pi_0 = |N_0| / (|N_0| + |N_1|)$. Then
 \begin{equation}
 \mathrm{AUC}_{\mathrm{all}} = \pi_0\, A_0 + (1 - \pi_0)\, \mathrm{AUC}_{N_1},
 \label{eq:aucmix}
 \end{equation}
-where $A_0$ is the probability that a random positive outscores a random structural negative and $\mathrm{AUC}_{N_1}$ is the AUC on positives and ordinary negatives alone. If the model ranks every structural negative below every positive, $A_0 = 1$ and the inflation is $\pi_0 (1 - \mathrm{AUC}_{N_1})$.
+where $A_0$ is the probability that a random positive outscores a random structural negative, and $\mathrm{AUC}_{N_1}$ is the AUC on the positives and ordinary negatives alone. If the model ranks every structural negative below every positive, $A_0 = 1$ and the inflation is $\pi_0 (1 - \mathrm{AUC}_{N_1})$.
 \end{proposition}
 
 \begin{proof}
-AUC is the probability that a random positive outscores a random negative. Conditioning on which kind of negative is drawn gives (\ref{eq:aucmix}) directly.
+AUC is the probability that a random positive outscores a random negative. Conditioning on which kind of negative is drawn gives (\ref{eq:aucmix}).
 \end{proof}
 
-In our time-split test set the full population has 333 negatives, of which 304 commit nothing, so $\pi_0 = 0.913$. With the nonempty-sprint AUC of 0.852, (\ref{eq:aucmix}) predicts 0.987 for the full population under $A_0 = 1$; the observed value is 0.986, which implies $A_0 = 0.999$. The 0.13 gap between the two headline numbers is therefore almost entirely the structural negatives, not model quality, and any study that keeps empty sprints in its denominator inherits the same inflation.
+The decomposition is elementary. Its use is that it puts an exact number on the inflation.
+
+On our time-split test set the full population has \NegAll{} negatives, and \NegStruct{} of them commit nothing, so $\pi_0 = \PiZero$. The model's AUC on nonempty sprints is \AucNonempty. With $A_0 = 1$, (\ref{eq:aucmix}) predicts \AucPred{} for the full population; the observed value is \AucAll, and the measured $A_0$ is \AZero. The gap of \Inflation{} between the two headline numbers is entirely the empty sprints. Any study that keeps them in the denominator reports this gap as skill.
 
 \subsection{Why a fitted threshold does not travel}
 
-Youden's index picks the threshold that maximises sensitivity plus specificity, that is, minimises $\mathrm{FNR} + \mathrm{FPR}$. With prevalence $\pi$, a miss cost $c_{\mathrm{FN}}$ and a false-alarm cost $c_{\mathrm{FP}}$, the expected cost per sprint is $\pi c_{\mathrm{FN}} \mathrm{FNR} + (1 - \pi) c_{\mathrm{FP}} \mathrm{FPR}$, which is proportional to $\mathrm{FNR} + \mathrm{FPR}$ exactly when
+Youden's index picks the threshold that maximises sensitivity plus specificity, which is the same as minimising $\mathrm{FNR} + \mathrm{FPR}$. With prevalence $\pi$, a miss cost $c_{\mathrm{FN}}$ and a false-alarm cost $c_{\mathrm{FP}}$, the expected cost per sprint is $\pi c_{\mathrm{FN}} \mathrm{FNR} + (1 - \pi) c_{\mathrm{FP}} \mathrm{FPR}$. This is proportional to $\mathrm{FNR} + \mathrm{FPR}$ exactly when
 \begin{equation}
 \frac{c_{\mathrm{FN}}}{c_{\mathrm{FP}}} = \frac{1 - \pi}{\pi}.
 \label{eq:youden}
@@ -59,25 +61,27 @@ Youden's index picks the threshold that maximises sensitivity plus specificity, 
 
 \begin{proposition}
 \label{prop:youden}
-A Youden threshold fitted on a population with prevalence $\pi_{\mathrm{train}}$ is cost-optimal on a population with prevalence $\pi$ only if the implied cost ratio (\ref{eq:youden}) is the same, that is, only if $\pi = \pi_{\mathrm{train}}$. For a calibrated score, the cost-optimal rule warns when $p \ge p^{*} = c_{\mathrm{FP}} / (c_{\mathrm{FP}} + c_{\mathrm{FN}})$, which does not depend on prevalence; a fixed score threshold transferred to a population with lower prevalence therefore behaves like a rule that prices a miss at only $(1 - \pi_{\mathrm{train}}) / \pi_{\mathrm{train}}$ false alarms, and its sensitivity falls with $\pi$.
+A Youden threshold fitted on a population with prevalence $\pi_{\mathrm{train}}$ is cost-optimal on a population with prevalence $\pi$ only if the implied cost ratio (\ref{eq:youden}) is the same, that is, only if $\pi = \pi_{\mathrm{train}}$. For a calibrated score the cost-optimal rule warns when $p \ge p^{*} = c_{\mathrm{FP}} / (c_{\mathrm{FP}} + c_{\mathrm{FN}})$, which does not depend on prevalence. A fixed score threshold carried to a team with lower prevalence therefore acts like a rule that prices a miss at only $(1 - \pi_{\mathrm{train}}) / \pi_{\mathrm{train}}$ false alarms, and its sensitivity falls with $\pi$.
 \end{proposition}
 
-The implied ratio is 2.2 on our TAWOS test set (late-closure prevalence 0.31). On the ten outside projects the same threshold meets prevalences from 0.07 to 0.59, where (\ref{eq:youden}) would call for ratios from 13 to 0.7, and the observed sensitivity runs from 0.11 to 0.86 with a rank correlation of 0.93 with prevalence. The ranking travels because AUC is threshold-free; the threshold does not, and a deployment must either recalibrate it per team or set it from stated costs.
+The link between a threshold rule and the cost ratio it implies is standard in the ROC literature \cite{hernandez2012}. What we add is its use to explain why a threshold that worked on TAWOS misses most failures on some new teams.
+
+For late closure the training prevalence is \TrainPrev, so the implied ratio is \TrainRatio. On the \ExtProjects{} testable outside projects the same threshold meets prevalences from \PrevMin{} to \PrevMax, where (\ref{eq:youden}) would call for ratios from \RatioMin{} down to \RatioMax. The observed sensitivity runs from \SensMin{} to \SensMax, with a rank correlation of \SpearmanPS{} with prevalence. The ranking travels because AUC does not depend on a threshold; the threshold does not travel. A deployment has to recalibrate it per team or set it from stated costs.
 
 \subsection{A minimal model of the two spillover labels}
 
-Suppose each committed issue of sprint $s$ is resolved by the planned end independently with probability $q_s$, a property of the team and the period rather than of the issue. Then the number unresolved is $\mathrm{Binomial}(n_s, 1 - q_s)$, and
+Suppose each committed issue of sprint $s$ is finished by the planned end independently with probability $q_s$, a property of the team and the period rather than of the issue. The number left unfinished is then $\mathrm{Binomial}(n_s, 1 - q_s)$, and
 \begin{align}
 \Pr[y^{\mathrm{sp}}_s = 1] &= 1 - q_s^{\,n_s}, \label{eq:any}\\
 \mathbb{E}[\rho_s] &= 1 - q_s, \qquad \mathrm{Var}[\rho_s] = \frac{q_s (1 - q_s)}{n_s}. \label{eq:ratio}
 \end{align}
-Two predictions follow. By (\ref{eq:any}) the ``any'' label is driven by $n_s$ and saturates quickly: at the cohort's median carry ratio, $q_s \approx 0.25$, a sprint of three issues already spills with probability 0.98, which is why committed scope alone ranks spillover as well as any learned model and why 93\% of nonempty sprints are positive. By (\ref{eq:ratio}) a threshold label on $\rho_s$ is driven by $1 - q_s$, the team's completion rate, with $n_s$ entering only through the variance; so the serious-spillover label should depend on planning-time history and capacity rather than on scope, and the gap between the scope-only and the history-aware models should be larger for it than for plain spillover. Both predictions are tested in Section~\ref{sec:results}. The model ignores dependence between issues and within-sprint scope changes; it is a reading aid, not a claim about the process.
+Two predictions follow. By (\ref{eq:any}) the ``any'' label is driven by $n_s$ and saturates fast: at the cohort's median carry ratio, \CarryMedian, $q_s \approx \Qhat$ and a sprint of three issues already spills with probability \PSpillThree. The median nonempty sprint commits \MedianIssues{} issues, and \NonemptySpill\% of nonempty sprints spill. So committed scope should carry most of what can be known about plain spillover. By (\ref{eq:ratio}) a threshold label on $\rho_s$ is driven by $1 - q_s$, the team's completion rate, with $n_s$ entering only through the variance. Serious spillover should therefore depend on planning-time history and capacity rather than on scope, and the gap between scope-only and history-aware models should be larger for it than for plain spillover. Section~\ref{sec:results} tests both. The model ignores dependence between issues and scope changes during the sprint. It is a reading aid, not a claim about how teams work.
 
 \subsection{Warnings as decisions}
 
-A warning raised at checkpoint $c$ costs $\kappa$ and, if the sprint would otherwise fail, averts a fraction $e(c)$ of the failure cost $F$, with $e$ decreasing in $c$. Warning when the calibrated risk is $p$ has expected cost $\kappa + F p (1 - e(c))$ against $F p$ for staying silent, so the warning pays when
+A warning raised at checkpoint $c$ costs $\kappa$ and, if the sprint would otherwise fail, averts a fraction $e(c)$ of the failure cost $F$, with $e$ falling as $c$ grows. Warning at calibrated risk $p$ has expected cost $\kappa + F p (1 - e(c))$ against $F p$ for staying silent, so the warning pays when
 \begin{equation}
 p \ge \frac{\kappa}{e(c)\, F}.
 \label{eq:warn}
 \end{equation}
-The right-hand side rises as the sprint proceeds, because a late warning averts less. An in-sprint model is therefore useful only where its gain in discrimination outpaces the fall in $e(c)$, which is the trade-off the checkpoint results in Section~\ref{sec:results} describe. Because (\ref{eq:warn}) needs a calibrated $p$, the paper reports calibration beside AUC for every in-sprint model.
+The bar rises as the sprint goes on, because a late warning saves less. An in-sprint model is useful only where its gain in ranking outpaces the fall in $e(c)$. Because (\ref{eq:warn}) needs a calibrated $p$, we report calibration beside AUC.

@@ -1,64 +1,62 @@
-"""Numerical checks of the claims in paper/theory.tex against the repository's result files.
+"""Checks of the claims in paper/theory.tex for the current cohort.
 
+    python -m jr.theory_numbers     (computes results/<cohort>/theory_numbers.json)
     python -m jr.theory_checks
+
+Checks the identities themselves (not just the printed numbers): Proposition 1's mixture
+equals the observed AUC, Proposition 2's implied ratios follow from the prevalences, and the
+binomial model's numbers follow from the frame. The printed macros come from jr/tables.py.
 """
 from __future__ import annotations
 
 import json
 
-import numpy as np
 import pandas as pd
 
 import jr
 
-P1 = jr.PRIOR_RESULTS
-P4 = jr.PRIOR_RESULTS
+t = json.loads((jr.RESULTS / "theory_numbers.json").read_text())
+p1, p2, m, gaps = t["prop1"], t["prop2"], t["minimal_model"], t["gaps"]
 fails = []
 
 
-def check(name, claimed, actual, tol):
-    ok = abs(claimed - actual) <= tol
-    print(("PASS " if ok else "FAIL ") + f"{name}: paper={claimed} computed={actual:.4f}")
+def check(name, ok):
+    print(("PASS " if ok else "FAIL ") + name)
     if not ok:
         fails.append(name)
 
 
-# Proposition 1: AUC on the full population = pi0 * A0 + (1 - pi0) * AUC_nonempty
-cmp_ = pd.read_csv(P1 / "assignment_comparison.csv")
-late = cmp_[cmp_.task == "late_closure"].iloc[0]
-spill = cmp_[cmp_.task == "spillover"].iloc[0]
-neg_all = 786 - 453  # full-population spillover test set: 786 sprints, 453 positive (Table II row 8 of the CCECE paper)
-neg_ne = int(spill.n_test) - round(spill.n_test * spill.positive_rate)
-pi0 = (neg_all - neg_ne) / neg_all
-base = json.load(open(P1 / "baseline_results.json"))
-cond = json.load(open(P1 / "conditional_spillover.json"))
-auc_all = base["label_spillover"]["time_ordered"]["random_forest"]["roc_auc"]
-auc_ne = cond["time_ordered"]["random_forest"]["roc_auc"]
-check("pi0 = 0.913", 0.913, pi0, 0.001)
-check("predicted full AUC with A0=1 is 0.987", 0.987, pi0 + (1 - pi0) * auc_ne, 0.001)
-a0 = (auc_all - (1 - pi0) * auc_ne) / pi0
-check("implied A0 = 0.999", 0.999, a0, 0.001)
-check("inflation pi0(1-AUC_ne) ~ 0.135", 0.135, pi0 * (1 - auc_ne), 0.002)
+# Proposition 1
+check("pi0 = structural / all negatives", abs(p1["pi0"] - p1["structural_negatives"] / p1["negatives"]) < 1e-12)
+check("mixture identity: AUC_all = pi0*A0 + (1-pi0)*AUC_N1", abs(p1["auc_all"] - p1["auc_all_from_mixture"]) < 1e-9)
+check("inflation = AUC_all - AUC_N1 when A0 = 1",
+      p1["A0"] < 1 or abs((p1["auc_all"] - p1["auc_nonempty"]) - p1["inflation_if_A0_is_1"]) < 1e-9)
 
-# Proposition 2: Youden's implied cost ratio and sensitivity on the outside projects
-e = pd.read_csv(P4 / "e3_external_per_project.csv")
-e = e[(e.task == "Late closure") & (e.model == "Gradient boosting") & e.interpretable].copy()
-e["prev"] = e.n_pos / e.n
-check("TAWOS implied ratio (1-.313)/.313 = 2.2", 2.2, (1 - 0.313) / 0.313, 0.01)
-check("outside prevalence min 0.07", 0.07, e.prev.min(), 0.005)
-check("outside prevalence max 0.59", 0.59, e.prev.max(), 0.005)
-check("implied ratio at min prevalence 13", 13, (1 - e.prev.min()) / e.prev.min(), 0.2)
-check("implied ratio at max prevalence 0.7", 0.7, (1 - e.prev.max()) / e.prev.max(), 0.02)
-check("sensitivity min 0.11", 0.11, e.sensitivity.min(), 0.005)
-check("sensitivity max 0.86", 0.86, e.sensitivity.max(), 0.005)
-check("rank correlation prevalence vs sensitivity 0.93", 0.93, e[["prev", "sensitivity"]].corr("spearman").iloc[0, 1], 0.005)
+# Proposition 2
+pp = pd.DataFrame(p2["per_project"])
+check("implied ratio (1-pi)/pi on training data", abs(p2["implied_ratio_train"] - (1 - p2["train_prevalence"]) / p2["train_prevalence"]) < 1e-12)
+check("ratio at min prevalence", abs(p2["ratio_at_min_prev"] - (1 - pp.prevalence.min()) / pp.prevalence.min()) < 1e-12)
+check("ratio at max prevalence", abs(p2["ratio_at_max_prev"] - (1 - pp.prevalence.max()) / pp.prevalence.max()) < 1e-12)
+check("sensitivity rises with prevalence (Spearman > 0.5)", p2["spearman_prev_sens"] > 0.5)
+check("outside prevalences straddle the training prevalence",
+      pp.prevalence.min() < p2["train_prevalence"] < pp.prevalence.max())
 
-# Minimal model: q = 1 - median carry ratio; P(spill | n=3) = 1 - q^3
+# Minimal model
 f = pd.read_csv(jr.DATA / "planning_frame.csv")
 ne = f[f.nonempty]
-q = 1 - ne.carry_ratio.median()
-check("median carry ratio 0.75 (q = 0.25)", 0.25, q, 0.005)
-check("P(any spill | n=3, q=.25) = 0.98", 0.98, 1 - q ** 3, 0.005)
-check("nonempty spillover rate 0.93", 0.93, ne.label_spillover.mean(), 0.005)
+check("q = 1 - median carry ratio", abs(m["q"] - (1 - ne.carry_ratio.median())) < 1e-12)
+check("P(spill | n=3) = 1 - q^3", abs(m["p_spill_n3"] - (1 - m["q"] ** 3)) < 1e-12)
+check("nonempty spillover rate", abs(m["nonempty_spillover_rate"] - ne.label_spillover.mean()) < 1e-12)
+check("prediction: history-minus-scope gap larger for serious spillover (time split)",
+      gaps["serious_spillover_time_strict_minus_scope"] > gaps["spillover_time_strict_minus_scope"])
+check("prediction: history-minus-scope gap larger for serious spillover (LOPO)",
+      gaps["serious_spillover_lopo_strict_minus_scope"] > gaps["spillover_lopo_strict_minus_scope"])
+
+# Printed macros match the json
+tex = (jr.ROOT / "paper" / "tables" / "numbers.tex").read_text()
+for macro, val in (("PiZero", f"{p1['pi0']:.3f}"), ("AucAll", f"{p1['auc_all']:.3f}"),
+                   ("AucNonempty", f"{p1['auc_nonempty']:.3f}"), ("Qhat", f"{m['q']:.2f}"),
+                   ("SpearmanPS", f"{p2['spearman_prev_sens']:.2f}")):
+    check(f"macro {macro} = {val}", f"\\newcommand{{\\{macro}}}{{{val}}}" in tex)
 
 print("FAILS:", fails)

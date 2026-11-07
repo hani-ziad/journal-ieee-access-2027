@@ -1,0 +1,97 @@
+{
+ "cohort": "tawos_all",
+ "prop1": {
+  "n_test": 1288,
+  "positives": 700,
+  "negatives": 588,
+  "structural_negatives": 517,
+  "pi0": 0.8792517006802721,
+  "A0": 1.0,
+  "auc_nonempty": 0.8820623742454728,
+  "auc_all": 0.9857592322643343,
+  "auc_all_from_mixture": 0.9857592322643343,
+  "auc_all_if_A0_is_1": 0.9857592322643343,
+  "inflation_if_A0_is_1": 0.10369685801886146
+ },
+ "prop2": {
+  "threshold": 0.38389569007113766,
+  "train_prevalence": 0.40826446280991735,
+  "implied_ratio_train": 1.4493927125506074,
+  "n_projects": 8,
+  "prev_min": 0.07086614173228346,
+  "prev_max": 0.5862068965517241,
+  "ratio_at_min_prev": 13.11111111111111,
+  "ratio_at_max_prev": 0.7058823529411766,
+  "sens_min": 0.0,
+  "sens_max": 0.8571428571428571,
+  "spearman_prev_sens": 0.9285714285714287,
+  "per_project": [
+   {
+    "project": "MariaDB ColumnStore",
+    "n": 122,
+    "prevalence": 0.5409836065573771,
+    "sensitivity": 0.7121212121212122
+   },
+   {
+    "project": "MariaDB MaxScale",
+    "n": 269,
+    "prevalence": 0.14869888475836432,
+    "sensitivity": 0.3
+   },
+   {
+    "project": "MongoDB C++ Driver",
+    "n": 29,
+    "prevalence": 0.5862068965517241,
+    "sensitivity": 0.8235294117647058
+   },
+   {
+    "project": "MongoDB Compass",
+    "n": 127,
+    "prevalence": 0.07086614173228346,
+    "sensitivity": 0.0
+   },
+   {
+    "project": "MongoDB Database Tools",
+    "n": 43,
+    "prevalence": 0.4883720930232558,
+    "sensitivity": 0.8571428571428571
+   },
+   {
+    "project": "MongoDB PHP Driver",
+    "n": 32,
+    "prevalence": 0.40625,
+    "sensitivity": 0.6923076923076923
+   },
+   {
+    "project": "MongoDB Shell",
+    "n": 21,
+    "prevalence": 0.3333333333333333,
+    "sensitivity": 0.5714285714285714
+   },
+   {
+    "project": "WiredTiger",
+    "n": 211,
+    "prevalence": 0.11374407582938388,
+    "sensitivity": 0.20833333333333334
+   }
+  ]
+ },
+ "minimal_model": {
+  "median_carry_ratio": 0.7111111111111111,
+  "q": 0.28888888888888886,
+  "p_spill_n3": 0.9758902606310014,
+  "nonempty_spillover_rate": 0.9064020965930363,
+  "median_committed_issues": 6.0,
+  "p_spill_at_median_n": 0.999418720467559
+ },
+ "gaps": {
+  "spillover_time_strict_minus_scope": 0.011679556856187268,
+  "spillover_time_strictnew_minus_scope": 0.03985507246376807,
+  "spillover_lopo_strict_minus_scope": 0.03242461792647666,
+  "spillover_lopo_strictnew_minus_scope": 0.05280297397769518,
+  "serious_spillover_time_strict_minus_scope": 0.07850632348582165,
+  "serious_spillover_time_strictnew_minus_scope": 0.10445484635905544,
+  "serious_spillover_lopo_strict_minus_scope": 0.14108429485564566,
+  "serious_spillover_lopo_strictnew_minus_scope": 0.16766413059908292
+ }
+}

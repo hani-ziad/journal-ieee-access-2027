@@ -29,7 +29,9 @@ Outcomes: late closure and spillover (as before), plus three new labels: serious
 | `jr/worki_features.py` | Worki-style R1 to R11, copied unchanged from the critique repository. |
 | `jr/run.py` | Every experiment: planning-time, in-sprint, outside projects. Primary comparisons carry two bootstrap intervals. |
 | `jr/theory_checks.py` | Checks every number in the theory section against the result files. |
-| `paper/theory.tex` | The formal section of the paper: setting, admissible features, three derived results. |
+| `paper/main.tex` | The IEEE Access draft (IEEEtran for now). Inputs `theory.tex`, `tables/*.tex` and `fig_primary.pdf`, all generated from the results. `REVIEW.md` lists what a reviewer will still raise. |
+| `jr/theory_numbers.py`, `jr/tables.py`, `jr/figures.py` | Theory numbers and calibration, the paper's tables, and its figure, all from the result files. |
+| `jr/paper_checks.py` | Checks every number typed into the paper's text against the result files. |
 | `results/dev_8projects/` | Development run on the current 8-project extract, used to test the code. Not the paper's results. |
 | `prior/` | Vendored reconstruction code: `src` (Phase 1 loader, planning snapshot, labels), `phase2` (planning-time features, models), `phase3` (in-sprint progress features). |
 | `data/raw/tawos_8projects/` | The eight-project TAWOS extract used for development. |
@@ -51,8 +53,15 @@ For the full cohort, first make the export (next section), then:
 ```
 set JR_TAWOS_DIR=data/raw/tawos_all        (Windows; on macOS/Linux: export JR_TAWOS_DIR=data/raw/tawos_all)
 python -m jr.data
-python -m jr.run all
+python -m jr.run all              # about two hours; resumes where it stopped if interrupted
+python -m jr.theory_numbers       # theory numbers and calibration
+python -m jr.tables               # the paper's tables
+python -m jr.figures              # the paper's figure
+python -m jr.theory_checks        # the theory identities
+python -m jr.paper_checks         # every number in the paper's text
 ```
+
+Then compile `paper/main.tex` (pdflatex twice).
 
 ## Making the full TAWOS export
 
