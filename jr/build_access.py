@@ -80,8 +80,10 @@ for the content.
 
 BIOS = r"""
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{hani_abusharkh.jpg}}]{Hani AbuSharkh}
-is a Lecturer in Computer Science at the Higher Colleges of Technology, United Arab Emirates, and is
-pursuing the Ph.D. degree in informatics and computing at United Arab Emirates University. He previously
+received the M.A.Sc. degree in information systems technology from Concordia University, Montreal, QC,
+Canada, in 2011. He is currently pursuing the Ph.D. degree in informatics and computing at United Arab
+Emirates University, Al Ain, United Arab Emirates. He is a Lecturer in Computer Science at the Higher
+Colleges of Technology, United Arab Emirates. He previously
 taught computer science for three years at Vanier College, Montreal, Canada. Before teaching, he worked for
 more than ten years as a software engineer in the technology, automotive, aviation, defence and
 secure-payments sectors, with organizations including Ford Motor Company, General Electric, Thales,
