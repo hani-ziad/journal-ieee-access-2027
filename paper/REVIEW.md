@@ -32,3 +32,15 @@ What a reviewer can still raise:
 - Overlap with the CCECE paper (not addressed here by request).
 
 Effect on the CCECE paper: Confluence Cloud is one of its eight projects. Without it, the headline scope-only spillover AUC (logistic regression, time split) moves from 0.885 to 0.903 on the same models and 0.908 when retrained; no conclusion changes. A one-sentence limitation is worth adding before submission.
+
+## Sync with the CCECE audit (8 Nov 2026, evening)
+
+The CCECE sprint-risk paper was rewritten on 8 Nov as an audit, with a new title, because rebuilding iteration state from the change log is not new (Choetkiertikul et al., TSE 2018). Four edits follow here; no number changed.
+
+- Reference `abusharkh2027` now uses the new title, "Predicting sprint outcomes from reconstructed Jira state: Count baselines and a leakage audit" (`jr/build_paper.py`). The co-authors still have to agree to it.
+- Introduction: "Our earlier work rebuilt the board..." now adds "following the change-log reconstruction of iteration state by Choetkiertikul et al. [choet2018]", so the paper no longer reads as if the reconstruction were ours.
+- Acknowledgment (`jr/build_access.py`): "first built for" became "code ... was written for", for the same reason.
+- `guide/Paper_Explained.html`: one sentence saying the replay idea dates from 2018.
+- Related work: the earlier paper's "shuffling added 0.07 AUC" now says part of that gap is drift between time windows, as the CCECE audit found (test windows 27% to 47% late).
+
+`main.tex` and `ieee_access/access_paper.tex` were patched with the same strings instead of rebuilt, so they match what `jr.build_paper` and `jr.build_access` now produce. A stand-in compile of main.tex gives 15 pages with no undefined references. `main_preview.pdf` was not regenerated. The CCECE audit's other findings (within-project scores, count baselines) are already in this paper's Section 6.5 and its burndown and count comparisons, so nothing else needed changing.

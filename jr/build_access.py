@@ -73,7 +73,7 @@ ACK = r"""\section*{Acknowledgment}
 %% IEEE requires the AI system, the sections that use AI-generated content and the level of use to be
 %% stated here. This paragraph describes how the work was actually done in the Claude project. Keep it
 %% accurate: if you rewrite sections yourself or review the code, change the wording to match.
-The sprint-start reconstruction reused here was first built for \cite{abusharkh2027}, with Maryam Hanif
+The sprint-start reconstruction code reused here was written for \cite{abusharkh2027}, with Maryam Hanif
 and Rafat Damseh. The author used Claude (Anthropic), a large language model, throughout this study.
 Under the author's direction it wrote the analysis code in the repository, ran the experiments, drafted
 the text of every section, including the formal setting, and reviewed the drafts critically. The author
