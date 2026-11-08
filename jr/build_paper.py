@@ -85,7 +85,7 @@ PRE = r"""% Journal draft for IEEE Access, assembled by jr/build_paper.py from m
 
 \title{What Predicts Sprint Spillover Without Hindsight? A Benchmark of Feature Families on Public Jira Data}
 
-% Co-authors to be confirmed before submission.
+% Sole author (decided 8 Nov 2026).
 \author{Hani~AbuSharkh%
 \thanks{H. AbuSharkh is with the Higher Colleges of Technology, Al Ain, UAE (e-mail: habusharkh@hct.ac.ae).}}
 

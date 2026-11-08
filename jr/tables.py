@@ -344,6 +344,41 @@ def apneg_table():
     write("apneg", "\n".join(rows) + "\n")
 
 
+def within_table():
+    """Pooled AUC differences (as everywhere else) beside within-project ones (jr/within.py)."""
+    pdf = pd.read_csv(jr.RESULTS / "planning_differences.csv"); pdf = pdf[pdf.primary == True]  # noqa: E712
+    idf = pd.read_csv(jr.RESULTS / "insprint_differences.csv"); idf = idf[idf.primary == True]  # noqa: E712
+    wd = pd.read_csv(jr.RESULTS / "within_differences.csv")
+    names = {**NAMES, "serious_spillover_median": "Serious sp.\\ (median)"}
+    rows_spec = [
+        ("New features", "planning", "strict+new - strict", "spillover", None),
+        ("", "planning", "strict+new - strict", "serious_spillover", None),
+        ("History over scope", "planning", "strict+new - scope", "spillover", None),
+        ("", "planning", "strict+new - scope", "serious_spillover", None),
+        ("", "planning", "strict+new - scope", "serious_spillover_median", None),
+        ("", "planning", "strict+new - scope", "late_closure", None),
+        ("Progress over burndown", "in-sprint", "ours - worki", "spillover", 0.5),
+        ("", "in-sprint", "ours - worki", "serious_spillover", 0.5),
+        ("Burndown added", "in-sprint", "ours+worki - ours", "serious_spillover", 0.5),
+    ]
+    rows = []
+    for lab, st, comp, o, cp in rows_spec:
+        if st == "planning":
+            q = pdf[(pdf.outcome == o) & (pdf.comparison == comp)]
+            w = wd[(wd.stage == st) & (wd.outcome == o) & (wd.comparison == comp)]
+        else:
+            q = idf[(idf.outcome == o) & (idf.comparison == comp) & (idf.checkpoint == cp)]
+            w = wd[(wd.stage == st) & (wd.outcome == o) & (wd.comparison == comp) & (wd.checkpoint == cp)]
+        if q.empty:  # the median label is a sensitivity label: its row has primary=False
+            allp = pd.read_csv(jr.RESULTS / "planning_differences.csv")
+            q = allp[(allp.model == GB) & (allp.protocol == "time") & (allp.outcome == o) & (allp.comparison == comp)]
+        q, w = q.iloc[0], w.iloc[0]
+        at = "" if cp is None else f", {int(cp * 100)}\\%"
+        rows.append(f"{lab} & {names[o]}{at} & {d3(q.delta)} {ci(q.ci_low, q.ci_high)} & "
+                    f"{d3(w.delta)} {ci(w.ci_low, w.ci_high)} & {int(w.projects)} \\\\")
+    write("within", "\n".join(rows) + "\n")
+
+
 if __name__ == "__main__":
     labels_table(); planning_auc_table(); primary_planning_table(); insprint_auc_table()
     primary_insprint_table(); external_table(); calibration_table(); theory_numbers()
@@ -353,6 +388,8 @@ if __name__ == "__main__":
         hypothesis_table()
     fair_table()
     apneg_table()
+    if (jr.RESULTS / "within_differences.csv").exists():
+        within_table()
     if (jr.RESULTS / "robust_restricted.csv").exists():
         robust_table()
         decision_table()

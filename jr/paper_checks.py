@@ -81,7 +81,7 @@ check("We read H1 as a small gain for spillover that we cannot confirm",
       P("spillover", "strict+new - strict", col="ci_low") > 0 and C("planning", "spillover", "strict+new - strict", col="ci_low") < 0)
 h2 = [I(o, "ours - worki", cp) for o in SPILL for cp in CPS]
 check("Ours beats worki by 0.13 to 0.19 AUC", round(min(h2), 2) == 0.13 and round(max(h2), 2) == 0.19)
-check("burndown-shape features rank sprints worse by 0.13 to 0.19 AUC", round(min(h2), 2) == 0.13 and round(max(h2), 2) == 0.19)
+check("Burndown-shape features rank sprints worse by 0.13 to 0.19 AUC", round(min(h2), 2) == 0.13 and round(max(h2), 2) == 0.19)
 check("in the full cohort and on the confirmation set",
       all(I(o, "ours - worki", cp, col="ci_low") > 0 and C("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS))
 h3 = [I(o, "ours - choet", cp) for o in ALL4 for cp in CPS]
@@ -93,14 +93,55 @@ check("On the confirmation set the gain is larger and holds for both spillover l
       all(C("in-sprint", o, "ours - choet", cp, "ci_low") > 0 and C("in-sprint", o, "ours - choet", cp) > I(o, "ours - choet", cp)
           for o in SPILL for cp in CPS))
 check("Seriously late and scope churn do not hold", all(P(o, "strict+new - scope", col="ci_low") < 0 for o in ("seriously_late", "scope_churn")))
-check("The first two findings replicate",
-      all(C("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS)
-      and C("planning", "serious_spillover", "strict+new - scope", col="ci_low") > 0)
+check("but the gain does not hold on the", C("planning", "spillover", "strict+new - strict", col="ci_low") < 0)
+check("for seriously late the interval ends just below zero",
+      -0.002 < P("seriously_late", "strict+new - strict", col="ci_high") < 0)
+fine = pd.read_csv(R / "hypotheses_fine.csv")
+fl = lambda o, cp: float(fine[(fine.h == "H3") & (fine.outcome == o) & (fine.checkpoint == cp)].lo.iloc[0])
+check("with the 10,000 resamples used for the $p$-values it no longer does, while the one for serious spillover at 50\\% then just clears it",
+      I("spillover", "ours - choet", 0.5, col="ci_low") > 0 and fl("spillover", 0.5) < 0
+      and I("serious_spillover", "ours - choet", 0.5, col="ci_low") < 0 and fl("serious_spillover", 0.5) > 0)
+check("all for H3, end within 0.001 of zero", set(hyp[hyp.lo.abs() < 0.001].h) == {"H3"})
 
 h4 = hyp[(hyp.h == "H4") & (hyp.outcome == "serious_spillover")].iloc[0]
-check("It does not survive the Holm adjustment, but it holds under every other protocol and replicates on the confirmation set",
+rdv = pd.read_csv(R / "robust_differences.csv")
+rrs = pd.read_csv(R / "robust_restricted.csv")
+rhs = pd.read_csv(R / "robust_history.csv")
+unc = pd.read_csv(jr.ROOT / "results" / "tawos_all" / "planning_differences.csv")
+pick = lambda d: d[(d.outcome == "serious_spillover") & (d.comparison == "strict+new - scope")]
+variants_lo = ([float(x) for x in pick(rdv).ci_low] + [float(x) for x in pick(rrs[rrs.model == GB] if "model" in rrs else rrs).ci_low]
+               + [float(x) for x in pick(rhs[rhs.stage == "planning"]).ci_low]
+               + [float(pick(unc[(unc.model == GB) & (unc.protocol == "time")]).ci_low.iloc[0])])
+check("It does not survive the Holm adjustment, but it holds under leave-one-project-out testing and every robustness variant, and replicates on the confirmation set",
       h4.p_holm >= 0.05 and h4.c_lo > 0 and P("serious_spillover", "strict+new - scope", "lopo", col="ci_low") > 0
-      and P("serious_spillover", "strict+new - scope", "time, no SP fallback", col="ci_low") > 0)
+      and P("serious_spillover", "strict+new - scope", "time, no SP fallback", col="ci_low") > 0
+      and len(variants_lo) >= 5 and min(variants_lo) > 0)
+
+# within-project analysis (jr/within.py)
+wd = pd.read_csv(R / "within_differences.csv")
+W = lambda st, o, comp, cp=None, col="delta": float(wd[(wd.stage == st) & (wd.outcome == o) & (wd.comparison == comp)
+                                                       & ((wd.checkpoint == cp) if cp is not None else wd.checkpoint.isna())][col].iloc[0])
+wk_ok = all(W("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS)
+add_w = max(W("in-sprint", o, "ours+worki - ours", cp) for o in ALL4 for cp in CPS)
+check("add nothing when combined with progress counts, across projects and within them", wk_ok and add_w < 0.01)
+check("within a team as well as across teams", wk_ok)
+check("and burndown shape still adds nothing", add_w < 0.01)
+check("but nearly all of that gain comes from telling teams apart",
+      W("planning", "serious_spillover", "strict+new - scope") < 0.25 * P("serious_spillover", "strict+new - scope")
+      and W("planning", "serious_spillover", "strict+new - scope", col="ci_low") < 0)
+check("with an interval that includes zero", W("planning", "serious_spillover", "strict+new - scope", col="ci_low") < 0)
+check("within projects too", W("planning", "spillover", "strict+new - strict", col="ci_low") > 0)
+check("The new features keep their gain for spillover", W("planning", "spillover", "strict+new - strict", col="ci_low") > 0)
+check("Within projects the spillover gain is the same size",
+      abs(W("planning", "spillover", "strict+new - strict") - P("spillover", "strict+new - strict")) < 0.01)
+check("the history-aware set ranks a team's own sprints worse than scope alone",
+      W("planning", "late_closure", "strict+new - scope", col="ci_high") < 0)
+check("so the outside test asked history for a gain it does not show at home either",
+      W("planning", "serious_spillover", "strict+new - scope", col="ci_low") < 0)
+check("Scored only within projects, the in-sprint findings hold but most of the planning-time history gain disappears",
+      wk_ok and W("planning", "serious_spillover", "strict+new - scope") < 0.25 * P("serious_spillover", "strict+new - scope"))
+check("A single team learns little from its own history that the size of the sprint does not already say",
+      all(W("planning", o, "strict+new - scope", col="ci_low") < 0 for o in ("spillover", "serious_spillover", "late_closure")))
 
 # planning time
 check("Plain spillover is mostly a matter of how many issues were committed",

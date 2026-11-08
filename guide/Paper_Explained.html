@@ -357,7 +357,7 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
   </div>
 
   <h3>Outside projects</h3>
-  <p>Trained on all of TAWOS, tested on ten MariaDB and MongoDB projects the model never saw. History stops helping.</p>
+  <p>Trained on all of TAWOS, tested on ten MariaDB and MongoDB projects the model never saw. History stops helping, but this test averages AUC within each project, and within a project history adds little even inside TAWOS.</p>
   <div class="card">
     <p class="chart-title">Mean AUC across outside projects</p>
     <p class="chart-sub">Whiskers show ± one standard deviation across projects. k = projects with at least five sprints in each class.</p>
@@ -372,8 +372,8 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
   <h2>What a team can take from this</h2>
   <ol class="take">
     <li><b>During a sprint, count.</b> How much is done, how much is left, and how fast it is going carry nearly all of the signal, and their warnings are calibrated. Burndown-shape indicators add nothing on top.</li>
-    <li><b>Before a sprint, look at your own recent completion rate.</b> It is what tells you how much will be left over. The binomial model gets most of the way with one number per team.</li>
-    <li><b>Don't import a model or a threshold from another organisation.</b> Neither carried over in this study.</li>
+    <li><b>Before a sprint, history tells teams apart, not a team's sprints.</b> Across many teams, each team's recent completion rate is the best guide to how much will be left over, and the binomial model gets most of the way with one number per team. Within one team it adds little to the size of the sprint: the serious-spillover gain falls from 0.088 to 0.015 AUC when only pairs of sprints from the same project are compared.</li>
+    <li><b>Be careful importing a model or a threshold from another organisation.</b> We saw no sign that either carried over, and a threshold changes what a miss is worth when the share of bad sprints changes.</li>
     <li><b>For outcomes as common as spillover, warning on every sprint is almost as good as any model</b> unless warnings are costly.</li>
     <li><b>Late closure is mostly noise.</b> It records when someone pressed "Complete sprint", and nothing tried here predicts it well.</li>
   </ol>
@@ -381,7 +381,8 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
   <ul>
     <li>The labels come from Jira fields, not from asking teams whether a sprint went badly. No practitioner has yet judged the flagged sprints.</li>
     <li>Only 26 project clusters, so project-level intervals are wide. Only 5 of 22 tests survive Holm.</li>
-    <li>Some analysis choices were made after the full run (the measurability check, the confirmation set, the Holm step). All are logged with dates, and the confirmation set is the main defence.</li>
+    <li>Some analysis choices were made after the full run (the measurability check, the confirmation set, the Holm step). All are logged with dates, and the confirmation set is the main defence, though its 19 projects are part of the full cohort, so it is not an independent replication.</li>
+    <li>Every AUC in this literature is pooled over projects, which also rewards telling teams apart. The paper now scores the main comparisons within projects too, and most of the planning-time history gain disappears there.</li>
     <li>21% of issues placed in a sprint have no sprint history, so the replay has to assume their exported sprint. The main results hold on the 15 projects with at least 85% coverage.</li>
     <li>All data are open source, and a handful of organisations contribute most TAWOS projects.</li>
   </ul>

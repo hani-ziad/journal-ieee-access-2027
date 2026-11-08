@@ -70,10 +70,15 @@ FRONT = r"""\begin{document}
 """
 
 ACK = r"""\section*{Acknowledgment}
-%% IEEE Access requires AI-generated text to be disclosed here, with a citation to the AI system in the
-%% sections that use it. Edit this paragraph so it says exactly how AI was used, or delete it if it was not.
-The author used an AI assistant (Claude, Anthropic) to help draft and edit parts of the text and the
-analysis code. The author checked every statement, number and reference and takes full responsibility
+%% IEEE requires the AI system, the sections that use AI-generated content and the level of use to be
+%% stated here. This paragraph describes how the work was actually done in the Claude project. Keep it
+%% accurate: if you rewrite sections yourself or review the code, change the wording to match.
+The sprint-start reconstruction reused here was first built for \cite{abusharkh2027}, with Maryam Hanif
+and Rafat Damseh. The author used Claude (Anthropic), a large language model, throughout this study.
+Under the author's direction it wrote the analysis code in the repository, ran the experiments, drafted
+the text of every section, including the formal setting, and reviewed the drafts critically. The author
+chose the research question and the venue, approved the study plan and every change to it, and checked
+the statements, numbers and references against the result files. The author takes full responsibility
 for the content.
 
 """

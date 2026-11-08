@@ -4,7 +4,7 @@
 \section{Formal Setting}
 \label{sec:theory}
 
-This section fixes what ``no hindsight'' means for a Jira export, adds a matching rule for the outcomes, and derives four consequences. Each one turns a pattern that is easy to miss into a prediction the experiments can check: how empty sprints inflate ROC-AUC, why a threshold fitted on one group of teams does not carry to another, how the two spillover labels should differ, and why a simple model of sprint completion can rank sprints well yet give probabilities that are too extreme.
+This section fixes what ``no hindsight'' means for a Jira export, adds a matching rule for the outcomes, and works out four consequences: how empty sprints inflate ROC-AUC, why a threshold fitted on one group of teams does not carry to another, how the two spillover labels should differ, and why a simple model of sprint completion can rank sprints well yet give probabilities that are too extreme. None of them is deep. Their use is that each turns a pattern that is easy to miss into something the data can confirm or contradict. The first three were in the study plan before the full-cohort run; the fourth (Section~\ref{sec:overdisp}) was added after it, to explain a result.
 
 \subsection{The event log and the sprint state}
 
@@ -35,7 +35,7 @@ The outcomes need a rule of their own. The carry ratio uses each committed issue
 An outcome of sprint $s$ that depends on $\{r_i : i \in C_s\}$ is measurable if, for every $i \in C_s$, either $r_i$ is recorded or the issue is in an open state at the time of export.
 \end{definition}
 
-An issue that is closed but has no $r_i$ was finished at an unknown time. Counting it as never finished, which is what a rule that reads only $r_i$ does, makes $\rho_s$ too large and turns a recording habit into spillover. We check this per project before any modelling (Section~\ref{sec:setup}).
+An issue that is closed but has no $r_i$ was finished at an unknown time. Counting it as never finished, which is what a rule that reads only $r_i$ does, makes $\rho_s$ too large and turns a recording habit into spillover. We check this per project (Section~\ref{sec:setup}).
 
 \subsection{Empty sprints inflate ROC-AUC}
 
@@ -55,9 +55,9 @@ where $A_0$ is the probability that a random positive outscores a random structu
 AUC is the probability that a random positive outscores a random negative. Conditioning on which kind of negative is drawn gives (\ref{eq:aucmix}).
 \end{proof}
 
-The decomposition is elementary, but it puts an exact number on the inflation.
+The decomposition is elementary and holds exactly, so there is nothing to test. Its use is that it puts a number on the inflation.
 
-On our time-split test set the full population has \NegAll{} negatives, and \NegStruct{} of them commit nothing, so $\pi_0 = \PiZero$. The model's AUC on nonempty sprints is \AucNonempty. With $A_0 = 1$, (\ref{eq:aucmix}) predicts \AucPred{} for the full population; the observed value is \AucAll, and the measured $A_0$ is \AZero. The gap of \Inflation{} between the two headline numbers is entirely the empty sprints. Any study that keeps them in the denominator reports this gap as skill.
+To show its size we score spillover on all sprints, empty ones included, with the time split made over all sprints (the one used for the late labels, Section~\ref{sec:protocol}). Its test set has \NegAll{} negatives, and \NegStruct{} of them commit nothing, so $\pi_0 = \PiZero$. The model (strict+new, gradient boosting) has an AUC of \AucNonempty{} on the \TestFullNonempty{} nonempty sprints of this test set; this differs from Table~\ref{tab:planauc}, which uses the split made over nonempty sprints. The measured $A_0$ is \AZero, so (\ref{eq:aucmix}) gives \AucPred{} for the full population, which is the AUC observed there. The gap of \Inflation{} is entirely the empty sprints. Any study that keeps them in the denominator reports this gap as skill.
 
 \subsection{Why a fitted threshold does not travel}
 
@@ -69,10 +69,10 @@ Youden's index picks the threshold that maximises sensitivity plus specificity, 
 
 \begin{proposition}
 \label{prop:youden}
-A Youden threshold fitted on a population with prevalence $\pi_{\mathrm{train}}$ is cost-optimal on a population with prevalence $\pi$ only if the implied cost ratio (\ref{eq:youden}) is the same, that is, only if $\pi = \pi_{\mathrm{train}}$. For a calibrated score the cost-optimal rule warns when $p \ge p^{*} = c_{\mathrm{FP}} / (c_{\mathrm{FP}} + c_{\mathrm{FN}})$, which does not depend on prevalence \cite{elkan2001}. A fixed score threshold carried to a team with lower prevalence therefore acts like a rule that prices a miss at only $(1 - \pi_{\mathrm{train}}) / \pi_{\mathrm{train}}$ false alarms, and its sensitivity falls with $\pi$.
+A Youden threshold fitted on a population with prevalence $\pi_{\mathrm{train}}$ is cost-optimal on a population with prevalence $\pi$ only if the implied cost ratio (\ref{eq:youden}) is the same, that is, only if $\pi = \pi_{\mathrm{train}}$. For a calibrated score the cost-optimal rule warns when $p \ge p^{*} = c_{\mathrm{FP}} / (c_{\mathrm{FP}} + c_{\mathrm{FN}})$, which does not depend on prevalence \cite{elkan2001}. A fixed score threshold carried to a team with lower prevalence therefore acts like a rule that prices a miss at only $(1 - \pi_{\mathrm{train}}) / \pi_{\mathrm{train}}$ false alarms.
 \end{proposition}
 
-The link between a threshold rule and the cost ratio it implies is standard in the ROC literature \cite{hernandez2012}. What we add is its use to explain why a threshold that worked on TAWOS misses most failures on some new teams.
+The link between a threshold rule and the cost ratio it implies is standard in the ROC literature \cite{hernandez2012}. What we add is its use to explain why a threshold that worked on TAWOS misses most failures on some new teams. The proposition does not by itself say that sensitivity falls with prevalence; sensitivity depends only on the scores of the positives. It falls in practice because history features make a team's scores track its own base rate, so a team with fewer failures gets lower scores across the board, its failures included.
 
 For late closure the training prevalence is \TrainPrev, so the implied ratio is \TrainRatio. On the \ExtProjects{} testable outside projects the same threshold meets prevalences from \PrevMin{} to \PrevMax, where (\ref{eq:youden}) would call for ratios from \RatioMin{} down to \RatioMax. The observed sensitivity runs from \SensMin{} to \SensMax, with a rank correlation of \SpearmanPS{} with prevalence. The ranking travels because AUC does not depend on a threshold; the threshold does not travel. A deployment has to recalibrate it per team or set it from stated costs.
 
@@ -88,8 +88,9 @@ Two predictions follow. By (\ref{eq:any}) the ``any'' label is driven by $n_s$ a
 The model also gives a predictor with no learning at all. Estimate $q_s$ from the team's last finished sprints, which is admissible, and read the risk of either label off the binomial distribution. If this one-number-per-team model ranks sprints nearly as well as a learned model, then most of what the learned model does is estimate $q_s$.
 
 \subsection{When issues do not finish independently}
+\label{sec:overdisp}
 
-The binomial model assumes that the issues of a sprint finish independently. They plausibly do not: a blocked dependency, a sick developer or an underestimated epic holds back several issues at once. A standard way to allow for this \cite{skellam1948} is to let the unfinished probability $p_s$ itself vary from sprint to sprint around $1 - q_s$, with a beta distribution whose spread is set by one parameter $r \in (0, 1)$, the correlation between two issues of the same sprint. The count left unfinished is then beta-binomial.
+We added this part after the full run, when the binomial model ranked well but gave poor probabilities. The binomial model assumes that the issues of a sprint finish independently. They plausibly do not: a blocked dependency, a sick developer or an underestimated epic holds back several issues at once. A standard way to allow for this \cite{skellam1948} is to let the unfinished probability $p_s$ itself vary from sprint to sprint around $1 - q_s$, with a beta distribution whose spread is set by one parameter $r \in (0, 1)$, the correlation between two issues of the same sprint. The count left unfinished is then beta-binomial.
 
 \begin{proposition}
 \label{prop:overdisp}

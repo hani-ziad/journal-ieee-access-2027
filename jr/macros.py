@@ -79,6 +79,7 @@ def main():
     put("SprintMin", f"{g.min()}"); put("SprintMax", f"{g.max()}"); put("SprintMed", f"{g.median():.0f}")
     put("DateFrom", f.start_date.min().strftime("%B %Y")); put("DateTo", f.start_date.max().strftime("%B %Y"))
     put("TestAll", f"{len(te_all):,}"); put("TestNonempty", f"{len(te_ne):,}")
+    put("TestFullNonempty", f"{int(te_all.nonempty.sum()):,}")
     put("NegSp", f"{int((te_ne.label_spillover == 0).sum())}")
     put("NegSs", f"{int((te_ne.label_serious_spillover == 0).sum())}")
     put("CarryMedPct", f"{100 * ne.carry_ratio.median():.0f}")
@@ -88,6 +89,7 @@ def main():
     put("DevProj", f"{len(dev & set(f.project))}")
     put("DevSprints", f"{int(f.project.isin(dev).sum()):,}")
     put("ConfProj", f"{f.project.nunique() - len(dev & set(f.project))}")
+    put("ConfSprints", f"{int((~f.project.isin(dev)).sum()):,}")
     ex = rc[rc.excluded].sort_values("share", ascending=False)
     put("NExcluded", f"{len(ex)}")
     for nm, r in zip(("UnrecA", "UnrecB", "UnrecC"), ex.itertuples()):
@@ -186,6 +188,23 @@ def main():
     put("NHoldRaw", f"{int((h.lo > 0).sum())}")
     put("NHoldHolm", f"{int((h.p_holm < 0.05).sum())}")
     put("NHoldConf", f"{int(((h.lo > 0) & (h.c_lo > 0)).sum())}")
+    # intervals whose lower end is within 0.001 of zero: their tick depends on the bootstrap draw
+    put("NBoundary", f"{int((h.lo.abs() < 0.001).sum())}")
+    h3 = h[h.h == "H3"]
+    put("NHThree", f"{len(h3)}"); put("NHThreeOver", f"{int((h3.delta > 0.05).sum())}")
+    r3 = h3[(h3.outcome == "spillover") & (h3.checkpoint == 0.5)].iloc[0]
+    put("LoChSpB", f"{r3.lo:.4f}")
+
+    # within-project AUC (jr/within.py): only pairs of sprints from the same project
+    wf = R / "within_differences.csv"
+    if wf.exists():
+        wd = pd.read_csv(wf)
+        diff_macros(wd[wd.stage == "planning"], "P", "within", "W")
+        diff_macros(wd[wd.stage == "in-sprint"], "I", "within", "W", checkpoint=True)
+        wa = pd.read_csv(R / "within_project.csv")
+        for r in wa[wa.stage == "planning"].itertuples():
+            if r.outcome in OUTC and r.features in SETS:
+                put(f"wPT{OUTC[r.outcome]}{SETS[r.features]}", num(r.within))
 
     # theory numbers for the cohort
     t = json.loads((R / "theory_numbers.json").read_text())

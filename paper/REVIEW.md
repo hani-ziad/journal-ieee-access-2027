@@ -1,5 +1,11 @@
 # Review log
 
+## Fifth pass (8 Nov 2026)
+
+Fixed: (1) pooled AUC hid that the history gain is between teams; new within-project analysis (`jr/within.py`, Section 6.5, Table 8) and the abstract, introduction, H4 text, outside-project reading, discussion and conclusion rewritten around it. (2) Section 5.3 said "1,118 test sprints, 734 of them nonempty", but those come from two different splits; Proposition 1 used the all-sprint split (688 nonempty), which is why its 0.885 differed from Table 4's 0.869. Both now explained. (3) "Before any modelling we checked" was false; the check came after the first full run. (4) Proposition 2's "sensitivity falls with prevalence" is not a consequence of the proposition; moved to the text with the actual mechanism. (5) The plan held H4 (no gain for serious spillover) and the binomial reading (a gain) at once; the paper now says so. (6) Three H3 intervals end within 0.001 of zero and flip between 2,000 and 10,000 resamples; flagged. (7) H3's 0.05 ceiling was exceeded in 5 of 8 comparisons; now said. (8) Confirmation set described as overlapping the full cohort. (9) Data statement claimed the full TAWOS extract is in the repository; it is not. (10) AI disclosure made specific. 67 claim checks, all pass.
+
+Still open: practitioner validation; full extract on Zenodo with a DOI; author's own rewrite of the introduction and discussion; the bio wording (see below).
+
 ## Fourth pass (8 Nov 2026)
 
 Fixed: title now leads with spillover; reconstruction consistency check (story points 99.7%, sprint field 99.6% where both name a cohort sprint, 79% of in-sprint issues have sprint history) and the main comparisons on the 15 projects with at least 85% history coverage (results hold; planning context gains more there); TAWOS licence (Apache 2.0, research use) noted and outside Jira data no longer redistributed; the two failed labels reported as negative results; Holm adjustment from 10,000 resamples (5 of 22 survive; H4 serious spillover does not, but replicates on the confirmation set and holds under every other variant, which the paper now says); hair-splitting wording removed; two tables moved to the appendix; a sentence on when the measurability rule was fixed.

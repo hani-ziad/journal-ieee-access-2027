@@ -33,6 +33,7 @@ Outcomes: late closure and spillover (as before), plus three new labels: serious
 | `jr/theory_numbers.py`, `jr/tables.py`, `jr/figures.py` | Theory numbers and calibration, the paper's tables, and its figure, all from the result files. |
 | `jr/confirm.py`, `jr/binomial.py` | The confirmation set (19 projects not in the development run) and the binomial and beta-binomial predictors. |
 | `jr/paper_checks.py` | Checks every number typed into the paper's text against the result files. |
+| `jr/within.py` | The main comparisons rescored with within-project AUC (pairs of sprints from the same project only). Added after the full run. |
 | `results/dev_8projects/` | Development run on the current 8-project extract, used to test the code. Not the paper's results. |
 | `prior/` | Vendored reconstruction code: `src` (Phase 1 loader, planning snapshot, labels), `phase2` (planning-time features, models), `phase3` (in-sprint progress features). |
 | `data/raw/tawos_8projects/` | The eight-project TAWOS extract used for development. |
@@ -71,6 +72,7 @@ python -m jr.robust               # tuned model, calendar cut, warning budgets, 
 python -m jr.validate             # reconstruction consistency check and sprint-history coverage
 python -m jr.robust history       # main comparisons on projects with good sprint-history coverage
 python -m jr.hypotheses_fine      # the 22 hypothesis tests with 10,000 resamples, for the Holm adjustment
+python -m jr.within               # the main comparisons scored within projects only, about 15 seconds
 python -m jr.tables               # the paper's tables
 python -m jr.macros               # every number in the paper's text
 python -m jr.build_paper          # assembles paper/main.tex from main_body.tex with the verified references
