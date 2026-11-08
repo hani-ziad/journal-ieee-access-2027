@@ -1,0 +1,11 @@
+outcome,model,comparison,auc,delta,ci_low,ci_high,excludes_zero,primary,p_project
+spillover,binomial,,0.7994680851063829,,,,,,
+spillover,scope,,0.7376329787234043,,,,,,
+spillover,strict+new,,0.826241134751773,,,,,,
+spillover,,strict+new - binomial,,0.026773049645390068,-0.030303659503612444,0.09892291953864457,False,False,0.3225
+spillover,,binomial - scope,,0.06183510638297862,-0.007511588232635138,0.11327642938446722,False,False,0.0795
+serious_spillover,binomial,,0.6822998946814112,,,,,,
+serious_spillover,scope,,0.5580239599789363,,,,,,
+serious_spillover,strict+new,,0.7358478146392838,,,,,,
+serious_spillover,,strict+new - binomial,,0.05354791995787267,-0.004127590586501209,0.12246973598700553,False,False,0.0635
+serious_spillover,,binomial - scope,,0.12427593470247489,0.016324232572358488,0.22434990369927607,True,False,0.0305

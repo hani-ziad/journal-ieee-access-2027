@@ -1,0 +1,31 @@
+protocol,outcome,features,n,auc,best,projects
+"time, tuned",late_closure,scope,1118,0.6920716727289438,"(2, 0.03, 300, 10)",
+"time, tuned",late_closure,strict,1118,0.7148220023542138,"(3, 0.03, 100, 40)",
+"time, tuned",late_closure,strict+new,1118,0.7126922519503565,"(3, 0.03, 100, 40)",
+calendar cut,late_closure,scope,1103,0.6846221341233809,2018-01-29,20.0
+calendar cut,late_closure,strict,1103,0.7204069598084559,2018-01-29,20.0
+calendar cut,late_closure,strict+new,1103,0.717003786829223,2018-01-29,20.0
+"time, tuned",seriously_late,scope,1118,0.6442864869041182,"(2, 0.03, 100, 40)",
+"time, tuned",seriously_late,strict,1118,0.6844832470576114,"(2, 0.03, 300, 40)",
+"time, tuned",seriously_late,strict+new,1118,0.6873290581781658,"(2, 0.1, 100, 40)",
+calendar cut,seriously_late,scope,1103,0.6365010021295252,2018-01-29,20.0
+calendar cut,seriously_late,strict,1103,0.6971637646665831,2018-01-29,20.0
+calendar cut,seriously_late,strict+new,1103,0.6957362520355755,2018-01-29,20.0
+"time, tuned",spillover,scope,734,0.8439371645286304,"(2, 0.03, 100, 40)",
+"time, tuned",spillover,strict,734,0.8434915963774273,"(3, 0.03, 100, 10)",
+"time, tuned",spillover,strict+new,734,0.8711064597019873,"(2, 0.03, 100, 40)",
+calendar cut,spillover,scope,724,0.8583195135433941,2018-02-12,20.0
+calendar cut,spillover,strict,724,0.8761470425649531,2018-02-12,20.0
+calendar cut,spillover,strict+new,724,0.9113322277501382,2018-02-12,20.0
+"time, tuned",serious_spillover,scope,734,0.6916011072261075,"(3, 0.03, 100, 40)",
+"time, tuned",serious_spillover,strict,734,0.748513986013986,"(3, 0.03, 300, 40)",
+"time, tuned",serious_spillover,strict+new,734,0.7728292540792542,"(2, 0.03, 100, 40)",
+calendar cut,serious_spillover,scope,724,0.7012131932532875,2018-02-12,20.0
+calendar cut,serious_spillover,strict,724,0.7593714265294453,2018-02-12,20.0
+calendar cut,serious_spillover,strict+new,724,0.7804817038307603,2018-02-12,20.0
+"time, tuned",scope_churn,scope,412,0.5340028188865399,"(5, 0.1, 300, 40)",
+"time, tuned",scope_churn,strict,412,0.5833836705929729,"(2, 0.1, 100, 40)",
+"time, tuned",scope_churn,strict+new,412,0.6289137219369778,"(3, 0.03, 100, 40)",
+calendar cut,scope_churn,scope,450,0.5233128453467437,2018-02-26,18.0
+calendar cut,scope_churn,strict,450,0.49925498230582976,2018-02-26,18.0
+calendar cut,scope_churn,strict+new,450,0.5294592413236481,2018-02-26,18.0

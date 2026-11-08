@@ -1,17 +1,28 @@
-# Strict review of the draft (7 Nov 2026, second pass)
+# Review log
 
-Done in this pass:
+## Fourth pass (8 Nov 2026)
 
-1. **Hypotheses written after a look at 61% of the data.** Added a confirmation set: every hypothesis test repeated on the 21 projects that the development run never saw (Table "confirm"). The in-sprint hypotheses and the serious-spillover results replicate; the spillover part of H1 does not and is now reported as unconfirmed. Logged in PLAN.md as added after the full run.
-2. **Thin related work.** 18 to 42 references, in four subsections. Every reference was checked against Crossref (DOI in the entry) or the publisher's page (JMLR, IJCAI); none was typed from memory. Two candidates were dropped because they could not be verified (Usman et al. 2014; Self and Liang 1987).
-3. **Light theory.** Added Proposition 3 (overdispersion, beta-binomial variance) with proof, checked by simulation. Turned the binomial model into a predictor with no learning: it comes within 0.03 AUC of gradient boosting, which shows most of the planning-time ranking is one number per team, and its poor calibration is explained by Proposition 3 (estimated intra-sprint correlation 0.18).
+Fixed: title now leads with spillover; reconstruction consistency check (story points 99.7%, sprint field 99.6% where both name a cohort sprint, 79% of in-sprint issues have sprint history) and the main comparisons on the 15 projects with at least 85% history coverage (results hold; planning context gains more there); TAWOS licence (Apache 2.0, research use) noted and outside Jira data no longer redistributed; the two failed labels reported as negative results; Holm adjustment from 10,000 resamples (5 of 22 survive; H4 serious spillover does not, but replicates on the confirmation set and holds under every other variant, which the paper now says); hair-splitting wording removed; two tables moved to the appendix; a sentence on when the measurability rule was fixed.
 
-All numbers: `python -m jr.paper_checks` (189 checks) and `python -m jr.theory_checks` pass.
+Still open: practitioner validation; data only to 2020 and open source; IEEE Access template, bios and authorship.
 
-Still open:
+## Third pass (8 Nov 2026)
 
-- The head-to-head uses partial versions of prior feature sets (said plainly in the paper).
-- Overlap with the CCECE paper: disclose in the cover letter; run the similarity check.
+Fixed:
+
+1. **Data validity.** In three TAWOS projects most sprint issues are closed without a resolution date, so they counted as never finished. A measurability rule (Definition 2 in the theory section) and a per-project check now exclude them; any cut-off between 1% and 56% gives the same three. The paper's cohort is 26 projects, 3,676 sprints. The change moved the new-features result from serious spillover to spillover, so it is reported as a contribution, with the uncleaned results in the robustness table.
+2. **Strawman comparisons.** The fair tests are now the headline: burndown shape added to ours (about zero everywhere), planning context added to the Choetkiertikul counts (choet+ctx, new), and our progress counts beyond theirs given the same context.
+3. **Weak primary label.** The 30% serious-spillover threshold is called a poor choice in the paper; the median version is reported as secondary.
+4. **Statistics.** Holm-adjusted bootstrap p-values over the 22 hypothesis tests; minority-class average precision; tuned model; single calendar cut; the binomial "no learning" result phrased as "cannot be told apart" and also scored on the confirmation set.
+5. **So what.** Warning budgets and net benefit (decision-curve form) at four thresholds, with the break-even rule for waiting until mid-sprint; reliability figure.
+6. **Polishing.** New title, named hypotheses, carry-ratio figure, robustness and calibration tables in an appendix, every number in the text generated as a macro from the result files (`jr/macros.py`), 48 verbal claims checked (`jr/paper_checks.py`), 45 references all verified.
+
+What a reviewer can still raise:
+
+- Several analysis choices came after the full run (all logged, all reported both ways).
+- The prior feature sets are partial versions; the paper says so.
 - No practitioner validation.
-- Template (ieeeaccess.cls, author bios and photos) and authorship.
-- A comparison table of prior studies (data, labels, timing, validation) would help Section II, but every cell would need checking against the papers themselves; not done.
+- Format: ieeeaccess.cls, author bios and photos, authorship.
+- Overlap with the CCECE paper (not addressed here by request).
+
+Effect on the CCECE paper: Confluence Cloud is one of its eight projects. Without it, the headline scope-only spillover AUC (logistic regression, time split) moves from 0.885 to 0.903 on the same models and 0.908 when retrained; no conclusion changes. A one-sentence limitation is worth adding before submission.

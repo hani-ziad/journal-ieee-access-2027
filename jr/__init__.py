@@ -30,6 +30,11 @@ RAW = Path(os.environ.get("JR_TAWOS_DIR", DEV_RAW))
 if not RAW.is_absolute():
     RAW = ROOT / RAW
 COHORT = "dev_8projects" if RAW == DEV_RAW else RAW.name
+# JR_EXCLUDE_UNRECORDED=1 drops projects whose sprint issues are often closed without a resolution date
+# (the label rule cannot tell when such an issue was finished). See jr.data.recording_check.
+EXCLUDE_UNRECORDED = os.environ.get("JR_EXCLUDE_UNRECORDED", "0") == "1"
+if EXCLUDE_UNRECORDED:
+    COHORT += "_clean"
 RESULTS = ROOT / "results" / COHORT
 DATA = ROOT / "data" / COHORT
 EXTERNAL_RAW = ROOT / "data" / "raw" / "external"

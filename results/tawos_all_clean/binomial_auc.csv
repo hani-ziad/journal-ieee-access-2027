@@ -1,0 +1,9 @@
+outcome,model,n,auc
+spillover,binomial,734,0.8636043354817317
+spillover,beta-binomial,734,0.8536982156549853
+spillover,scope,734,0.8353470250554369
+spillover,strict+new,734,0.8692620147970074
+serious_spillover,binomial,734,0.7591273310023311
+serious_spillover,beta-binomial,734,0.7449883449883451
+serious_spillover,scope,734,0.6809586247086248
+serious_spillover,strict+new,734,0.7688519813519815

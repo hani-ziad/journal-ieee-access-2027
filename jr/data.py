@@ -232,9 +232,34 @@ def add_split(f: pd.DataFrame) -> pd.DataFrame:
     return f
 
 
+CLOSED_STATES = {"closed", "done", "resolved", "complete"}
+UNRECORDED_LIMIT = 0.10
+
+
+def recording_check(raw: Path) -> pd.DataFrame:
+    """Per project: share of issues in a sprint whose status says finished but which have no resolution date.
+
+    The labels count an issue as finished at its resolution date. An issue closed without one is counted
+    as never finished, so where this is common the spillover labels measure a recording habit, not
+    unfinished work. Projects above UNRECORDED_LIMIT are excluded when JR_EXCLUDE_UNRECORDED=1.
+    """
+    i = pd.read_csv(Path(raw) / "tawos_issue.csv", low_memory=False, na_values=["NULL"], keep_default_na=True)
+    i = i[i["Sprint_ID"].notna()].copy()
+    i["project"] = i["Project_Name"].astype(str).str.strip()
+    i["closed_no_date"] = i["Status"].astype(str).str.strip().str.lower().isin(CLOSED_STATES) & i["Resolution_Date"].isna()
+    g = i.groupby("project")["closed_no_date"].agg(["sum", "size", "mean"]).reset_index()
+    g.columns = ["project", "closed_without_date", "sprint_issues", "share"]
+    g["excluded"] = g["share"] > UNRECORDED_LIMIT
+    return g.sort_values("share", ascending=False)
+
+
 def planning_frame(raw: Path):
     use_raw(raw)
     base = p2d.load_phase2_frame()
+    if jr.EXCLUDE_UNRECORDED:
+        rc = recording_check(raw)
+        drop = set(rc.loc[rc.excluded, "project"])
+        base = base[~base["project"].isin(drop)].reset_index(drop=True)
     info = p2d.load_reconstructed_sprints()[["sprint_id", "start_date", "end_date", "complete_date"]]
     cohort = base[["sprint_id"]].merge(info, on="sprint_id", how="left")
     plan, ck = issue_level(raw, cohort)
@@ -345,6 +370,7 @@ def build(raw: Path = None, out_dir: Path = None):
     out_dir.mkdir(parents=True, exist_ok=True)
     plan_f, ck, cohort = planning_frame(raw)
     cp = checkpoint_frame(raw, plan_f, ck, cohort)
+    recording_check(raw).to_csv(out_dir / "recording_check.csv", index=False)
     plan_f.to_csv(out_dir / "planning_frame.csv", index=False)
     cp.to_csv(out_dir / "checkpoint_frame.csv", index=False)
     return plan_f, cp

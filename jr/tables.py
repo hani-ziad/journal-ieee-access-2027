@@ -92,7 +92,7 @@ def insprint_auc_table():
         for cp in (0.25, 0.5):
             t = a[(a.outcome == o) & (a.checkpoint == cp)].set_index("features").auc
             rows.append(f"{NAMES[o] if cp == 0.25 else ''} & {int(cp * 100)}\\% & " +
-                        " & ".join(f3(t[s]) for s in ("scope", "worki", "choet", "ours", "ours+worki")) + " \\\\")
+                        " & ".join(f3(t[s]) for s in ("scope", "worki", "choet", "choet+ctx", "ours", "ours+worki")) + " \\\\")
     write("insprint_auc", "\n".join(rows) + "\n")
 
 
@@ -215,11 +215,146 @@ def confirm_table():
     write("confirm", "\n".join(rows[:-1]) + "\n")
 
 
+HYP = [("H1", "planning", "strict+new - strict", list(NAMES), [None]),
+       ("H2", "in-sprint", "ours - worki", ["spillover", "serious_spillover"], [0.25, 0.5]),
+       ("H3", "in-sprint", "ours - choet", ["spillover", "serious_spillover", "late_closure", "seriously_late"], [0.25, 0.5]),
+       ("H4", "planning", "strict+new - scope", list(NAMES), [None])]
+
+
+def holm(p):
+    p = pd.Series(p)
+    order = p.sort_values().index
+    m, adj, run = len(p), pd.Series(index=p.index, dtype=float), 0.0
+    for k, i in enumerate(order):
+        run = max(run, min(1.0, (m - k) * p[i]))
+        adj[i] = run
+    return adj
+
+
+def hypothesis_rows():
+    """The 22 hypothesis comparisons: full cohort, Holm-adjusted p, and the confirmation set."""
+    pdf = pd.read_csv(jr.RESULTS / "planning_differences.csv")
+    idf = pd.read_csv(jr.RESULTS / "insprint_differences.csv")
+    cf = pd.read_csv(jr.RESULTS / "confirm_differences.csv")
+    out = []
+    for h, st, comp, outs, cps in HYP:
+        for o in outs:
+            for cp in cps:
+                if st == "planning":
+                    r = pdf[(pdf.primary == True) & (pdf.outcome == o) & (pdf.comparison == comp)].iloc[0]  # noqa: E712
+                    c = cf[(cf.stage == "planning") & (cf.outcome == o) & (cf.comparison == comp)].iloc[0]
+                else:
+                    r = idf[(idf.primary == True) & (idf.outcome == o) & (idf.comparison == comp) & (idf.checkpoint == cp)].iloc[0]  # noqa: E712
+                    c = cf[(cf.stage == "in-sprint") & (cf.outcome == o) & (cf.comparison == comp) & (cf.checkpoint == cp)].iloc[0]
+                out.append({"h": h, "outcome": o, "checkpoint": cp, "delta": r.delta, "lo": r.ci_low, "hi": r.ci_high,
+                            "p": r.p_project, "c_delta": c.delta, "c_lo": c.ci_low, "c_hi": c.ci_high})
+    d = pd.DataFrame(out)
+    d["p_holm"] = holm(d.p)
+    fine = jr.RESULTS / "hypotheses_fine.csv"
+    if fine.exists():  # 10,000 resamples: finer p-values for the Holm adjustment
+        fz = pd.read_csv(fine)
+        fz["checkpoint"] = pd.to_numeric(fz["checkpoint"], errors="coerce")
+        key = lambda r: (r.h, r.outcome, None if pd.isna(r.checkpoint) else float(r.checkpoint))
+        pm = {key(r): (r.p, r.p_holm) for r in fz.itertuples()}
+        d["p"] = [pm[key(r)][0] for r in d.itertuples()]
+        d["p_holm"] = [pm[key(r)][1] for r in d.itertuples()]
+    save_csv = jr.RESULTS / "hypotheses.csv"
+    d.to_csv(save_csv, index=False)
+    return d
+
+
+def hypothesis_table():
+    d = hypothesis_rows()
+    mark = lambda lo: "$\\checkmark$" if lo > 0 else ""
+    rows, prev = [], None
+    for r in d.itertuples():
+        if prev is not None and r.h != prev:
+            rows.append("\\midrule")
+        lab = NAMES[r.outcome] + ("" if pd.isna(r.checkpoint) else f", {int(r.checkpoint * 100)}\\%")
+        p = "$<$0.001" if r.p_holm < 0.001 else f"{r.p_holm:.3f}"
+        rows.append(f"{r.h} & {lab} & {d3(r.delta)} & {ci(r.lo, r.hi)} & {p} & {mark(r.lo)} & {d3(r.c_delta)} & {mark(r.c_lo)} \\\\")
+        prev = r.h
+    write("hypotheses", "\n".join(rows) + "\n")
+
+
+def fair_table():
+    idf = pd.read_csv(jr.RESULTS / "insprint_differences.csv")
+    idf = idf[idf.primary == True]  # noqa: E712
+    rows = []
+    for o in ("spillover", "serious_spillover", "late_closure", "seriously_late"):
+        for cp in (0.25, 0.5):
+            cells = []
+            for comp in ("ours+worki - ours", "choet+ctx - choet", "ours - choet+ctx"):
+                r = idf[(idf.outcome == o) & (idf.checkpoint == cp) & (idf.comparison == comp)].iloc[0]
+                cells.append(f"{d3(r.delta)} {ci(r.ci_low, r.ci_high)}")
+            rows.append(f"{NAMES[o] if cp == 0.25 else ''} & {int(cp * 100)}\\% & " + " & ".join(cells) + " \\\\")
+    write("fair", "\n".join(rows) + "\n")
+
+
+def robust_table():
+    """Appendix: the primary planning comparisons under each robustness variant."""
+    variants = []
+    pdf = pd.read_csv(jr.RESULTS / "planning_differences.csv")
+    variants.append(("Primary", pdf[pdf.primary == True]))  # noqa: E712
+    rd = pd.read_csv(jr.RESULTS / "robust_differences.csv")
+    variants.append(("Tuned", rd[rd.protocol == "time, tuned"]))
+    variants.append(("Calendar cut", rd[rd.protocol == "calendar cut"]))
+    rr = pd.read_csv(jr.RESULTS / "robust_restricted.csv")
+    variants.append(("Without 2 projects", rr[rr.stage == "planning"]))
+    orig = jr.ROOT / "results" / "tawos_all" / "planning_differences.csv"
+    if orig.exists() and jr.COHORT != "tawos_all":
+        od = pd.read_csv(orig)
+        variants.append(("Uncleaned (29)", od[od.primary == True]))  # noqa: E712
+    rows = []
+    for lab, d in variants:
+        cells = []
+        for comp in ("strict+new - strict", "strict+new - scope"):
+            for o in ("spillover", "serious_spillover", "late_closure"):
+                r = d[(d.outcome == o) & (d.comparison == comp)].iloc[0]
+                cells.append(d3(r.delta) + ("$^{*}$" if r.ci_low > 0 else ""))
+        rows.append(f"{lab} & " + " & ".join(cells) + " \\\\")
+    write("robust", "\n".join(rows) + "\n")
+
+
+def decision_table():
+    b = pd.read_csv(jr.RESULTS / "robust_budgets.csv")
+    rows = []
+    for o, lab in (("serious_spillover_median", "Serious sp. (median)"), ("late_closure", "Late closure")):
+        for k in (0.1, 0.2):
+            t = b[(b.outcome == o) & (b.budget == k)].set_index("features")
+            rows.append(f"{lab if k == 0.1 else ''} & {int(k * 100)}\\% & {t.loc['scope', 'prevalence'] * 100:.0f} & " +
+                        " & ".join(f"{t.loc[fs, 'precision'] * 100:.0f}" for fs in ("scope", "strict", "strict+new")) + " \\\\")
+    write("budgets", "\n".join(rows) + "\n")
+    nb = pd.read_csv(jr.RESULTS / "robust_net_benefit.csv")
+    rows = []
+    for r in nb.itertuples():
+        rows.append(f"{NAMES[r.outcome]} & {r.p_star:.1f} & {r.nb_warn_all:+.3f} & {r.nb_planning:+.3f} & {r.nb_25:+.3f} & {r.nb_50:+.3f} \\\\".replace("-", "$-$").replace("+", "+"))
+    write("net_benefit", "\n".join(rows) + "\n")
+
+
+def apneg_table():
+    a = pd.read_csv(jr.RESULTS / "planning_auc.csv")
+    a = a[(a.model == GB) & (a.protocol == "time")]
+    rows = []
+    for o in ("spillover", "serious_spillover"):
+        t = a[a.outcome == o].set_index("features")
+        base = 1 - t["positives"].iloc[0] / t["n"].iloc[0]
+        rows.append(f"{NAMES[o]} & {int(t['n'].iloc[0] - t['positives'].iloc[0])} & {base:.3f} & " +
+                    " & ".join(f3(t.loc[fs, 'ap_negative']) for fs in ("scope", "strict", "strict+new")) + " \\\\")
+    write("apneg", "\n".join(rows) + "\n")
+
+
 if __name__ == "__main__":
     labels_table(); planning_auc_table(); primary_planning_table(); insprint_auc_table()
     primary_insprint_table(); external_table(); calibration_table(); theory_numbers()
     binomial_tables()
     if (jr.RESULTS / "confirm_differences.csv").exists():
         confirm_table()
+        hypothesis_table()
+    fair_table()
+    apneg_table()
+    if (jr.RESULTS / "robust_restricted.csv").exists():
+        robust_table()
+        decision_table()
     for p in sorted(OUT.glob("*.tex")):
         print("==", p.name); print(p.read_text())

@@ -4,3 +4,6 @@ __pycache__/
 data/raw/tawos_all/
 data/tawos_all/
 results/*/cache/
+
+# Outside-project data pulled from public Jira sites is not redistributed; rebuild it with data_export/outside/
+data/raw/external/

@@ -1,0 +1,451 @@
+outcome,model,features,instance,project,n,positives,interpretable,auc
+late_closure,Logistic regression,scope,mariadb,MariaDB ColumnStore,122,66,True,0.507711038961039
+late_closure,Logistic regression,scope,mariadb,MariaDB MaxScale,269,40,True,0.46020742358078603
+late_closure,Logistic regression,scope,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Logistic regression,scope,mongodb,MongoDB C++ Driver,29,17,True,0.37254901960784315
+late_closure,Logistic regression,scope,mongodb,MongoDB Compass,127,9,True,0.5743879472693031
+late_closure,Logistic regression,scope,mongodb,MongoDB Database Tools,43,21,True,0.46645021645021645
+late_closure,Logistic regression,scope,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Logistic regression,scope,mongodb,MongoDB PHP Driver,32,13,True,0.3421052631578948
+late_closure,Logistic regression,scope,mongodb,MongoDB Shell,21,7,True,0.3112244897959183
+late_closure,Logistic regression,scope,mongodb,WiredTiger,211,24,True,0.6680035650623886
+late_closure,Logistic regression,strict,mariadb,MariaDB ColumnStore,122,66,True,0.7007575757575757
+late_closure,Logistic regression,strict,mariadb,MariaDB MaxScale,269,40,True,0.5163755458515283
+late_closure,Logistic regression,strict,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Logistic regression,strict,mongodb,MongoDB C++ Driver,29,17,True,0.7058823529411765
+late_closure,Logistic regression,strict,mongodb,MongoDB Compass,127,9,True,0.5188323917137476
+late_closure,Logistic regression,strict,mongodb,MongoDB Database Tools,43,21,True,0.7835497835497836
+late_closure,Logistic regression,strict,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Logistic regression,strict,mongodb,MongoDB PHP Driver,32,13,True,0.5222672064777327
+late_closure,Logistic regression,strict,mongodb,MongoDB Shell,21,7,True,0.29591836734693877
+late_closure,Logistic regression,strict,mongodb,WiredTiger,211,24,True,0.677361853832442
+late_closure,Logistic regression,strict+new,mariadb,MariaDB ColumnStore,122,66,True,0.7048160173160173
+late_closure,Logistic regression,strict+new,mariadb,MariaDB MaxScale,269,40,True,0.5039301310043668
+late_closure,Logistic regression,strict+new,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Logistic regression,strict+new,mongodb,MongoDB C++ Driver,29,17,True,0.7058823529411765
+late_closure,Logistic regression,strict+new,mongodb,MongoDB Compass,127,9,True,0.5602636534839924
+late_closure,Logistic regression,strict+new,mongodb,MongoDB Database Tools,43,21,True,0.7835497835497836
+late_closure,Logistic regression,strict+new,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Logistic regression,strict+new,mongodb,MongoDB PHP Driver,32,13,True,0.5263157894736843
+late_closure,Logistic regression,strict+new,mongodb,MongoDB Shell,21,7,True,0.326530612244898
+late_closure,Logistic regression,strict+new,mongodb,WiredTiger,211,24,True,0.6639928698752229
+late_closure,Random forest,scope,mariadb,MariaDB ColumnStore,122,66,True,0.6919642857142858
+late_closure,Random forest,scope,mariadb,MariaDB MaxScale,269,40,True,0.6406113537117905
+late_closure,Random forest,scope,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Random forest,scope,mongodb,MongoDB C++ Driver,29,17,True,0.5588235294117647
+late_closure,Random forest,scope,mongodb,MongoDB Compass,127,9,True,0.3912429378531073
+late_closure,Random forest,scope,mongodb,MongoDB Database Tools,43,21,True,0.5768398268398268
+late_closure,Random forest,scope,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Random forest,scope,mongodb,MongoDB PHP Driver,32,13,True,0.8846153846153846
+late_closure,Random forest,scope,mongodb,MongoDB Shell,21,7,True,0.6683673469387755
+late_closure,Random forest,scope,mongodb,WiredTiger,211,24,True,0.6885026737967914
+late_closure,Random forest,strict,mariadb,MariaDB ColumnStore,122,66,True,0.7199675324675325
+late_closure,Random forest,strict,mariadb,MariaDB MaxScale,269,40,True,0.5307860262008733
+late_closure,Random forest,strict,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Random forest,strict,mongodb,MongoDB C++ Driver,29,17,True,0.6764705882352942
+late_closure,Random forest,strict,mongodb,MongoDB Compass,127,9,True,0.403954802259887
+late_closure,Random forest,strict,mongodb,MongoDB Database Tools,43,21,True,0.7662337662337662
+late_closure,Random forest,strict,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Random forest,strict,mongodb,MongoDB PHP Driver,32,13,True,0.5668016194331984
+late_closure,Random forest,strict,mongodb,MongoDB Shell,21,7,True,0.5
+late_closure,Random forest,strict,mongodb,WiredTiger,211,24,True,0.6753565062388591
+late_closure,Random forest,strict+new,mariadb,MariaDB ColumnStore,122,66,True,0.7278138528138528
+late_closure,Random forest,strict+new,mariadb,MariaDB MaxScale,269,40,True,0.5158296943231442
+late_closure,Random forest,strict+new,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Random forest,strict+new,mongodb,MongoDB C++ Driver,29,17,True,0.6862745098039216
+late_closure,Random forest,strict+new,mongodb,MongoDB Compass,127,9,True,0.4726930320150659
+late_closure,Random forest,strict+new,mongodb,MongoDB Database Tools,43,21,True,0.761904761904762
+late_closure,Random forest,strict+new,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Random forest,strict+new,mongodb,MongoDB PHP Driver,32,13,True,0.562753036437247
+late_closure,Random forest,strict+new,mongodb,MongoDB Shell,21,7,True,0.5204081632653061
+late_closure,Random forest,strict+new,mongodb,WiredTiger,211,24,True,0.6827094474153299
+late_closure,Gradient boosting,scope,mariadb,MariaDB ColumnStore,122,66,True,0.6658549783549783
+late_closure,Gradient boosting,scope,mariadb,MariaDB MaxScale,269,40,True,0.6051310043668122
+late_closure,Gradient boosting,scope,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Gradient boosting,scope,mongodb,MongoDB C++ Driver,29,17,True,0.7426470588235293
+late_closure,Gradient boosting,scope,mongodb,MongoDB Compass,127,9,True,0.38983050847457623
+late_closure,Gradient boosting,scope,mongodb,MongoDB Database Tools,43,21,True,0.6212121212121212
+late_closure,Gradient boosting,scope,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Gradient boosting,scope,mongodb,MongoDB PHP Driver,32,13,True,0.8987854251012146
+late_closure,Gradient boosting,scope,mongodb,MongoDB Shell,21,7,True,0.7142857142857144
+late_closure,Gradient boosting,scope,mongodb,WiredTiger,211,24,True,0.6892825311942959
+late_closure,Gradient boosting,strict,mariadb,MariaDB ColumnStore,122,66,True,0.7414772727272727
+late_closure,Gradient boosting,strict,mariadb,MariaDB MaxScale,269,40,True,0.5908842794759825
+late_closure,Gradient boosting,strict,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Gradient boosting,strict,mongodb,MongoDB C++ Driver,29,17,True,0.6715686274509804
+late_closure,Gradient boosting,strict,mongodb,MongoDB Compass,127,9,True,0.371939736346516
+late_closure,Gradient boosting,strict,mongodb,MongoDB Database Tools,43,21,True,0.7835497835497836
+late_closure,Gradient boosting,strict,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Gradient boosting,strict,mongodb,MongoDB PHP Driver,32,13,True,0.680161943319838
+late_closure,Gradient boosting,strict,mongodb,MongoDB Shell,21,7,True,0.5816326530612245
+late_closure,Gradient boosting,strict,mongodb,WiredTiger,211,24,True,0.7092245989304813
+late_closure,Gradient boosting,strict+new,mariadb,MariaDB ColumnStore,122,66,True,0.7432359307359306
+late_closure,Gradient boosting,strict+new,mariadb,MariaDB MaxScale,269,40,True,0.6012008733624454
+late_closure,Gradient boosting,strict+new,mongodb,MongoDB C Driver,36,33,False,
+late_closure,Gradient boosting,strict+new,mongodb,MongoDB C++ Driver,29,17,True,0.6715686274509804
+late_closure,Gradient boosting,strict+new,mongodb,MongoDB Compass,127,9,True,0.4378531073446328
+late_closure,Gradient boosting,strict+new,mongodb,MongoDB Database Tools,43,21,True,0.7748917748917749
+late_closure,Gradient boosting,strict+new,mongodb,MongoDB Java Driver,27,24,False,
+late_closure,Gradient boosting,strict+new,mongodb,MongoDB PHP Driver,32,13,True,0.6558704453441295
+late_closure,Gradient boosting,strict+new,mongodb,MongoDB Shell,21,7,True,0.6224489795918366
+late_closure,Gradient boosting,strict+new,mongodb,WiredTiger,211,24,True,0.7065508021390374
+seriously_late,Logistic regression,scope,mariadb,MariaDB ColumnStore,122,46,True,0.5417620137299771
+seriously_late,Logistic regression,scope,mariadb,MariaDB MaxScale,269,18,True,0.4477644975652944
+seriously_late,Logistic regression,scope,mongodb,MongoDB C Driver,36,25,True,0.5890909090909091
+seriously_late,Logistic regression,scope,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Logistic regression,scope,mongodb,MongoDB Compass,127,8,True,0.555672268907563
+seriously_late,Logistic regression,scope,mongodb,MongoDB Database Tools,43,5,True,0.2631578947368421
+seriously_late,Logistic regression,scope,mongodb,MongoDB Java Driver,27,17,True,0.2529411764705882
+seriously_late,Logistic regression,scope,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Logistic regression,scope,mongodb,MongoDB Shell,21,5,True,0.29374999999999996
+seriously_late,Logistic regression,scope,mongodb,WiredTiger,211,7,True,0.8060224089635855
+seriously_late,Logistic regression,strict,mariadb,MariaDB ColumnStore,122,46,True,0.665903890160183
+seriously_late,Logistic regression,strict,mariadb,MariaDB MaxScale,269,18,True,0.33222664895971665
+seriously_late,Logistic regression,strict,mongodb,MongoDB C Driver,36,25,True,0.7709090909090909
+seriously_late,Logistic regression,strict,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Logistic regression,strict,mongodb,MongoDB Compass,127,8,True,0.536764705882353
+seriously_late,Logistic regression,strict,mongodb,MongoDB Database Tools,43,5,True,0.5526315789473684
+seriously_late,Logistic regression,strict,mongodb,MongoDB Java Driver,27,17,True,0.4294117647058824
+seriously_late,Logistic regression,strict,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Logistic regression,strict,mongodb,MongoDB Shell,21,5,True,0.4
+seriously_late,Logistic regression,strict,mongodb,WiredTiger,211,7,True,0.676470588235294
+seriously_late,Logistic regression,strict+new,mariadb,MariaDB ColumnStore,122,46,True,0.6673340961098397
+seriously_late,Logistic regression,strict+new,mariadb,MariaDB MaxScale,269,18,True,0.3247011952191235
+seriously_late,Logistic regression,strict+new,mongodb,MongoDB C Driver,36,25,True,0.7818181818181817
+seriously_late,Logistic regression,strict+new,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Logistic regression,strict+new,mongodb,MongoDB Compass,127,8,True,0.5630252100840336
+seriously_late,Logistic regression,strict+new,mongodb,MongoDB Database Tools,43,5,True,0.536842105263158
+seriously_late,Logistic regression,strict+new,mongodb,MongoDB Java Driver,27,17,True,0.4117647058823529
+seriously_late,Logistic regression,strict+new,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Logistic regression,strict+new,mongodb,MongoDB Shell,21,5,True,0.4
+seriously_late,Logistic regression,strict+new,mongodb,WiredTiger,211,7,True,0.6813725490196079
+seriously_late,Random forest,scope,mariadb,MariaDB ColumnStore,122,46,True,0.670337528604119
+seriously_late,Random forest,scope,mariadb,MariaDB MaxScale,269,18,True,0.45196989818503763
+seriously_late,Random forest,scope,mongodb,MongoDB C Driver,36,25,True,0.42000000000000004
+seriously_late,Random forest,scope,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Random forest,scope,mongodb,MongoDB Compass,127,8,True,0.5456932773109243
+seriously_late,Random forest,scope,mongodb,MongoDB Database Tools,43,5,True,0.5473684210526316
+seriously_late,Random forest,scope,mongodb,MongoDB Java Driver,27,17,True,0.2058823529411765
+seriously_late,Random forest,scope,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Random forest,scope,mongodb,MongoDB Shell,21,5,True,0.7562500000000001
+seriously_late,Random forest,scope,mongodb,WiredTiger,211,7,True,0.7689075630252101
+seriously_late,Random forest,strict,mariadb,MariaDB ColumnStore,122,46,True,0.694508009153318
+seriously_late,Random forest,strict,mariadb,MariaDB MaxScale,269,18,True,0.3470562195661797
+seriously_late,Random forest,strict,mongodb,MongoDB C Driver,36,25,True,0.7236363636363636
+seriously_late,Random forest,strict,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Random forest,strict,mongodb,MongoDB Compass,127,8,True,0.46638655462184875
+seriously_late,Random forest,strict,mongodb,MongoDB Database Tools,43,5,True,0.6052631578947368
+seriously_late,Random forest,strict,mongodb,MongoDB Java Driver,27,17,True,0.17058823529411762
+seriously_late,Random forest,strict,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Random forest,strict,mongodb,MongoDB Shell,21,5,True,0.625
+seriously_late,Random forest,strict,mongodb,WiredTiger,211,7,True,0.7198879551820728
+seriously_late,Random forest,strict+new,mariadb,MariaDB ColumnStore,122,46,True,0.697654462242563
+seriously_late,Random forest,strict+new,mariadb,MariaDB MaxScale,269,18,True,0.32647189021691014
+seriously_late,Random forest,strict+new,mongodb,MongoDB C Driver,36,25,True,0.7236363636363636
+seriously_late,Random forest,strict+new,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Random forest,strict+new,mongodb,MongoDB Compass,127,8,True,0.4474789915966386
+seriously_late,Random forest,strict+new,mongodb,MongoDB Database Tools,43,5,True,0.5763157894736842
+seriously_late,Random forest,strict+new,mongodb,MongoDB Java Driver,27,17,True,0.14705882352941177
+seriously_late,Random forest,strict+new,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Random forest,strict+new,mongodb,MongoDB Shell,21,5,True,0.6375
+seriously_late,Random forest,strict+new,mongodb,WiredTiger,211,7,True,0.7079831932773109
+seriously_late,Gradient boosting,scope,mariadb,MariaDB ColumnStore,122,46,True,0.6856407322654462
+seriously_late,Gradient boosting,scope,mariadb,MariaDB MaxScale,269,18,True,0.5025453740593183
+seriously_late,Gradient boosting,scope,mongodb,MongoDB C Driver,36,25,True,0.4727272727272727
+seriously_late,Gradient boosting,scope,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Gradient boosting,scope,mongodb,MongoDB Compass,127,8,True,0.509453781512605
+seriously_late,Gradient boosting,scope,mongodb,MongoDB Database Tools,43,5,True,0.6105263157894737
+seriously_late,Gradient boosting,scope,mongodb,MongoDB Java Driver,27,17,True,0.2647058823529412
+seriously_late,Gradient boosting,scope,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Gradient boosting,scope,mongodb,MongoDB Shell,21,5,True,0.7562500000000001
+seriously_late,Gradient boosting,scope,mongodb,WiredTiger,211,7,True,0.709733893557423
+seriously_late,Gradient boosting,strict,mariadb,MariaDB ColumnStore,122,46,True,0.6905034324942791
+seriously_late,Gradient boosting,strict,mariadb,MariaDB MaxScale,269,18,True,0.4091412129260734
+seriously_late,Gradient boosting,strict,mongodb,MongoDB C Driver,36,25,True,0.7236363636363636
+seriously_late,Gradient boosting,strict,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Gradient boosting,strict,mongodb,MongoDB Compass,127,8,True,0.4569327731092437
+seriously_late,Gradient boosting,strict,mongodb,MongoDB Database Tools,43,5,True,0.7894736842105263
+seriously_late,Gradient boosting,strict,mongodb,MongoDB Java Driver,27,17,True,0.18823529411764706
+seriously_late,Gradient boosting,strict,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Gradient boosting,strict,mongodb,MongoDB Shell,21,5,True,0.75
+seriously_late,Gradient boosting,strict,mongodb,WiredTiger,211,7,True,0.6645658263305322
+seriously_late,Gradient boosting,strict+new,mariadb,MariaDB ColumnStore,122,46,True,0.6922196796338673
+seriously_late,Gradient boosting,strict+new,mariadb,MariaDB MaxScale,269,18,True,0.42850818946436475
+seriously_late,Gradient boosting,strict+new,mongodb,MongoDB C Driver,36,25,True,0.7381818181818183
+seriously_late,Gradient boosting,strict+new,mongodb,MongoDB C++ Driver,29,3,False,
+seriously_late,Gradient boosting,strict+new,mongodb,MongoDB Compass,127,8,True,0.5283613445378151
+seriously_late,Gradient boosting,strict+new,mongodb,MongoDB Database Tools,43,5,True,0.8710526315789474
+seriously_late,Gradient boosting,strict+new,mongodb,MongoDB Java Driver,27,17,True,0.1588235294117647
+seriously_late,Gradient boosting,strict+new,mongodb,MongoDB PHP Driver,32,3,False,
+seriously_late,Gradient boosting,strict+new,mongodb,MongoDB Shell,21,5,True,0.75
+seriously_late,Gradient boosting,strict+new,mongodb,WiredTiger,211,7,True,0.6827731092436975
+spillover,Logistic regression,scope,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Logistic regression,scope,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Logistic regression,scope,mongodb,MongoDB C Driver,28,27,False,
+spillover,Logistic regression,scope,mongodb,MongoDB C++ Driver,25,19,True,0.912280701754386
+spillover,Logistic regression,scope,mongodb,MongoDB Compass,125,123,False,
+spillover,Logistic regression,scope,mongodb,MongoDB Database Tools,23,15,True,0.5833333333333334
+spillover,Logistic regression,scope,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Logistic regression,scope,mongodb,MongoDB PHP Driver,25,16,True,0.7430555555555556
+spillover,Logistic regression,scope,mongodb,MongoDB Shell,20,14,True,0.7261904761904763
+spillover,Logistic regression,scope,mongodb,WiredTiger,205,203,False,
+spillover,Logistic regression,strict,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Logistic regression,strict,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Logistic regression,strict,mongodb,MongoDB C Driver,28,27,False,
+spillover,Logistic regression,strict,mongodb,MongoDB C++ Driver,25,19,True,0.7982456140350878
+spillover,Logistic regression,strict,mongodb,MongoDB Compass,125,123,False,
+spillover,Logistic regression,strict,mongodb,MongoDB Database Tools,23,15,True,0.6541666666666667
+spillover,Logistic regression,strict,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Logistic regression,strict,mongodb,MongoDB PHP Driver,25,16,True,0.6388888888888891
+spillover,Logistic regression,strict,mongodb,MongoDB Shell,20,14,True,0.7380952380952381
+spillover,Logistic regression,strict,mongodb,WiredTiger,205,203,False,
+spillover,Logistic regression,strict+new,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Logistic regression,strict+new,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Logistic regression,strict+new,mongodb,MongoDB C Driver,28,27,False,
+spillover,Logistic regression,strict+new,mongodb,MongoDB C++ Driver,25,19,True,0.9035087719298246
+spillover,Logistic regression,strict+new,mongodb,MongoDB Compass,125,123,False,
+spillover,Logistic regression,strict+new,mongodb,MongoDB Database Tools,23,15,True,0.7166666666666667
+spillover,Logistic regression,strict+new,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Logistic regression,strict+new,mongodb,MongoDB PHP Driver,25,16,True,0.5833333333333334
+spillover,Logistic regression,strict+new,mongodb,MongoDB Shell,20,14,True,0.7380952380952381
+spillover,Logistic regression,strict+new,mongodb,WiredTiger,205,203,False,
+spillover,Random forest,scope,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Random forest,scope,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Random forest,scope,mongodb,MongoDB C Driver,28,27,False,
+spillover,Random forest,scope,mongodb,MongoDB C++ Driver,25,19,True,0.9780701754385965
+spillover,Random forest,scope,mongodb,MongoDB Compass,125,123,False,
+spillover,Random forest,scope,mongodb,MongoDB Database Tools,23,15,True,0.6458333333333333
+spillover,Random forest,scope,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Random forest,scope,mongodb,MongoDB PHP Driver,25,16,True,0.8263888888888888
+spillover,Random forest,scope,mongodb,MongoDB Shell,20,14,True,0.7857142857142857
+spillover,Random forest,scope,mongodb,WiredTiger,205,203,False,
+spillover,Random forest,strict,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Random forest,strict,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Random forest,strict,mongodb,MongoDB C Driver,28,27,False,
+spillover,Random forest,strict,mongodb,MongoDB C++ Driver,25,19,True,0.8947368421052632
+spillover,Random forest,strict,mongodb,MongoDB Compass,125,123,False,
+spillover,Random forest,strict,mongodb,MongoDB Database Tools,23,15,True,0.5874999999999999
+spillover,Random forest,strict,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Random forest,strict,mongodb,MongoDB PHP Driver,25,16,True,0.7083333333333334
+spillover,Random forest,strict,mongodb,MongoDB Shell,20,14,True,0.8571428571428571
+spillover,Random forest,strict,mongodb,WiredTiger,205,203,False,
+spillover,Random forest,strict+new,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Random forest,strict+new,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Random forest,strict+new,mongodb,MongoDB C Driver,28,27,False,
+spillover,Random forest,strict+new,mongodb,MongoDB C++ Driver,25,19,True,0.9210526315789473
+spillover,Random forest,strict+new,mongodb,MongoDB Compass,125,123,False,
+spillover,Random forest,strict+new,mongodb,MongoDB Database Tools,23,15,True,0.65
+spillover,Random forest,strict+new,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Random forest,strict+new,mongodb,MongoDB PHP Driver,25,16,True,0.6944444444444444
+spillover,Random forest,strict+new,mongodb,MongoDB Shell,20,14,True,0.8452380952380952
+spillover,Random forest,strict+new,mongodb,WiredTiger,205,203,False,
+spillover,Gradient boosting,scope,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Gradient boosting,scope,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Gradient boosting,scope,mongodb,MongoDB C Driver,28,27,False,
+spillover,Gradient boosting,scope,mongodb,MongoDB C++ Driver,25,19,True,0.9605263157894737
+spillover,Gradient boosting,scope,mongodb,MongoDB Compass,125,123,False,
+spillover,Gradient boosting,scope,mongodb,MongoDB Database Tools,23,15,True,0.6375
+spillover,Gradient boosting,scope,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Gradient boosting,scope,mongodb,MongoDB PHP Driver,25,16,True,0.7986111111111112
+spillover,Gradient boosting,scope,mongodb,MongoDB Shell,20,14,True,0.7142857142857143
+spillover,Gradient boosting,scope,mongodb,WiredTiger,205,203,False,
+spillover,Gradient boosting,strict,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Gradient boosting,strict,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Gradient boosting,strict,mongodb,MongoDB C Driver,28,27,False,
+spillover,Gradient boosting,strict,mongodb,MongoDB C++ Driver,25,19,True,0.8771929824561404
+spillover,Gradient boosting,strict,mongodb,MongoDB Compass,125,123,False,
+spillover,Gradient boosting,strict,mongodb,MongoDB Database Tools,23,15,True,0.5625
+spillover,Gradient boosting,strict,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Gradient boosting,strict,mongodb,MongoDB PHP Driver,25,16,True,0.75
+spillover,Gradient boosting,strict,mongodb,MongoDB Shell,20,14,True,0.8452380952380952
+spillover,Gradient boosting,strict,mongodb,WiredTiger,205,203,False,
+spillover,Gradient boosting,strict+new,mariadb,MariaDB ColumnStore,106,106,False,
+spillover,Gradient boosting,strict+new,mariadb,MariaDB MaxScale,245,242,False,
+spillover,Gradient boosting,strict+new,mongodb,MongoDB C Driver,28,27,False,
+spillover,Gradient boosting,strict+new,mongodb,MongoDB C++ Driver,25,19,True,0.9035087719298246
+spillover,Gradient boosting,strict+new,mongodb,MongoDB Compass,125,123,False,
+spillover,Gradient boosting,strict+new,mongodb,MongoDB Database Tools,23,15,True,0.6166666666666667
+spillover,Gradient boosting,strict+new,mongodb,MongoDB Java Driver,22,20,False,
+spillover,Gradient boosting,strict+new,mongodb,MongoDB PHP Driver,25,16,True,0.6319444444444444
+spillover,Gradient boosting,strict+new,mongodb,MongoDB Shell,20,14,True,0.869047619047619
+spillover,Gradient boosting,strict+new,mongodb,WiredTiger,205,203,False,
+serious_spillover,Logistic regression,scope,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Logistic regression,scope,mariadb,MariaDB MaxScale,245,223,True,0.5608438646555237
+serious_spillover,Logistic regression,scope,mongodb,MongoDB C Driver,28,22,True,0.46212121212121215
+serious_spillover,Logistic regression,scope,mongodb,MongoDB C++ Driver,25,15,True,0.6266666666666667
+serious_spillover,Logistic regression,scope,mongodb,MongoDB Compass,125,104,True,0.5226648351648352
+serious_spillover,Logistic regression,scope,mongodb,MongoDB Database Tools,23,14,True,0.5
+serious_spillover,Logistic regression,scope,mongodb,MongoDB Java Driver,22,14,True,0.33035714285714285
+serious_spillover,Logistic regression,scope,mongodb,MongoDB PHP Driver,25,14,True,0.5974025974025975
+serious_spillover,Logistic regression,scope,mongodb,MongoDB Shell,20,7,True,0.5604395604395604
+serious_spillover,Logistic regression,scope,mongodb,WiredTiger,205,190,True,0.6003508771929824
+serious_spillover,Logistic regression,strict,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Logistic regression,strict,mariadb,MariaDB MaxScale,245,223,True,0.575417855686914
+serious_spillover,Logistic regression,strict,mongodb,MongoDB C Driver,28,22,True,0.5151515151515151
+serious_spillover,Logistic regression,strict,mongodb,MongoDB C++ Driver,25,15,True,0.41333333333333333
+serious_spillover,Logistic regression,strict,mongodb,MongoDB Compass,125,104,True,0.6952838827838828
+serious_spillover,Logistic regression,strict,mongodb,MongoDB Database Tools,23,14,True,0.6388888888888888
+serious_spillover,Logistic regression,strict,mongodb,MongoDB Java Driver,22,14,True,0.21428571428571427
+serious_spillover,Logistic regression,strict,mongodb,MongoDB PHP Driver,25,14,True,0.5454545454545455
+serious_spillover,Logistic regression,strict,mongodb,MongoDB Shell,20,7,True,0.3516483516483516
+serious_spillover,Logistic regression,strict,mongodb,WiredTiger,205,190,True,0.6894736842105263
+serious_spillover,Logistic regression,strict+new,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Logistic regression,strict+new,mariadb,MariaDB MaxScale,245,223,True,0.6013045250713411
+serious_spillover,Logistic regression,strict+new,mongodb,MongoDB C Driver,28,22,True,0.5984848484848485
+serious_spillover,Logistic regression,strict+new,mongodb,MongoDB C++ Driver,25,15,True,0.5399999999999999
+serious_spillover,Logistic regression,strict+new,mongodb,MongoDB Compass,125,104,True,0.7422161172161172
+serious_spillover,Logistic regression,strict+new,mongodb,MongoDB Database Tools,23,14,True,0.6587301587301588
+serious_spillover,Logistic regression,strict+new,mongodb,MongoDB Java Driver,22,14,True,0.4375
+serious_spillover,Logistic regression,strict+new,mongodb,MongoDB PHP Driver,25,14,True,0.474025974025974
+serious_spillover,Logistic regression,strict+new,mongodb,MongoDB Shell,20,7,True,0.46153846153846156
+serious_spillover,Logistic regression,strict+new,mongodb,WiredTiger,205,190,True,0.7294736842105264
+serious_spillover,Random forest,scope,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Random forest,scope,mariadb,MariaDB MaxScale,245,223,True,0.5450468813697513
+serious_spillover,Random forest,scope,mongodb,MongoDB C Driver,28,22,True,0.3484848484848485
+serious_spillover,Random forest,scope,mongodb,MongoDB C++ Driver,25,15,True,0.7533333333333334
+serious_spillover,Random forest,scope,mongodb,MongoDB Compass,125,104,True,0.5176282051282052
+serious_spillover,Random forest,scope,mongodb,MongoDB Database Tools,23,14,True,0.6309523809523809
+serious_spillover,Random forest,scope,mongodb,MongoDB Java Driver,22,14,True,0.4017857142857143
+serious_spillover,Random forest,scope,mongodb,MongoDB PHP Driver,25,14,True,0.7597402597402597
+serious_spillover,Random forest,scope,mongodb,MongoDB Shell,20,7,True,0.48351648351648346
+serious_spillover,Random forest,scope,mongodb,WiredTiger,205,190,True,0.5917543859649123
+serious_spillover,Random forest,strict,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Random forest,strict,mariadb,MariaDB MaxScale,245,223,True,0.559926620464737
+serious_spillover,Random forest,strict,mongodb,MongoDB C Driver,28,22,True,0.4772727272727273
+serious_spillover,Random forest,strict,mongodb,MongoDB C++ Driver,25,15,True,0.4666666666666667
+serious_spillover,Random forest,strict,mongodb,MongoDB Compass,125,104,True,0.7021520146520146
+serious_spillover,Random forest,strict,mongodb,MongoDB Database Tools,23,14,True,0.503968253968254
+serious_spillover,Random forest,strict,mongodb,MongoDB Java Driver,22,14,True,0.33928571428571425
+serious_spillover,Random forest,strict,mongodb,MongoDB PHP Driver,25,14,True,0.5
+serious_spillover,Random forest,strict,mongodb,MongoDB Shell,20,7,True,0.3296703296703296
+serious_spillover,Random forest,strict,mongodb,WiredTiger,205,190,True,0.6978947368421052
+serious_spillover,Random forest,strict+new,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Random forest,strict+new,mariadb,MariaDB MaxScale,245,223,True,0.5990623726049735
+serious_spillover,Random forest,strict+new,mongodb,MongoDB C Driver,28,22,True,0.5378787878787878
+serious_spillover,Random forest,strict+new,mongodb,MongoDB C++ Driver,25,15,True,0.6066666666666666
+serious_spillover,Random forest,strict+new,mongodb,MongoDB Compass,125,104,True,0.7257326007326008
+serious_spillover,Random forest,strict+new,mongodb,MongoDB Database Tools,23,14,True,0.5476190476190477
+serious_spillover,Random forest,strict+new,mongodb,MongoDB Java Driver,22,14,True,0.3839285714285714
+serious_spillover,Random forest,strict+new,mongodb,MongoDB PHP Driver,25,14,True,0.4805194805194805
+serious_spillover,Random forest,strict+new,mongodb,MongoDB Shell,20,7,True,0.47252747252747246
+serious_spillover,Random forest,strict+new,mongodb,WiredTiger,205,190,True,0.7435087719298246
+serious_spillover,Gradient boosting,scope,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Gradient boosting,scope,mariadb,MariaDB MaxScale,245,223,True,0.5514675907052589
+serious_spillover,Gradient boosting,scope,mongodb,MongoDB C Driver,28,22,True,0.5113636363636364
+serious_spillover,Gradient boosting,scope,mongodb,MongoDB C++ Driver,25,15,True,0.8033333333333333
+serious_spillover,Gradient boosting,scope,mongodb,MongoDB Compass,125,104,True,0.5384615384615384
+serious_spillover,Gradient boosting,scope,mongodb,MongoDB Database Tools,23,14,True,0.6388888888888888
+serious_spillover,Gradient boosting,scope,mongodb,MongoDB Java Driver,22,14,True,0.5892857142857143
+serious_spillover,Gradient boosting,scope,mongodb,MongoDB PHP Driver,25,14,True,0.7337662337662337
+serious_spillover,Gradient boosting,scope,mongodb,MongoDB Shell,20,7,True,0.39010989010989006
+serious_spillover,Gradient boosting,scope,mongodb,WiredTiger,205,190,True,0.5898245614035088
+serious_spillover,Gradient boosting,strict,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Gradient boosting,strict,mariadb,MariaDB MaxScale,245,223,True,0.5454545454545454
+serious_spillover,Gradient boosting,strict,mongodb,MongoDB C Driver,28,22,True,0.6893939393939393
+serious_spillover,Gradient boosting,strict,mongodb,MongoDB C++ Driver,25,15,True,0.4666666666666667
+serious_spillover,Gradient boosting,strict,mongodb,MongoDB Compass,125,104,True,0.7012362637362637
+serious_spillover,Gradient boosting,strict,mongodb,MongoDB Database Tools,23,14,True,0.4801587301587302
+serious_spillover,Gradient boosting,strict,mongodb,MongoDB Java Driver,22,14,True,0.4107142857142857
+serious_spillover,Gradient boosting,strict,mongodb,MongoDB PHP Driver,25,14,True,0.6688311688311688
+serious_spillover,Gradient boosting,strict,mongodb,MongoDB Shell,20,7,True,0.38461538461538464
+serious_spillover,Gradient boosting,strict,mongodb,WiredTiger,205,190,True,0.6866666666666666
+serious_spillover,Gradient boosting,strict+new,mariadb,MariaDB ColumnStore,106,105,False,
+serious_spillover,Gradient boosting,strict+new,mariadb,MariaDB MaxScale,245,223,True,0.5947818997146352
+serious_spillover,Gradient boosting,strict+new,mongodb,MongoDB C Driver,28,22,True,0.6969696969696969
+serious_spillover,Gradient boosting,strict+new,mongodb,MongoDB C++ Driver,25,15,True,0.5466666666666666
+serious_spillover,Gradient boosting,strict+new,mongodb,MongoDB Compass,125,104,True,0.7316849816849816
+serious_spillover,Gradient boosting,strict+new,mongodb,MongoDB Database Tools,23,14,True,0.5079365079365079
+serious_spillover,Gradient boosting,strict+new,mongodb,MongoDB Java Driver,22,14,True,0.4285714285714286
+serious_spillover,Gradient boosting,strict+new,mongodb,MongoDB PHP Driver,25,14,True,0.5454545454545454
+serious_spillover,Gradient boosting,strict+new,mongodb,MongoDB Shell,20,7,True,0.46153846153846156
+serious_spillover,Gradient boosting,strict+new,mongodb,WiredTiger,205,190,True,0.7059649122807017
+scope_churn,Logistic regression,scope,mariadb,MariaDB ColumnStore,100,59,True,0.7027697395618024
+scope_churn,Logistic regression,scope,mariadb,MariaDB MaxScale,233,18,True,0.8418604651162791
+scope_churn,Logistic regression,scope,mongodb,MongoDB C Driver,22,13,True,0.5641025641025641
+scope_churn,Logistic regression,scope,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Logistic regression,scope,mongodb,MongoDB Compass,120,70,True,0.5539999999999999
+scope_churn,Logistic regression,scope,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Logistic regression,scope,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Logistic regression,scope,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Logistic regression,scope,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Logistic regression,scope,mongodb,WiredTiger,195,179,True,0.723463687150838
+scope_churn,Logistic regression,strict,mariadb,MariaDB ColumnStore,100,59,True,0.5861926415874328
+scope_churn,Logistic regression,strict,mariadb,MariaDB MaxScale,233,18,True,0.5868217054263566
+scope_churn,Logistic regression,strict,mongodb,MongoDB C Driver,22,13,True,0.46153846153846156
+scope_churn,Logistic regression,strict,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Logistic regression,strict,mongodb,MongoDB Compass,120,70,True,0.5965714285714285
+scope_churn,Logistic regression,strict,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Logistic regression,strict,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Logistic regression,strict,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Logistic regression,strict,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Logistic regression,strict,mongodb,WiredTiger,195,179,True,0.7325418994413407
+scope_churn,Logistic regression,strict+new,mariadb,MariaDB ColumnStore,100,59,True,0.6043819760231501
+scope_churn,Logistic regression,strict+new,mariadb,MariaDB MaxScale,233,18,True,0.6697674418604651
+scope_churn,Logistic regression,strict+new,mongodb,MongoDB C Driver,22,13,True,0.45299145299145305
+scope_churn,Logistic regression,strict+new,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Logistic regression,strict+new,mongodb,MongoDB Compass,120,70,True,0.6168571428571428
+scope_churn,Logistic regression,strict+new,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Logistic regression,strict+new,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Logistic regression,strict+new,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Logistic regression,strict+new,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Logistic regression,strict+new,mongodb,WiredTiger,195,179,True,0.7381284916201117
+scope_churn,Random forest,scope,mariadb,MariaDB ColumnStore,100,59,True,0.6471682513435304
+scope_churn,Random forest,scope,mariadb,MariaDB MaxScale,233,18,True,0.3083979328165375
+scope_churn,Random forest,scope,mongodb,MongoDB C Driver,22,13,True,0.20512820512820518
+scope_churn,Random forest,scope,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Random forest,scope,mongodb,MongoDB Compass,120,70,True,0.4455714285714286
+scope_churn,Random forest,scope,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Random forest,scope,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Random forest,scope,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Random forest,scope,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Random forest,scope,mongodb,WiredTiger,195,179,True,0.5977653631284916
+scope_churn,Random forest,strict,mariadb,MariaDB ColumnStore,100,59,True,0.6796196775527077
+scope_churn,Random forest,strict,mariadb,MariaDB MaxScale,233,18,True,0.6431524547803618
+scope_churn,Random forest,strict,mongodb,MongoDB C Driver,22,13,True,0.5042735042735043
+scope_churn,Random forest,strict,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Random forest,strict,mongodb,MongoDB Compass,120,70,True,0.6088571428571429
+scope_churn,Random forest,strict,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Random forest,strict,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Random forest,strict,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Random forest,strict,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Random forest,strict,mongodb,WiredTiger,195,179,True,0.6267458100558658
+scope_churn,Random forest,strict+new,mariadb,MariaDB ColumnStore,100,59,True,0.6531624638280281
+scope_churn,Random forest,strict+new,mariadb,MariaDB MaxScale,233,18,True,0.6940568475452196
+scope_churn,Random forest,strict+new,mongodb,MongoDB C Driver,22,13,True,0.3418803418803419
+scope_churn,Random forest,strict+new,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Random forest,strict+new,mongodb,MongoDB Compass,120,70,True,0.5922857142857143
+scope_churn,Random forest,strict+new,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Random forest,strict+new,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Random forest,strict+new,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Random forest,strict+new,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Random forest,strict+new,mongodb,WiredTiger,195,179,True,0.6347765363128491
+scope_churn,Gradient boosting,scope,mariadb,MariaDB ColumnStore,100,59,True,0.6287722199255891
+scope_churn,Gradient boosting,scope,mariadb,MariaDB MaxScale,233,18,True,0.3545219638242894
+scope_churn,Gradient boosting,scope,mongodb,MongoDB C Driver,22,13,True,0.1495726495726496
+scope_churn,Gradient boosting,scope,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Gradient boosting,scope,mongodb,MongoDB Compass,120,70,True,0.36385714285714277
+scope_churn,Gradient boosting,scope,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Gradient boosting,scope,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Gradient boosting,scope,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Gradient boosting,scope,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Gradient boosting,scope,mongodb,WiredTiger,195,179,True,0.6454259776536313
+scope_churn,Gradient boosting,strict,mariadb,MariaDB ColumnStore,100,59,True,0.6643241008681272
+scope_churn,Gradient boosting,strict,mariadb,MariaDB MaxScale,233,18,True,0.650516795865633
+scope_churn,Gradient boosting,strict,mongodb,MongoDB C Driver,22,13,True,0.4358974358974359
+scope_churn,Gradient boosting,strict,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Gradient boosting,strict,mongodb,MongoDB Compass,120,70,True,0.5937142857142856
+scope_churn,Gradient boosting,strict,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Gradient boosting,strict,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Gradient boosting,strict,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Gradient boosting,strict,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Gradient boosting,strict,mongodb,WiredTiger,195,179,True,0.6347765363128491
+scope_churn,Gradient boosting,strict+new,mariadb,MariaDB ColumnStore,100,59,True,0.6467548573790822
+scope_churn,Gradient boosting,strict+new,mariadb,MariaDB MaxScale,233,18,True,0.7828165374677002
+scope_churn,Gradient boosting,strict+new,mongodb,MongoDB C Driver,22,13,True,0.4017094017094017
+scope_churn,Gradient boosting,strict+new,mongodb,MongoDB C++ Driver,12,12,False,
+scope_churn,Gradient boosting,strict+new,mongodb,MongoDB Compass,120,70,True,0.5651428571428572
+scope_churn,Gradient boosting,strict+new,mongodb,MongoDB Database Tools,1,0,False,
+scope_churn,Gradient boosting,strict+new,mongodb,MongoDB Java Driver,17,17,False,
+scope_churn,Gradient boosting,strict+new,mongodb,MongoDB PHP Driver,6,3,False,
+scope_churn,Gradient boosting,strict+new,mongodb,MongoDB Shell,15,12,False,
+scope_churn,Gradient boosting,strict+new,mongodb,WiredTiger,195,179,True,0.6466480446927374

@@ -4,7 +4,7 @@
 \section{Formal Setting}
 \label{sec:theory}
 
-This section fixes what ``no hindsight'' means for a Jira export and derives four consequences. Each one turns a pattern that is easy to miss into a prediction the experiments can check: how empty sprints inflate ROC-AUC, why a threshold fitted on one group of teams does not carry to another, how the two spillover labels should differ, and why a simple model of sprint completion can rank sprints well yet give probabilities that are too extreme.
+This section fixes what ``no hindsight'' means for a Jira export, adds a matching rule for the outcomes, and derives four consequences. Each one turns a pattern that is easy to miss into a prediction the experiments can check: how empty sprints inflate ROC-AUC, why a threshold fitted on one group of teams does not carry to another, how the two spillover labels should differ, and why a simple model of sprint completion can rank sprints well yet give probabilities that are too extreme.
 
 \subsection{The event log and the sprint state}
 
@@ -29,6 +29,14 @@ A feature $x(s, t)$ for sprint $s$ at prediction time $t$ is admissible if it is
 
 Two common practices break this rule. First, a history feature that summarises an earlier sprint $u$ of the same project is admissible at $a_s$ only if $u$'s outcome was known by then, $\max(b_u, c_u) \le a_s$. A ``previous sprint'' picked by start date alone breaks this whenever sprints overlap, which happens for \OverlapShare\% of the sprints in our cohort. Second, a field read from the static export is $\mathcal{F}_\infty$-measurable, not $\mathcal{F}_{a_s}$-measurable. Wherever the log records no change for a field, the replay has to fall back on a value that may postdate planning. We record the share of committed issues affected, $\phi_s$, and repeat the main comparisons on sprints with $\phi_s = 0$. Issue type, priority and assignee are left out altogether, because the export only holds their final values.
 
+The outcomes need a rule of their own. The carry ratio uses each committed issue's resolution time $r_i$. The log records $r_i$ when the issue is resolved, but a tracker can also move an issue into a closed state without recording a resolution time.
+
+\begin{definition}[Measurable outcome]
+An outcome of sprint $s$ that depends on $\{r_i : i \in C_s\}$ is measurable if, for every $i \in C_s$, either $r_i$ is recorded or the issue is in an open state at the time of export.
+\end{definition}
+
+An issue that is closed but has no $r_i$ was finished at an unknown time. Counting it as never finished, which is what a rule that reads only $r_i$ does, makes $\rho_s$ too large and turns a recording habit into spillover. We check this per project before any modelling (Section~\ref{sec:setup}).
+
 \subsection{Empty sprints inflate ROC-AUC}
 
 A sprint with $n_s = 0$ cannot spill, so it is a negative by construction. Keeping such sprints in a spillover evaluation rewards the model for something it did not have to learn.
@@ -47,7 +55,7 @@ where $A_0$ is the probability that a random positive outscores a random structu
 AUC is the probability that a random positive outscores a random negative. Conditioning on which kind of negative is drawn gives (\ref{eq:aucmix}).
 \end{proof}
 
-The decomposition is elementary. Its use is that it puts an exact number on the inflation.
+The decomposition is elementary, but it puts an exact number on the inflation.
 
 On our time-split test set the full population has \NegAll{} negatives, and \NegStruct{} of them commit nothing, so $\pi_0 = \PiZero$. The model's AUC on nonempty sprints is \AucNonempty. With $A_0 = 1$, (\ref{eq:aucmix}) predicts \AucPred{} for the full population; the observed value is \AucAll, and the measured $A_0$ is \AZero. The gap of \Inflation{} between the two headline numbers is entirely the empty sprints. Any study that keeps them in the denominator reports this gap as skill.
 
@@ -97,7 +105,7 @@ As $n_s$ grows, $\mathrm{Var}[\rho_s] \to r\, q_s (1 - q_s)$ rather than to zero
 By the law of total variance, $\mathrm{Var}[\rho_s] = \mathbb{E}[p_s(1-p_s)]/n_s + \mathrm{Var}[p_s]$. For the beta distribution above, $\mathrm{Var}[p_s] = r\,q_s(1-q_s)$ and $\mathbb{E}[p_s(1-p_s)] = (1-r)\,q_s(1-q_s)$. Adding the two terms gives (\ref{eq:overdisp}). Given $p_s$, $\rho_s \to p_s$ as $n_s$ grows, which gives the limits.
 \end{proof}
 
-Two things follow. If $r > 0$, the binomial model's variance is too small by the factor $1 + (n_s - 1) r$, which grows with the size of the sprint, so the binomial probabilities will be too extreme for large sprints. And committed scope matters even less for serious spillover than the binomial model says, because a large sprint no longer averages its luck away. Section~\ref{sec:results} estimates $r$ and checks both. Neither model covers scope added during the sprint. They are reading aids, not claims about how teams work.
+Two things follow. If $r > 0$, the binomial model's variance is too small by the factor $1 + (n_s - 1) r$, which grows with the size of the sprint, so the binomial probabilities will be too extreme for large sprints. And committed scope matters even less for serious spillover than the binomial model says, because a large sprint no longer averages its luck away. Section~\ref{sec:results} estimates $r$ and checks both. Neither model covers scope added during the sprint. We use them to read the results, not as a claim about how teams work.
 
 \subsection{Warnings as decisions}
 
@@ -106,4 +114,9 @@ A warning raised at checkpoint $c$ costs $\kappa$ and, if the sprint would other
 p \ge \frac{\kappa}{e(c)\, F}.
 \label{eq:warn}
 \end{equation}
-The bar rises as the sprint goes on, because a late warning saves less. An in-sprint model is useful only where its gain in ranking outpaces the fall in $e(c)$. Because (\ref{eq:warn}) needs a calibrated $p$, we report calibration beside AUC.
+The bar rises as the sprint goes on, because a late warning saves less. Writing $p^{*} = \kappa / (e(c) F)$ and summing over $N$ sprints, the saving of a warning rule over silence, in units of $e(c) F$ per sprint, is
+\begin{equation}
+\mathrm{NB}(p^{*}) = \frac{\mathrm{TP}}{N} - p^{*}\, \frac{\mathrm{TP} + \mathrm{FP}}{N},
+\label{eq:nb}
+\end{equation}
+which is the net benefit of decision-curve analysis \cite{vickers2006} up to a factor $1 - p^{*}$. At a common threshold, a warning at checkpoint $c$ beats a warning at planning only if $e(c)\,\mathrm{NB}_c > e(0)\,\mathrm{NB}_0$, that is, only if it still averts at least the fraction $\mathrm{NB}_0 / \mathrm{NB}_c$ of what an early warning would. Since $p^{*}$ itself rises as $e(c)$ falls, this is a first-order guide rather than an exact rule. Because (\ref{eq:warn}) needs a calibrated $p$, we report calibration beside AUC.

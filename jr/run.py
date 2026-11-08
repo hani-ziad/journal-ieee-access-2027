@@ -20,7 +20,7 @@ import sys
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics import confusion_matrix, f1_score, roc_auc_score
+from sklearn.metrics import average_precision_score, confusion_matrix, f1_score, roc_auc_score
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
 import jr
@@ -47,9 +47,13 @@ IN_SETS = {
     "worki": (R_COLS, False),
     "ours": (OURS, True),
     "ours+worki": (OURS + R_COLS, True),
+    # added after review: Choetkiertikul counts plus our planning context, so that the planning-context test
+    # (choet+ctx minus choet) and the progress-count test (ours minus choet+ctx) compare like with like
+    "choet+ctx": (list(dict.fromkeys(CHOET_COLS + list(STRICT_NUMERIC) + NEW_FEATURES)), True),
 }
 PLAN_DIFFS = [("strict+new", "strict"), ("strict+new", "scope"), ("strict", "scope")]
-IN_DIFFS = [("ours", "worki"), ("ours", "choet"), ("ours+worki", "ours"), ("worki", "scope"), ("choet", "scope")]
+IN_DIFFS = [("ours", "worki"), ("ours", "choet"), ("ours+worki", "ours"), ("worki", "scope"), ("choet", "scope"),
+            ("choet+ctx", "choet"), ("ours", "choet+ctx")]
 IN_OUTCOMES = ["spillover", "late_closure", "serious_spillover", "seriously_late"]
 PRIMARY_MODEL, PRIMARY_PROTOCOL = "gradient_boosting", "time"
 
@@ -94,6 +98,12 @@ def safe_auc(y, s):
     return roc_auc_score(y, s) if 0 < y.sum() < len(y) else np.nan
 
 
+def ap_negative(y, s):
+    """Average precision for finding the minority (negative) class, scored by 1 - risk."""
+    y = np.asarray(y)
+    return average_precision_score(1 - y, 1 - np.asarray(s)) if 0 < y.sum() < len(y) else np.nan
+
+
 def cluster_diff(test, y, sa, sb, rng, level="project"):
     """Paired AUC difference with a 95% bootstrap interval, resampling projects (default) or sprints."""
     if level == "project":
@@ -111,6 +121,10 @@ def cluster_diff(test, y, sa, sb, rng, level="project"):
             continue
         vals.append(roc_auc_score(yy, sa.loc[idx]) - roc_auc_score(yy, sb.loc[idx]))
     d = safe_auc(test[y], sa) - safe_auc(test[y], sb)
+    v = np.asarray(vals)
+    # two-sided bootstrap p-value for "no difference" (share of resamples on the other side of zero)
+    p = float(min(1.0, 2 * min((v <= 0).mean(), (v >= 0).mean()) + 1 / len(v)))
+    cluster_diff.last_p = p
     return d, float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))
 
 
@@ -118,7 +132,7 @@ def diff_row(base, test, y, s, a, b, rng, primary):
     """One difference record; primary comparisons also get a sprint-level interval."""
     d, lo, hi = cluster_diff(test, y, s[a], s[b], rng)
     r = {**base, "comparison": f"{a} - {b}", "delta": d, "ci_low": lo, "ci_high": hi,
-         "excludes_zero": lo > 0 or hi < 0, "primary": primary}
+         "excludes_zero": lo > 0 or hi < 0, "primary": primary, "p_project": cluster_diff.last_p}
     if primary:
         _, slo, shi = cluster_diff(test, y, s[a], s[b], rng, level="sprint")
         r.update({"sprint_ci_low": slo, "sprint_ci_high": shi})
@@ -200,7 +214,8 @@ def run_planning():
                     te, s = scores(fr, y, model, PLAN_SETS, protocol, split)
                     for name in PLAN_SETS:
                         ua.append({"outcome": oname, "protocol": protocol, "model": mname, "features": name,
-                                   "n": len(te), "positives": int(te[y].sum()), "auc": safe_auc(te[y], s[name])})
+                                   "n": len(te), "positives": int(te[y].sum()), "auc": safe_auc(te[y], s[name]),
+                                   "ap_negative": ap_negative(te[y], s[name])})
                     primary = main and model == PRIMARY_MODEL and protocol == PRIMARY_PROTOCOL
                     base = {"outcome": oname, "protocol": protocol, "model": mname}
                     for a, b in PLAN_DIFFS:
@@ -257,7 +272,7 @@ def run_insprint():
                         for name in IN_SETS:
                             ua.append({"outcome": oname, "checkpoint": cp, "protocol": protocol, "model": mname,
                                        "features": name, "n": len(te), "positives": int(te[y].sum()),
-                                       "auc": safe_auc(te[y], s[name])})
+                                       "auc": safe_auc(te[y], s[name]), "ap_negative": ap_negative(te[y], s[name])})
                         primary = model == PRIMARY_MODEL and protocol == PRIMARY_PROTOCOL
                         base = {"outcome": oname, "checkpoint": cp, "protocol": protocol, "model": mname}
                         for a, b in IN_DIFFS:

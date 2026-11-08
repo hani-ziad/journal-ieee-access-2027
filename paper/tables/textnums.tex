@@ -1,0 +1,1020 @@
+\newcommand{\NProjSprints}{36}
+\newcommand{\NProjThirty}{32}
+\newcommand{\NProjExport}{29}
+\newcommand{\NProj}{26}
+\newcommand{\NSprints}{3,676}
+\newcommand{\NNonempty}{2,409}
+\newcommand{\SprintMin}{35}
+\newcommand{\SprintMax}{557}
+\newcommand{\SprintMed}{102}
+\newcommand{\DateFrom}{February 2012}
+\newcommand{\DateTo}{October 2020}
+\newcommand{\TestAll}{1,118}
+\newcommand{\TestNonempty}{734}
+\newcommand{\NegSp}{73}
+\newcommand{\NegSs}{110}
+\newcommand{\CarryMedPct}{67}
+\newcommand{\PosSs}{82}
+\newcommand{\PosSm}{49}
+\newcommand{\PosSp}{90}
+\newcommand{\DevProj}{7}
+\newcommand{\DevSprints}{2,138}
+\newcommand{\ConfProj}{19}
+\newcommand{\NExcluded}{3}
+\newcommand{\UnrecA}{69}
+\newcommand{\UnrecB}{57}
+\newcommand{\UnrecC}{56}
+\newcommand{\UnrecOtherMax}{0.7}
+\newcommand{\FullNothingPct}{31}
+\newcommand{\FullSprints}{4,235}
+\newcommand{\CleanNothingPct}{26}
+\newcommand{\dPTNewLc}{0.001}
+\newcommand{\cPTNewLc}{[$-$0.013, 0.012]}
+\newcommand{\dPTHistLc}{0.043}
+\newcommand{\cPTHistLc}{[$-$0.013, 0.093]}
+\newcommand{\dPTStrLc}{0.042}
+\newcommand{\cPTStrLc}{[$-$0.020, 0.102]}
+\newcommand{\dPTNewSl}{$-$0.006}
+\newcommand{\cPTNewSl}{[$-$0.016, 0.000]}
+\newcommand{\dPTHistSl}{0.045}
+\newcommand{\cPTHistSl}{[$-$0.020, 0.101]}
+\newcommand{\dPTStrSl}{0.051}
+\newcommand{\cPTStrSl}{[$-$0.014, 0.114]}
+\newcommand{\dPTNewSp}{0.037}
+\newcommand{\cPTNewSp}{[0.022, 0.056]}
+\newcommand{\dPTHistSp}{0.034}
+\newcommand{\cPTHistSp}{[$-$0.005, 0.082]}
+\newcommand{\dPTStrSp}{$-$0.003}
+\newcommand{\cPTStrSp}{[$-$0.051, 0.043]}
+\newcommand{\dPTNewSs}{0.017}
+\newcommand{\cPTNewSs}{[$-$0.008, 0.048]}
+\newcommand{\dPTHistSs}{0.088}
+\newcommand{\cPTHistSs}{[0.018, 0.161]}
+\newcommand{\dPTStrSs}{0.071}
+\newcommand{\cPTStrSs}{[0.001, 0.141]}
+\newcommand{\dPTNewSc}{0.026}
+\newcommand{\cPTNewSc}{[$-$0.028, 0.069]}
+\newcommand{\dPTHistSc}{0.063}
+\newcommand{\cPTHistSc}{[$-$0.056, 0.207]}
+\newcommand{\dPTStrSc}{0.037}
+\newcommand{\cPTStrSc}{[$-$0.067, 0.172]}
+\newcommand{\dPTNewSt}{0.030}
+\newcommand{\cPTNewSt}{[0.018, 0.051]}
+\newcommand{\dPTHistSt}{0.035}
+\newcommand{\cPTHistSt}{[$-$0.036, 0.113]}
+\newcommand{\dPTStrSt}{0.005}
+\newcommand{\cPTStrSt}{[$-$0.074, 0.075]}
+\newcommand{\dPTNewSf}{0.030}
+\newcommand{\cPTNewSf}{[$-$0.001, 0.064]}
+\newcommand{\dPTHistSf}{0.103}
+\newcommand{\cPTHistSf}{[0.024, 0.176]}
+\newcommand{\dPTStrSf}{0.072}
+\newcommand{\cPTStrSf}{[$-$0.009, 0.140]}
+\newcommand{\dPTNewSh}{0.063}
+\newcommand{\cPTNewSh}{[0.021, 0.098]}
+\newcommand{\dPTHistSh}{0.065}
+\newcommand{\cPTHistSh}{[$-$0.033, 0.173]}
+\newcommand{\dPTStrSh}{0.002}
+\newcommand{\cPTStrSh}{[$-$0.108, 0.128]}
+\newcommand{\dPTNewSm}{0.037}
+\newcommand{\cPTNewSm}{[0.010, 0.061]}
+\newcommand{\dPTHistSm}{0.141}
+\newcommand{\cPTHistSm}{[0.065, 0.206]}
+\newcommand{\dPTStrSm}{0.104}
+\newcommand{\cPTStrSm}{[0.037, 0.165]}
+\newcommand{\dPLNewLc}{$-$0.003}
+\newcommand{\cPLNewLc}{[$-$0.009, 0.003]}
+\newcommand{\dPLHistLc}{0.077}
+\newcommand{\cPLHistLc}{[0.037, 0.115]}
+\newcommand{\dPLStrLc}{0.080}
+\newcommand{\cPLStrLc}{[0.036, 0.117]}
+\newcommand{\dPLNewSl}{$-$0.008}
+\newcommand{\cPLNewSl}{[$-$0.016, 0.000]}
+\newcommand{\dPLHistSl}{0.024}
+\newcommand{\cPLHistSl}{[$-$0.005, 0.058]}
+\newcommand{\dPLStrSl}{0.033}
+\newcommand{\cPLStrSl}{[0.003, 0.068]}
+\newcommand{\dPLNewSp}{0.015}
+\newcommand{\cPLNewSp}{[0.003, 0.034]}
+\newcommand{\dPLHistSp}{0.031}
+\newcommand{\cPLHistSp}{[0.003, 0.061]}
+\newcommand{\dPLStrSp}{0.016}
+\newcommand{\cPLStrSp}{[$-$0.015, 0.043]}
+\newcommand{\dPLNewSs}{0.024}
+\newcommand{\cPLNewSs}{[0.005, 0.047]}
+\newcommand{\dPLHistSs}{0.138}
+\newcommand{\cPLHistSs}{[0.088, 0.183]}
+\newcommand{\dPLStrSs}{0.114}
+\newcommand{\cPLStrSs}{[0.056, 0.161]}
+\newcommand{\dPLNewSc}{0.024}
+\newcommand{\cPLNewSc}{[$-$0.011, 0.071]}
+\newcommand{\dPLHistSc}{0.012}
+\newcommand{\cPLHistSc}{[$-$0.047, 0.097]}
+\newcommand{\dPLStrSc}{$-$0.012}
+\newcommand{\cPLStrSc}{[$-$0.058, 0.049]}
+\newcommand{\dPLNewSt}{0.029}
+\newcommand{\cPLNewSt}{[0.014, 0.050]}
+\newcommand{\dPLHistSt}{0.108}
+\newcommand{\cPLHistSt}{[0.049, 0.165]}
+\newcommand{\dPLStrSt}{0.079}
+\newcommand{\cPLStrSt}{[0.014, 0.142]}
+\newcommand{\dPLNewSf}{0.031}
+\newcommand{\cPLNewSf}{[0.012, 0.047]}
+\newcommand{\dPLHistSf}{0.194}
+\newcommand{\cPLHistSf}{[0.113, 0.271]}
+\newcommand{\dPLStrSf}{0.163}
+\newcommand{\cPLStrSf}{[0.080, 0.234]}
+\newcommand{\dPLNewSh}{0.024}
+\newcommand{\cPLNewSh}{[$-$0.012, 0.065]}
+\newcommand{\dPLHistSh}{0.005}
+\newcommand{\cPLHistSh}{[$-$0.046, 0.089]}
+\newcommand{\dPLStrSh}{$-$0.019}
+\newcommand{\cPLStrSh}{[$-$0.065, 0.052]}
+\newcommand{\dPLNewSm}{0.029}
+\newcommand{\cPLNewSm}{[0.009, 0.049]}
+\newcommand{\dPLHistSm}{0.165}
+\newcommand{\cPLHistSm}{[0.116, 0.215]}
+\newcommand{\dPLStrSm}{0.136}
+\newcommand{\cPLStrSm}{[0.090, 0.196]}
+\newcommand{\dPFNewSp}{0.041}
+\newcommand{\cPFNewSp}{[0.015, 0.064]}
+\newcommand{\dPFHistSp}{0.069}
+\newcommand{\cPFHistSp}{[0.013, 0.120]}
+\newcommand{\dPFStrSp}{0.028}
+\newcommand{\cPFStrSp}{[$-$0.036, 0.082]}
+\newcommand{\dPFNewSs}{0.029}
+\newcommand{\cPFNewSs}{[0.002, 0.058]}
+\newcommand{\dPFHistSs}{0.125}
+\newcommand{\cPFHistSs}{[0.025, 0.215]}
+\newcommand{\dPFStrSs}{0.096}
+\newcommand{\cPFStrSs}{[0.002, 0.183]}
+\newcommand{\dPFNewSc}{0.022}
+\newcommand{\cPFNewSc}{[$-$0.052, 0.117]}
+\newcommand{\dPFHistSc}{0.162}
+\newcommand{\cPFHistSc}{[$-$0.041, 0.280]}
+\newcommand{\dPFStrSc}{0.140}
+\newcommand{\cPFStrSc}{[$-$0.108, 0.279]}
+\newcommand{\dITWkSpA}{0.131}
+\newcommand{\cITWkSpA}{[0.077, 0.196]}
+\newcommand{\dITChSpA}{0.031}
+\newcommand{\cITChSpA}{[$-$0.002, 0.067]}
+\newcommand{\dITAddSpA}{$-$0.002}
+\newcommand{\cITAddSpA}{[$-$0.006, 0.003]}
+\newcommand{\dITWsSpA}{$-$0.046}
+\newcommand{\cITWsSpA}{[$-$0.116, 0.014]}
+\newcommand{\dITCsSpA}{0.054}
+\newcommand{\cITCsSpA}{[0.015, 0.097]}
+\newcommand{\dITCtxSpA}{0.012}
+\newcommand{\cITCtxSpA}{[$-$0.013, 0.043]}
+\newcommand{\dITProgSpA}{0.018}
+\newcommand{\cITProgSpA}{[$-$0.008, 0.048]}
+\newcommand{\dITWkSpB}{0.194}
+\newcommand{\cITWkSpB}{[0.109, 0.272]}
+\newcommand{\dITChSpB}{0.034}
+\newcommand{\cITChSpB}{[0.000, 0.078]}
+\newcommand{\dITAddSpB}{0.000}
+\newcommand{\cITAddSpB}{[$-$0.006, 0.004]}
+\newcommand{\dITWsSpB}{$-$0.090}
+\newcommand{\cITWsSpB}{[$-$0.170, $-$0.019]}
+\newcommand{\dITCsSpB}{0.069}
+\newcommand{\cITCsSpB}{[0.036, 0.107]}
+\newcommand{\dITCtxSpB}{0.007}
+\newcommand{\cITCtxSpB}{[$-$0.014, 0.032]}
+\newcommand{\dITProgSpB}{0.027}
+\newcommand{\cITProgSpB}{[$-$0.004, 0.061]}
+\newcommand{\dITWkLcA}{0.144}
+\newcommand{\cITWkLcA}{[0.074, 0.214]}
+\newcommand{\dITChLcA}{0.051}
+\newcommand{\cITChLcA}{[$-$0.010, 0.125]}
+\newcommand{\dITAddLcA}{0.001}
+\newcommand{\cITAddLcA}{[$-$0.009, 0.010]}
+\newcommand{\dITWsLcA}{$-$0.107}
+\newcommand{\cITWsLcA}{[$-$0.164, $-$0.040]}
+\newcommand{\dITCsLcA}{$-$0.013}
+\newcommand{\cITCsLcA}{[$-$0.094, 0.049]}
+\newcommand{\dITCtxLcA}{0.059}
+\newcommand{\cITCtxLcA}{[$-$0.001, 0.125]}
+\newcommand{\dITProgLcA}{$-$0.008}
+\newcommand{\cITProgLcA}{[$-$0.022, 0.008]}
+\newcommand{\dITWkLcB}{0.098}
+\newcommand{\cITWkLcB}{[0.007, 0.184]}
+\newcommand{\dITChLcB}{0.053}
+\newcommand{\cITChLcB}{[$-$0.013, 0.125]}
+\newcommand{\dITAddLcB}{0.004}
+\newcommand{\cITAddLcB}{[$-$0.003, 0.012]}
+\newcommand{\dITWsLcB}{$-$0.043}
+\newcommand{\cITWsLcB}{[$-$0.105, 0.025]}
+\newcommand{\dITCsLcB}{0.002}
+\newcommand{\cITCsLcB}{[$-$0.062, 0.060]}
+\newcommand{\dITCtxLcB}{0.063}
+\newcommand{\cITCtxLcB}{[$-$0.001, 0.135]}
+\newcommand{\dITProgLcB}{$-$0.011}
+\newcommand{\cITProgLcB}{[$-$0.023, 0.003]}
+\newcommand{\dITWkSsA}{0.179}
+\newcommand{\cITWkSsA}{[0.108, 0.256]}
+\newcommand{\dITChSsA}{0.049}
+\newcommand{\cITChSsA}{[0.000, 0.111]}
+\newcommand{\dITAddSsA}{$-$0.002}
+\newcommand{\cITAddSsA}{[$-$0.008, 0.004]}
+\newcommand{\dITWsSsA}{$-$0.030}
+\newcommand{\cITWsSsA}{[$-$0.137, 0.055]}
+\newcommand{\dITCsSsA}{0.099}
+\newcommand{\cITCsSsA}{[0.024, 0.171]}
+\newcommand{\dITCtxSsA}{0.034}
+\newcommand{\cITCtxSsA}{[$-$0.011, 0.093]}
+\newcommand{\dITProgSsA}{0.016}
+\newcommand{\cITProgSsA}{[$-$0.018, 0.048]}
+\newcommand{\dITWkSsB}{0.178}
+\newcommand{\cITWkSsB}{[0.083, 0.261]}
+\newcommand{\dITChSsB}{0.053}
+\newcommand{\cITChSsB}{[0.000, 0.117]}
+\newcommand{\dITAddSsB}{0.000}
+\newcommand{\cITAddSsB}{[$-$0.006, 0.005]}
+\newcommand{\dITWsSsB}{0.019}
+\newcommand{\cITWsSsB}{[$-$0.069, 0.117]}
+\newcommand{\dITCsSsB}{0.145}
+\newcommand{\cITCsSsB}{[0.077, 0.216]}
+\newcommand{\dITCtxSsB}{0.018}
+\newcommand{\cITCtxSsB}{[$-$0.021, 0.070]}
+\newcommand{\dITProgSsB}{0.034}
+\newcommand{\cITProgSsB}{[0.005, 0.069]}
+\newcommand{\dITWkSlA}{0.169}
+\newcommand{\cITWkSlA}{[0.072, 0.274]}
+\newcommand{\dITChSlA}{0.067}
+\newcommand{\cITChSlA}{[$-$0.008, 0.138]}
+\newcommand{\dITAddSlA}{$-$0.003}
+\newcommand{\cITAddSlA}{[$-$0.014, 0.008]}
+\newcommand{\dITWsSlA}{$-$0.111}
+\newcommand{\cITWsSlA}{[$-$0.186, $-$0.050]}
+\newcommand{\dITCsSlA}{$-$0.009}
+\newcommand{\cITCsSlA}{[$-$0.076, 0.042]}
+\newcommand{\dITCtxSlA}{0.038}
+\newcommand{\cITCtxSlA}{[$-$0.029, 0.105]}
+\newcommand{\dITProgSlA}{0.029}
+\newcommand{\cITProgSlA}{[0.002, 0.055]}
+\newcommand{\dITWkSlB}{0.149}
+\newcommand{\cITWkSlB}{[0.067, 0.243]}
+\newcommand{\dITChSlB}{0.093}
+\newcommand{\cITChSlB}{[0.007, 0.193]}
+\newcommand{\dITAddSlB}{$-$0.007}
+\newcommand{\cITAddSlB}{[$-$0.018, 0.007]}
+\newcommand{\dITWsSlB}{$-$0.068}
+\newcommand{\cITWsSlB}{[$-$0.143, $-$0.004]}
+\newcommand{\dITCsSlB}{$-$0.011}
+\newcommand{\cITCsSlB}{[$-$0.098, 0.056]}
+\newcommand{\dITCtxSlB}{0.099}
+\newcommand{\cITCtxSlB}{[0.011, 0.192]}
+\newcommand{\dITProgSlB}{$-$0.006}
+\newcommand{\cITProgSlB}{[$-$0.042, 0.028]}
+\newcommand{\dILWkSpA}{0.188}
+\newcommand{\cILWkSpA}{[0.152, 0.235]}
+\newcommand{\dILChSpA}{0.022}
+\newcommand{\cILChSpA}{[0.004, 0.043]}
+\newcommand{\dILAddSpA}{$-$0.001}
+\newcommand{\cILAddSpA}{[$-$0.005, 0.001]}
+\newcommand{\dILWsSpA}{$-$0.106}
+\newcommand{\cILWsSpA}{[$-$0.180, $-$0.055]}
+\newcommand{\dILCsSpA}{0.059}
+\newcommand{\cILCsSpA}{[0.029, 0.091]}
+\newcommand{\dILCtxSpA}{0.005}
+\newcommand{\cILCtxSpA}{[$-$0.006, 0.019]}
+\newcommand{\dILProgSpA}{0.017}
+\newcommand{\cILProgSpA}{[0.002, 0.031]}
+\newcommand{\dILWkSpB}{0.165}
+\newcommand{\cILWkSpB}{[0.120, 0.222]}
+\newcommand{\dILChSpB}{0.023}
+\newcommand{\cILChSpB}{[0.003, 0.044]}
+\newcommand{\dILAddSpB}{0.000}
+\newcommand{\cILAddSpB}{[$-$0.004, 0.003]}
+\newcommand{\dILWsSpB}{$-$0.057}
+\newcommand{\cILWsSpB}{[$-$0.131, $-$0.007]}
+\newcommand{\dILCsSpB}{0.085}
+\newcommand{\cILCsSpB}{[0.051, 0.119]}
+\newcommand{\dILCtxSpB}{0.000}
+\newcommand{\cILCtxSpB}{[$-$0.009, 0.012]}
+\newcommand{\dILProgSpB}{0.023}
+\newcommand{\cILProgSpB}{[0.008, 0.036]}
+\newcommand{\dILWkLcA}{0.182}
+\newcommand{\cILWkLcA}{[0.109, 0.258]}
+\newcommand{\dILChLcA}{0.056}
+\newcommand{\cILChLcA}{[$-$0.021, 0.142]}
+\newcommand{\dILAddLcA}{0.004}
+\newcommand{\cILAddLcA}{[$-$0.004, 0.012]}
+\newcommand{\dILWsLcA}{$-$0.085}
+\newcommand{\cILWsLcA}{[$-$0.125, $-$0.050]}
+\newcommand{\dILCsLcA}{0.041}
+\newcommand{\cILCsLcA}{[$-$0.005, 0.073]}
+\newcommand{\dILCtxLcA}{0.054}
+\newcommand{\cILCtxLcA}{[$-$0.012, 0.123]}
+\newcommand{\dILProgLcA}{0.002}
+\newcommand{\cILProgLcA}{[$-$0.011, 0.024]}
+\newcommand{\dILWkLcB}{0.124}
+\newcommand{\cILWkLcB}{[0.045, 0.208]}
+\newcommand{\dILChLcB}{0.076}
+\newcommand{\cILChLcB}{[0.005, 0.157]}
+\newcommand{\dILAddLcB}{0.003}
+\newcommand{\cILAddLcB}{[$-$0.005, 0.010]}
+\newcommand{\dILWsLcB}{$-$0.023}
+\newcommand{\cILWsLcB}{[$-$0.082, 0.029]}
+\newcommand{\dILCsLcB}{0.026}
+\newcommand{\cILCsLcB}{[$-$0.023, 0.062]}
+\newcommand{\dILCtxLcB}{0.064}
+\newcommand{\cILCtxLcB}{[$-$0.007, 0.145]}
+\newcommand{\dILProgLcB}{0.012}
+\newcommand{\cILProgLcB}{[0.003, 0.021]}
+\newcommand{\dILWkSsA}{0.206}
+\newcommand{\cILWkSsA}{[0.152, 0.269]}
+\newcommand{\dILChSsA}{0.070}
+\newcommand{\cILChSsA}{[0.044, 0.097]}
+\newcommand{\dILAddSsA}{0.002}
+\newcommand{\cILAddSsA}{[$-$0.002, 0.005]}
+\newcommand{\dILWsSsA}{0.013}
+\newcommand{\cILWsSsA}{[$-$0.081, 0.092]}
+\newcommand{\dILCsSsA}{0.149}
+\newcommand{\cILCsSsA}{[0.096, 0.190]}
+\newcommand{\dILCtxSsA}{0.057}
+\newcommand{\cILCtxSsA}{[0.032, 0.084]}
+\newcommand{\dILProgSsA}{0.012}
+\newcommand{\cILProgSsA}{[$-$0.004, 0.028]}
+\newcommand{\dILWkSsB}{0.162}
+\newcommand{\cILWkSsB}{[0.132, 0.196]}
+\newcommand{\dILChSsB}{0.061}
+\newcommand{\cILChSsB}{[0.036, 0.088]}
+\newcommand{\dILAddSsB}{$-$0.001}
+\newcommand{\cILAddSsB}{[$-$0.003, 0.003]}
+\newcommand{\dILWsSsB}{0.112}
+\newcommand{\cILWsSsB}{[0.042, 0.157]}
+\newcommand{\dILCsSsB}{0.213}
+\newcommand{\cILCsSsB}{[0.161, 0.258]}
+\newcommand{\dILCtxSsB}{0.024}
+\newcommand{\cILCtxSsB}{[0.005, 0.041]}
+\newcommand{\dILProgSsB}{0.037}
+\newcommand{\cILProgSsB}{[0.020, 0.057]}
+\newcommand{\dILWkSlA}{0.067}
+\newcommand{\cILWkSlA}{[$-$0.009, 0.160]}
+\newcommand{\dILChSlA}{0.022}
+\newcommand{\cILChSlA}{[$-$0.030, 0.085]}
+\newcommand{\dILAddSlA}{0.009}
+\newcommand{\cILAddSlA}{[0.003, 0.015]}
+\newcommand{\dILWsSlA}{$-$0.035}
+\newcommand{\cILWsSlA}{[$-$0.137, 0.058]}
+\newcommand{\dILCsSlA}{0.009}
+\newcommand{\cILCsSlA}{[$-$0.048, 0.048]}
+\newcommand{\dILCtxSlA}{0.032}
+\newcommand{\cILCtxSlA}{[$-$0.011, 0.088]}
+\newcommand{\dILProgSlA}{$-$0.011}
+\newcommand{\cILProgSlA}{[$-$0.028, 0.007]}
+\newcommand{\dILWkSlB}{0.067}
+\newcommand{\cILWkSlB}{[0.006, 0.149]}
+\newcommand{\dILChSlB}{0.028}
+\newcommand{\cILChSlB}{[$-$0.024, 0.097]}
+\newcommand{\dILAddSlB}{0.010}
+\newcommand{\cILAddSlB}{[$-$0.003, 0.022]}
+\newcommand{\dILWsSlB}{$-$0.030}
+\newcommand{\cILWsSlB}{[$-$0.121, 0.046]}
+\newcommand{\dILCsSlB}{0.008}
+\newcommand{\cILCsSlB}{[$-$0.054, 0.048]}
+\newcommand{\dILCtxSlB}{0.029}
+\newcommand{\cILCtxSlB}{[$-$0.018, 0.094]}
+\newcommand{\dILProgSlB}{0.000}
+\newcommand{\cILProgSlB}{[$-$0.021, 0.020]}
+\newcommand{\dPCNewLc}{$-$0.009}
+\newcommand{\cPCNewLc}{[$-$0.025, 0.005]}
+\newcommand{\dPCHistLc}{0.016}
+\newcommand{\cPCHistLc}{[$-$0.050, 0.081]}
+\newcommand{\dPCStrLc}{0.025}
+\newcommand{\cPCStrLc}{[$-$0.049, 0.096]}
+\newcommand{\dPCNewSl}{0.002}
+\newcommand{\cPCNewSl}{[$-$0.006, 0.012]}
+\newcommand{\dPCHistSl}{0.044}
+\newcommand{\cPCHistSl}{[$-$0.009, 0.085]}
+\newcommand{\dPCStrSl}{0.041}
+\newcommand{\cPCStrSl}{[$-$0.012, 0.084]}
+\newcommand{\dPCNewSp}{0.016}
+\newcommand{\cPCNewSp}{[$-$0.016, 0.048]}
+\newcommand{\dPCHistSp}{0.089}
+\newcommand{\cPCHistSp}{[0.044, 0.137]}
+\newcommand{\dPCStrSp}{0.073}
+\newcommand{\cPCStrSp}{[0.033, 0.109]}
+\newcommand{\dPCNewSs}{0.035}
+\newcommand{\cPCNewSs}{[$-$0.007, 0.080]}
+\newcommand{\dPCHistSs}{0.178}
+\newcommand{\cPCHistSs}{[0.092, 0.256]}
+\newcommand{\dPCStrSs}{0.143}
+\newcommand{\cPCStrSs}{[0.042, 0.221]}
+\newcommand{\dPCNewSc}{0.006}
+\newcommand{\cPCNewSc}{[$-$0.044, 0.056]}
+\newcommand{\dPCHistSc}{0.065}
+\newcommand{\cPCHistSc}{[$-$0.105, 0.193]}
+\newcommand{\dPCStrSc}{0.059}
+\newcommand{\cPCStrSc}{[$-$0.136, 0.201]}
+\newcommand{\dICWkSpA}{0.158}
+\newcommand{\cICWkSpA}{[0.057, 0.249]}
+\newcommand{\dICChSpA}{0.053}
+\newcommand{\cICChSpA}{[0.007, 0.101]}
+\newcommand{\dICAddSpA}{0.005}
+\newcommand{\cICAddSpA}{[$-$0.005, 0.013]}
+\newcommand{\dICWsSpA}{$-$0.023}
+\newcommand{\cICWsSpA}{[$-$0.122, 0.081]}
+\newcommand{\dICCsSpA}{0.082}
+\newcommand{\cICCsSpA}{[0.028, 0.129]}
+\newcommand{\dICCtxSpA}{0.033}
+\newcommand{\cICCtxSpA}{[$-$0.004, 0.068]}
+\newcommand{\dICProgSpA}{0.021}
+\newcommand{\cICProgSpA}{[$-$0.018, 0.069]}
+\newcommand{\dICWkSpB}{0.252}
+\newcommand{\cICWkSpB}{[0.140, 0.366]}
+\newcommand{\dICChSpB}{0.081}
+\newcommand{\cICChSpB}{[0.022, 0.145]}
+\newcommand{\dICAddSpB}{0.002}
+\newcommand{\cICAddSpB}{[$-$0.005, 0.009]}
+\newcommand{\dICWsSpB}{$-$0.057}
+\newcommand{\cICWsSpB}{[$-$0.144, 0.049]}
+\newcommand{\dICCsSpB}{0.114}
+\newcommand{\cICCsSpB}{[0.063, 0.167]}
+\newcommand{\dICCtxSpB}{0.032}
+\newcommand{\cICCtxSpB}{[0.003, 0.062]}
+\newcommand{\dICProgSpB}{0.048}
+\newcommand{\cICProgSpB}{[$-$0.001, 0.113]}
+\newcommand{\dICWkLcA}{0.154}
+\newcommand{\cICWkLcA}{[0.045, 0.253]}
+\newcommand{\dICChLcA}{0.032}
+\newcommand{\cICChLcA}{[$-$0.028, 0.088]}
+\newcommand{\dICAddLcA}{0.000}
+\newcommand{\cICAddLcA}{[$-$0.013, 0.012]}
+\newcommand{\dICWsLcA}{$-$0.099}
+\newcommand{\cICWsLcA}{[$-$0.217, 0.016]}
+\newcommand{\dICCsLcA}{0.024}
+\newcommand{\cICCsLcA}{[$-$0.037, 0.075]}
+\newcommand{\dICCtxLcA}{0.034}
+\newcommand{\cICCtxLcA}{[$-$0.023, 0.092]}
+\newcommand{\dICProgLcA}{$-$0.002}
+\newcommand{\cICProgLcA}{[$-$0.030, 0.029]}
+\newcommand{\dICWkLcB}{0.032}
+\newcommand{\cICWkLcB}{[$-$0.058, 0.107]}
+\newcommand{\dICChLcB}{0.028}
+\newcommand{\cICChLcB}{[$-$0.031, 0.083]}
+\newcommand{\dICAddLcB}{0.002}
+\newcommand{\cICAddLcB}{[$-$0.010, 0.017]}
+\newcommand{\dICWsLcB}{0.027}
+\newcommand{\cICWsLcB}{[$-$0.068, 0.136]}
+\newcommand{\dICCsLcB}{0.031}
+\newcommand{\cICCsLcB}{[$-$0.029, 0.088]}
+\newcommand{\dICCtxLcB}{0.035}
+\newcommand{\cICCtxLcB}{[$-$0.018, 0.095]}
+\newcommand{\dICProgLcB}{$-$0.006}
+\newcommand{\cICProgLcB}{[$-$0.028, 0.014]}
+\newcommand{\dICWkSsA}{0.236}
+\newcommand{\cICWkSsA}{[0.173, 0.321]}
+\newcommand{\dICChSsA}{0.111}
+\newcommand{\cICChSsA}{[0.038, 0.209]}
+\newcommand{\dICAddSsA}{$-$0.007}
+\newcommand{\cICAddSsA}{[$-$0.021, 0.004]}
+\newcommand{\dICWsSsA}{0.048}
+\newcommand{\cICWsSsA}{[$-$0.096, 0.185]}
+\newcommand{\dICCsSsA}{0.174}
+\newcommand{\cICCsSsA}{[0.041, 0.286]}
+\newcommand{\dICCtxSsA}{0.059}
+\newcommand{\cICCtxSsA}{[$-$0.002, 0.135]}
+\newcommand{\dICProgSsA}{0.052}
+\newcommand{\cICProgSsA}{[0.018, 0.097]}
+\newcommand{\dICWkSsB}{0.248}
+\newcommand{\cICWkSsB}{[0.168, 0.300]}
+\newcommand{\dICChSsB}{0.099}
+\newcommand{\cICChSsB}{[0.048, 0.165]}
+\newcommand{\dICAddSsB}{0.005}
+\newcommand{\cICAddSsB}{[$-$0.008, 0.018]}
+\newcommand{\dICWsSsB}{0.094}
+\newcommand{\cICWsSsB}{[$-$0.007, 0.227]}
+\newcommand{\dICCsSsB}{0.244}
+\newcommand{\cICCsSsB}{[0.128, 0.357]}
+\newcommand{\dICCtxSsB}{0.032}
+\newcommand{\cICCtxSsB}{[0.003, 0.062]}
+\newcommand{\dICProgSsB}{0.067}
+\newcommand{\cICProgSsB}{[0.024, 0.122]}
+\newcommand{\dICWkSlA}{0.121}
+\newcommand{\cICWkSlA}{[$-$0.005, 0.261]}
+\newcommand{\dICChSlA}{0.073}
+\newcommand{\cICChSlA}{[0.010, 0.142]}
+\newcommand{\dICAddSlA}{0.001}
+\newcommand{\cICAddSlA}{[$-$0.024, 0.025]}
+\newcommand{\dICWsSlA}{$-$0.092}
+\newcommand{\cICWsSlA}{[$-$0.213, 0.002]}
+\newcommand{\dICCsSlA}{$-$0.044}
+\newcommand{\cICCsSlA}{[$-$0.088, $-$0.013]}
+\newcommand{\dICCtxSlA}{0.039}
+\newcommand{\cICCtxSlA}{[$-$0.023, 0.100]}
+\newcommand{\dICProgSlA}{0.033}
+\newcommand{\cICProgSlA}{[0.004, 0.060]}
+\newcommand{\dICWkSlB}{0.105}
+\newcommand{\cICWkSlB}{[0.012, 0.208]}
+\newcommand{\dICChSlB}{0.027}
+\newcommand{\cICChSlB}{[$-$0.030, 0.088]}
+\newcommand{\dICAddSlB}{0.003}
+\newcommand{\cICAddSlB}{[$-$0.016, 0.023]}
+\newcommand{\dICWsSlB}{$-$0.059}
+\newcommand{\cICWsSlB}{[$-$0.171, 0.020]}
+\newcommand{\dICCsSlB}{0.019}
+\newcommand{\cICCsSlB}{[$-$0.031, 0.061]}
+\newcommand{\dICCtxSlB}{0.013}
+\newcommand{\cICCtxSlB}{[$-$0.050, 0.080]}
+\newcommand{\dICProgSlB}{0.013}
+\newcommand{\cICProgSlB}{[$-$0.017, 0.042]}
+\newcommand{\ConfTestAll}{472}
+\newcommand{\ConfTestNonempty}{283}
+\newcommand{\aPTLcScope}{0.682}
+\newcommand{\aPTLcStrict}{0.724}
+\newcommand{\aPTLcNew}{0.725}
+\newcommand{\aPLLcScope}{0.643}
+\newcommand{\aPLLcStrict}{0.724}
+\newcommand{\aPLLcNew}{0.721}
+\newcommand{\aPTSlScope}{0.639}
+\newcommand{\aPTSlStrict}{0.690}
+\newcommand{\aPTSlNew}{0.684}
+\newcommand{\aPLSlScope}{0.650}
+\newcommand{\aPLSlStrict}{0.682}
+\newcommand{\aPLSlNew}{0.674}
+\newcommand{\aPTSpScope}{0.835}
+\newcommand{\aPTSpStrict}{0.832}
+\newcommand{\aPTSpNew}{0.869}
+\newcommand{\aPFSpScope}{0.755}
+\newcommand{\aPFSpStrict}{0.783}
+\newcommand{\aPFSpNew}{0.823}
+\newcommand{\aPLSpScope}{0.818}
+\newcommand{\aPLSpStrict}{0.834}
+\newcommand{\aPLSpNew}{0.849}
+\newcommand{\aPTSsScope}{0.681}
+\newcommand{\aPTSsStrict}{0.752}
+\newcommand{\aPTSsNew}{0.769}
+\newcommand{\aPFSsScope}{0.665}
+\newcommand{\aPFSsStrict}{0.761}
+\newcommand{\aPFSsNew}{0.790}
+\newcommand{\aPLSsScope}{0.609}
+\newcommand{\aPLSsStrict}{0.723}
+\newcommand{\aPLSsNew}{0.748}
+\newcommand{\aPTScScope}{0.545}
+\newcommand{\aPTScStrict}{0.582}
+\newcommand{\aPTScNew}{0.608}
+\newcommand{\aPFScScope}{0.497}
+\newcommand{\aPFScStrict}{0.637}
+\newcommand{\aPFScNew}{0.659}
+\newcommand{\aPLScScope}{0.535}
+\newcommand{\aPLScStrict}{0.523}
+\newcommand{\aPLScNew}{0.547}
+\newcommand{\aPTStScope}{0.752}
+\newcommand{\aPTStStrict}{0.757}
+\newcommand{\aPTStNew}{0.787}
+\newcommand{\aPLStScope}{0.679}
+\newcommand{\aPLStStrict}{0.758}
+\newcommand{\aPLStNew}{0.787}
+\newcommand{\aPTSfScope}{0.614}
+\newcommand{\aPTSfStrict}{0.687}
+\newcommand{\aPTSfNew}{0.717}
+\newcommand{\aPLSfScope}{0.514}
+\newcommand{\aPLSfStrict}{0.677}
+\newcommand{\aPLSfNew}{0.708}
+\newcommand{\aPTShScope}{0.570}
+\newcommand{\aPTShStrict}{0.572}
+\newcommand{\aPTShNew}{0.635}
+\newcommand{\aPLShScope}{0.537}
+\newcommand{\aPLShStrict}{0.519}
+\newcommand{\aPLShNew}{0.542}
+\newcommand{\aPTSmScope}{0.563}
+\newcommand{\aPTSmStrict}{0.666}
+\newcommand{\aPTSmNew}{0.704}
+\newcommand{\aPLSmScope}{0.551}
+\newcommand{\aPLSmStrict}{0.686}
+\newcommand{\aPLSmNew}{0.716}
+\newcommand{\aITSpAScope}{0.831}
+\newcommand{\aITSpAChoet}{0.885}
+\newcommand{\aITSpAWorki}{0.785}
+\newcommand{\aITSpAOurs}{0.916}
+\newcommand{\aITSpAOursW}{0.914}
+\newcommand{\aITSpACtx}{0.897}
+\newcommand{\aITSpBScope}{0.834}
+\newcommand{\aITSpBChoet}{0.903}
+\newcommand{\aITSpBWorki}{0.743}
+\newcommand{\aITSpBOurs}{0.937}
+\newcommand{\aITSpBOursW}{0.937}
+\newcommand{\aITSpBCtx}{0.910}
+\newcommand{\aITLcAScope}{0.678}
+\newcommand{\aITLcAChoet}{0.665}
+\newcommand{\aITLcAWorki}{0.571}
+\newcommand{\aITLcAOurs}{0.716}
+\newcommand{\aITLcAOursW}{0.717}
+\newcommand{\aITLcACtx}{0.724}
+\newcommand{\aITLcBScope}{0.676}
+\newcommand{\aITLcBChoet}{0.679}
+\newcommand{\aITLcBWorki}{0.634}
+\newcommand{\aITLcBOurs}{0.731}
+\newcommand{\aITLcBOursW}{0.736}
+\newcommand{\aITLcBCtx}{0.742}
+\newcommand{\aITSsAScope}{0.695}
+\newcommand{\aITSsAChoet}{0.794}
+\newcommand{\aITSsAWorki}{0.665}
+\newcommand{\aITSsAOurs}{0.843}
+\newcommand{\aITSsAOursW}{0.841}
+\newcommand{\aITSsACtx}{0.828}
+\newcommand{\aITSsBScope}{0.688}
+\newcommand{\aITSsBChoet}{0.833}
+\newcommand{\aITSsBWorki}{0.708}
+\newcommand{\aITSsBOurs}{0.886}
+\newcommand{\aITSsBOursW}{0.886}
+\newcommand{\aITSsBCtx}{0.851}
+\newcommand{\aITSlAScope}{0.617}
+\newcommand{\aITSlAChoet}{0.608}
+\newcommand{\aITSlAWorki}{0.506}
+\newcommand{\aITSlAOurs}{0.675}
+\newcommand{\aITSlAOursW}{0.672}
+\newcommand{\aITSlACtx}{0.645}
+\newcommand{\aITSlBScope}{0.605}
+\newcommand{\aITSlBChoet}{0.594}
+\newcommand{\aITSlBWorki}{0.537}
+\newcommand{\aITSlBOurs}{0.686}
+\newcommand{\aITSlBOursW}{0.680}
+\newcommand{\aITSlBCtx}{0.693}
+\newcommand{\InTestA}{732}
+\newcommand{\InTestB}{728}
+\newcommand{\AddMax}{0.007}
+\newcommand{\aBinSp}{0.864}
+\newcommand{\aBetaSp}{0.854}
+\newcommand{\aBinGbSp}{0.869}
+\newcommand{\sBinSp}{0.41}
+\newcommand{\sBetaSp}{0.59}
+\newcommand{\sGbSp}{0.95}
+\newcommand{\dGbBinSp}{0.006}
+\newcommand{\cGbBinSp}{[$-$0.023, 0.048]}
+\newcommand{\dBinScopeSp}{0.028}
+\newcommand{\cBinScopeSp}{[$-$0.010, 0.067]}
+\newcommand{\dBetaBinSp}{$-$0.010}
+\newcommand{\cBetaBinSp}{[$-$0.016, $-$0.005]}
+\newcommand{\mBetaCostSp}{0.010}
+\newcommand{\aBinSs}{0.759}
+\newcommand{\aBetaSs}{0.745}
+\newcommand{\aBinGbSs}{0.769}
+\newcommand{\sBinSs}{0.26}
+\newcommand{\sBetaSs}{0.49}
+\newcommand{\sGbSs}{0.81}
+\newcommand{\dGbBinSs}{0.010}
+\newcommand{\cGbBinSs}{[$-$0.034, 0.064]}
+\newcommand{\dBinScopeSs}{0.078}
+\newcommand{\cBinScopeSs}{[0.011, 0.136]}
+\newcommand{\dBetaBinSs}{$-$0.014}
+\newcommand{\cBetaBinSs}{[$-$0.031, $-$0.001]}
+\newcommand{\mBetaCostSs}{0.014}
+\newcommand{\dGbBinCSp}{0.027}
+\newcommand{\cGbBinCSp}{[$-$0.030, 0.099]}
+\newcommand{\dBinScopeCSp}{0.062}
+\newcommand{\cBinScopeCSp}{[$-$0.008, 0.113]}
+\newcommand{\dGbBinCSs}{0.054}
+\newcommand{\cGbBinCSs}{[$-$0.004, 0.122]}
+\newcommand{\dBinScopeCSs}{0.124}
+\newcommand{\cBinScopeCSs}{[0.016, 0.224]}
+\newcommand{\VarRatioSmall}{1.7}
+\newcommand{\VarRatioLarge}{5.8}
+\newcommand{\VarObsLarge}{0.044}
+\newcommand{\VarBetaLarge}{0.041}
+\newcommand{\SlopeSpMin}{0.81}
+\newcommand{\SlopeSpMax}{0.97}
+\newcommand{\SlopeLateMin}{0.68}
+\newcommand{\SlopeLateMax}{0.79}
+\newcommand{\eSpScope}{0.778}
+\newcommand{\eSpStrict}{0.759}
+\newcommand{\eSpNew}{0.755}
+\newcommand{\eKSp}{4}
+\newcommand{\eSsScope}{0.594}
+\newcommand{\eSsStrict}{0.559}
+\newcommand{\eSsNew}{0.580}
+\newcommand{\eKSs}{9}
+\newcommand{\eLcScope}{0.666}
+\newcommand{\eLcStrict}{0.641}
+\newcommand{\eLcNew}{0.652}
+\newcommand{\eKLc}{8}
+\newcommand{\repSp}{0.858 $\pm$ 0.019}
+\newcommand{\repSs}{0.767 $\pm$ 0.027}
+\newcommand{\repLc}{0.727 $\pm$ 0.013}
+\newcommand{\NHyp}{22}
+\newcommand{\NHoldRaw}{8}
+\newcommand{\NHoldHolm}{5}
+\newcommand{\NHoldConf}{6}
+\newcommand{\QhatPct}{33}
+\newcommand{\dPUNewLc}{$-$0.002}
+\newcommand{\cPUNewLc}{[$-$0.009, 0.003]}
+\newcommand{\dPUHistLc}{0.021}
+\newcommand{\cPUHistLc}{[$-$0.021, 0.057]}
+\newcommand{\dPUNewSl}{0.003}
+\newcommand{\cPUNewSl}{[$-$0.005, 0.009]}
+\newcommand{\dPUHistSl}{0.043}
+\newcommand{\cPUHistSl}{[$-$0.013, 0.114]}
+\newcommand{\dPUNewSp}{0.028}
+\newcommand{\cPUNewSp}{[0.009, 0.042]}
+\newcommand{\dPUHistSp}{0.027}
+\newcommand{\cPUHistSp}{[0.001, 0.056]}
+\newcommand{\dPUNewSs}{0.024}
+\newcommand{\cPUNewSs}{[0.003, 0.053]}
+\newcommand{\dPUHistSs}{0.081}
+\newcommand{\cPUHistSs}{[0.023, 0.149]}
+\newcommand{\dPUNewSc}{0.046}
+\newcommand{\cPUNewSc}{[$-$0.026, 0.111]}
+\newcommand{\dPUHistSc}{0.095}
+\newcommand{\cPUHistSc}{[$-$0.003, 0.195]}
+\newcommand{\dPKNewLc}{$-$0.003}
+\newcommand{\cPKNewLc}{[$-$0.009, 0.003]}
+\newcommand{\dPKHistLc}{0.032}
+\newcommand{\cPKHistLc}{[$-$0.047, 0.081]}
+\newcommand{\dPKNewSl}{$-$0.001}
+\newcommand{\cPKNewSl}{[$-$0.022, 0.006]}
+\newcommand{\dPKHistSl}{0.059}
+\newcommand{\cPKHistSl}{[$-$0.021, 0.127]}
+\newcommand{\dPKNewSp}{0.035}
+\newcommand{\cPKNewSp}{[0.018, 0.056]}
+\newcommand{\dPKHistSp}{0.053}
+\newcommand{\cPKHistSp}{[0.022, 0.095]}
+\newcommand{\dPKNewSs}{0.021}
+\newcommand{\cPKNewSs}{[$-$0.006, 0.058]}
+\newcommand{\dPKHistSs}{0.079}
+\newcommand{\cPKHistSs}{[0.005, 0.149]}
+\newcommand{\dPKNewSc}{0.030}
+\newcommand{\cPKNewSc}{[$-$0.006, 0.067]}
+\newcommand{\dPKHistSc}{0.006}
+\newcommand{\cPKHistSc}{[$-$0.115, 0.174]}
+\newcommand{\CutDate}{January 2018}
+\newcommand{\CutProj}{20}
+\newcommand{\dPRNewLc}{0.001}
+\newcommand{\cPRNewLc}{[$-$0.012, 0.014]}
+\newcommand{\dPRHistLc}{0.042}
+\newcommand{\cPRHistLc}{[$-$0.015, 0.091]}
+\newcommand{\dPRNewSl}{$-$0.006}
+\newcommand{\cPRNewSl}{[$-$0.017, 0.000]}
+\newcommand{\dPRHistSl}{0.040}
+\newcommand{\cPRHistSl}{[$-$0.025, 0.098]}
+\newcommand{\dPRNewSp}{0.038}
+\newcommand{\cPRNewSp}{[0.023, 0.057]}
+\newcommand{\dPRHistSp}{0.031}
+\newcommand{\cPRHistSp}{[$-$0.011, 0.077]}
+\newcommand{\dPRNewSs}{0.018}
+\newcommand{\cPRNewSs}{[$-$0.010, 0.053]}
+\newcommand{\dPRHistSs}{0.071}
+\newcommand{\cPRHistSs}{[0.003, 0.146]}
+\newcommand{\dPRNewSc}{0.031}
+\newcommand{\cPRNewSc}{[$-$0.026, 0.078]}
+\newcommand{\dPRHistSc}{0.073}
+\newcommand{\cPRHistSc}{[$-$0.054, 0.217]}
+\newcommand{\dIRWkSpA}{0.133}
+\newcommand{\cIRWkSpA}{[0.082, 0.203]}
+\newcommand{\dIRAddSpA}{$-$0.002}
+\newcommand{\cIRAddSpA}{[$-$0.007, 0.002]}
+\newcommand{\dIRChSpA}{0.030}
+\newcommand{\cIRChSpA}{[$-$0.004, 0.066]}
+\newcommand{\dIRCtxSpA}{0.010}
+\newcommand{\cIRCtxSpA}{[$-$0.015, 0.040]}
+\newcommand{\dIRProgSpA}{0.020}
+\newcommand{\cIRProgSpA}{[$-$0.008, 0.048]}
+\newcommand{\dIRWkSpB}{0.191}
+\newcommand{\cIRWkSpB}{[0.106, 0.274]}
+\newcommand{\dIRAddSpB}{0.000}
+\newcommand{\cIRAddSpB}{[$-$0.006, 0.004]}
+\newcommand{\dIRChSpB}{0.033}
+\newcommand{\cIRChSpB}{[$-$0.002, 0.077]}
+\newcommand{\dIRCtxSpB}{0.005}
+\newcommand{\cIRCtxSpB}{[$-$0.016, 0.031]}
+\newcommand{\dIRProgSpB}{0.029}
+\newcommand{\cIRProgSpB}{[$-$0.003, 0.065]}
+\newcommand{\dIRWkSsA}{0.180}
+\newcommand{\cIRWkSsA}{[0.106, 0.267]}
+\newcommand{\dIRAddSsA}{$-$0.002}
+\newcommand{\cIRAddSsA}{[$-$0.009, 0.004]}
+\newcommand{\dIRChSsA}{0.040}
+\newcommand{\cIRChSsA}{[$-$0.006, 0.101]}
+\newcommand{\dIRCtxSsA}{0.025}
+\newcommand{\cIRCtxSsA}{[$-$0.015, 0.082]}
+\newcommand{\dIRProgSsA}{0.015}
+\newcommand{\cIRProgSsA}{[$-$0.017, 0.049]}
+\newcommand{\dIRWkSsB}{0.173}
+\newcommand{\cIRWkSsB}{[0.073, 0.260]}
+\newcommand{\dIRAddSsB}{0.000}
+\newcommand{\cIRAddSsB}{[$-$0.006, 0.005]}
+\newcommand{\dIRChSsB}{0.051}
+\newcommand{\cIRChSsB}{[0.000, 0.113]}
+\newcommand{\dIRCtxSsB}{0.017}
+\newcommand{\cIRCtxSsB}{[$-$0.023, 0.069]}
+\newcommand{\dIRProgSsB}{0.034}
+\newcommand{\cIRProgSsB}{[0.003, 0.071]}
+\newcommand{\dIRWkLcA}{0.155}
+\newcommand{\cIRWkLcA}{[0.089, 0.217]}
+\newcommand{\dIRAddLcA}{0.000}
+\newcommand{\cIRAddLcA}{[$-$0.011, 0.010]}
+\newcommand{\dIRChLcA}{0.050}
+\newcommand{\cIRChLcA}{[$-$0.015, 0.123]}
+\newcommand{\dIRCtxLcA}{0.058}
+\newcommand{\cIRCtxLcA}{[0.000, 0.125]}
+\newcommand{\dIRProgLcA}{$-$0.008}
+\newcommand{\cIRProgLcA}{[$-$0.021, 0.008]}
+\newcommand{\dIRWkLcB}{0.111}
+\newcommand{\cIRWkLcB}{[0.025, 0.196]}
+\newcommand{\dIRAddLcB}{0.004}
+\newcommand{\cIRAddLcB}{[$-$0.003, 0.012]}
+\newcommand{\dIRChLcB}{0.053}
+\newcommand{\cIRChLcB}{[$-$0.012, 0.133]}
+\newcommand{\dIRCtxLcB}{0.064}
+\newcommand{\cIRCtxLcB}{[0.000, 0.143]}
+\newcommand{\dIRProgLcB}{$-$0.011}
+\newcommand{\cIRProgLcB}{[$-$0.024, 0.002]}
+\newcommand{\dIRWkSlA}{0.167}
+\newcommand{\cIRWkSlA}{[0.062, 0.269]}
+\newcommand{\dIRAddSlA}{$-$0.001}
+\newcommand{\cIRAddSlA}{[$-$0.011, 0.011]}
+\newcommand{\dIRChSlA}{0.056}
+\newcommand{\cIRChSlA}{[$-$0.020, 0.128]}
+\newcommand{\dIRCtxSlA}{0.031}
+\newcommand{\cIRCtxSlA}{[$-$0.041, 0.099]}
+\newcommand{\dIRProgSlA}{0.025}
+\newcommand{\cIRProgSlA}{[0.000, 0.049]}
+\newcommand{\dIRWkSlB}{0.156}
+\newcommand{\cIRWkSlB}{[0.064, 0.245]}
+\newcommand{\dIRAddSlB}{$-$0.009}
+\newcommand{\cIRAddSlB}{[$-$0.020, 0.004]}
+\newcommand{\dIRChSlB}{0.092}
+\newcommand{\cIRChSlB}{[$-$0.001, 0.192]}
+\newcommand{\dIRCtxSlB}{0.097}
+\newcommand{\cIRCtxSlB}{[0.003, 0.192]}
+\newcommand{\dIRProgSlB}{$-$0.005}
+\newcommand{\cIRProgSlB}{[$-$0.042, 0.030]}
+\newcommand{\RestrictedProj}{Appcelerator Daemon and Hyperledger Indy Node}
+\newcommand{\bSmTenScope}{75}
+\newcommand{\bSmTenNew}{81}
+\newcommand{\bSmTenBase}{57}
+\newcommand{\bSmTenExtra}{4}
+\newcommand{\bSmTenFlag}{73}
+\newcommand{\bSmTwentyScope}{68}
+\newcommand{\bSmTwentyNew}{75}
+\newcommand{\bSmTwentyBase}{57}
+\newcommand{\bSmTwentyExtra}{10}
+\newcommand{\bSmTwentyFlag}{147}
+\newcommand{\bLcTenScope}{62}
+\newcommand{\bLcTenNew}{63}
+\newcommand{\bLcTenBase}{35}
+\newcommand{\bLcTenExtra}{2}
+\newcommand{\bLcTenFlag}{112}
+\newcommand{\bLcTwentyScope}{65}
+\newcommand{\bLcTwentyNew}{63}
+\newcommand{\bLcTwentyBase}{35}
+\newcommand{\bLcTwentyExtra}{-3}
+\newcommand{\bLcTwentyFlag}{224}
+\newcommand{\nbSsHalfAll}{0.352}
+\newcommand{\nbSsHalfPlan}{0.353}
+\newcommand{\nbSsHalfA}{0.369}
+\newcommand{\nbSsHalfB}{0.380}
+\newcommand{\beSsHalfA}{0.96}
+\newcommand{\beSsHalfB}{0.93}
+\newcommand{\nbSsSevenAll}{0.152}
+\newcommand{\nbSsSevenPlan}{0.177}
+\newcommand{\nbSsSevenA}{0.187}
+\newcommand{\nbSsSevenB}{0.201}
+\newcommand{\beSsSevenA}{0.95}
+\newcommand{\beSsSevenB}{0.88}
+\newcommand{\nbSsNineAll}{$-$0.048}
+\newcommand{\nbSsNinePlan}{0.022}
+\newcommand{\nbSsNineA}{0.037}
+\newcommand{\nbSsNineB}{0.042}
+\newcommand{\beSsNineA}{0.59}
+\newcommand{\beSsNineB}{0.51}
+\newcommand{\nbSsThreeAll}{0.552}
+\newcommand{\nbSsThreePlan}{0.550}
+\newcommand{\nbSsThreeA}{0.556}
+\newcommand{\nbSsThreeB}{0.568}
+\newcommand{\beSsThreeA}{0.99}
+\newcommand{\beSsThreeB}{0.97}
+\newcommand{\nbLcHalfAll}{$-$0.155}
+\newcommand{\nbLcHalfPlan}{0.032}
+\newcommand{\nbLcHalfA}{0.032}
+\newcommand{\nbLcHalfB}{0.033}
+\newcommand{\beLcHalfA}{1.02}
+\newcommand{\beLcHalfB}{0.98}
+\newcommand{\nbLcSevenAll}{$-$0.355}
+\newcommand{\nbLcSevenPlan}{$-$0.004}
+\newcommand{\nbLcSevenA}{$-$0.009}
+\newcommand{\nbLcSevenB}{$-$0.003}
+\newcommand{\beLcSevenA}{--}
+\newcommand{\beLcSevenB}{--}
+\newcommand{\nbLcNineAll}{$-$0.555}
+\newcommand{\nbLcNinePlan}{$-$0.002}
+\newcommand{\nbLcNineA}{$-$0.003}
+\newcommand{\nbLcNineB}{$-$0.004}
+\newcommand{\beLcNineA}{--}
+\newcommand{\beLcNineB}{--}
+\newcommand{\nbLcThreeAll}{0.045}
+\newcommand{\nbLcThreePlan}{0.099}
+\newcommand{\nbLcThreeA}{0.088}
+\newcommand{\nbLcThreeB}{0.093}
+\newcommand{\beLcThreeA}{1.12}
+\newcommand{\beLcThreeB}{1.06}
+\newcommand{\NbN}{728}
+\newcommand{\RecPointsAgree}{99.7}
+\newcommand{\RecPointsN}{30,520}
+\newcommand{\RecSprintBoth}{30,401}
+\newcommand{\RecSprintAgree}{99.6}
+\newcommand{\RecExportEmpty}{3,455}
+\newcommand{\RecHistoryPct}{79}
+\newcommand{\dPHNewLc}{0.001}
+\newcommand{\cPHNewLc}{[$-$0.014, 0.012]}
+\newcommand{\dPHHistLc}{$-$0.012}
+\newcommand{\cPHHistLc}{[$-$0.048, 0.049]}
+\newcommand{\dPHNewSl}{$-$0.004}
+\newcommand{\cPHNewSl}{[$-$0.011, 0.002]}
+\newcommand{\dPHHistSl}{0.010}
+\newcommand{\cPHHistSl}{[$-$0.051, 0.090]}
+\newcommand{\dPHNewSp}{0.038}
+\newcommand{\cPHNewSp}{[0.011, 0.059]}
+\newcommand{\dPHHistSp}{0.057}
+\newcommand{\cPHHistSp}{[$-$0.013, 0.112]}
+\newcommand{\dPHNewSs}{0.031}
+\newcommand{\cPHNewSs}{[0.009, 0.070]}
+\newcommand{\dPHHistSs}{0.142}
+\newcommand{\cPHHistSs}{[0.041, 0.228]}
+\newcommand{\dPHNewSc}{0.050}
+\newcommand{\cPHNewSc}{[$-$0.016, 0.118]}
+\newcommand{\dPHHistSc}{0.258}
+\newcommand{\cPHHistSc}{[0.116, 0.364]}
+\newcommand{\dIHWkSpA}{0.174}
+\newcommand{\cIHWkSpA}{[0.112, 0.275]}
+\newcommand{\dIHAddSpA}{$-$0.001}
+\newcommand{\cIHAddSpA}{[$-$0.004, 0.006]}
+\newcommand{\dIHChSpA}{0.059}
+\newcommand{\cIHChSpA}{[0.023, 0.100]}
+\newcommand{\dIHCtxSpA}{0.044}
+\newcommand{\cIHCtxSpA}{[0.018, 0.083]}
+\newcommand{\dIHProgSpA}{0.015}
+\newcommand{\cIHProgSpA}{[$-$0.021, 0.055]}
+\newcommand{\dIHWkSpB}{0.244}
+\newcommand{\cIHWkSpB}{[0.136, 0.337]}
+\newcommand{\dIHAddSpB}{0.000}
+\newcommand{\cIHAddSpB}{[$-$0.006, 0.007]}
+\newcommand{\dIHChSpB}{0.055}
+\newcommand{\cIHChSpB}{[$-$0.002, 0.112]}
+\newcommand{\dIHCtxSpB}{0.030}
+\newcommand{\cIHCtxSpB}{[0.011, 0.062]}
+\newcommand{\dIHProgSpB}{0.025}
+\newcommand{\cIHProgSpB}{[$-$0.021, 0.072]}
+\newcommand{\dIHWkSsA}{0.267}
+\newcommand{\cIHWkSsA}{[0.192, 0.365]}
+\newcommand{\dIHAddSsA}{$-$0.002}
+\newcommand{\cIHAddSsA}{[$-$0.014, 0.008]}
+\newcommand{\dIHChSsA}{0.095}
+\newcommand{\cIHChSsA}{[0.023, 0.188]}
+\newcommand{\dIHCtxSsA}{0.080}
+\newcommand{\cIHCtxSsA}{[0.030, 0.176]}
+\newcommand{\dIHProgSsA}{0.015}
+\newcommand{\cIHProgSsA}{[$-$0.052, 0.081]}
+\newcommand{\dIHWkSsB}{0.266}
+\newcommand{\cIHWkSsB}{[0.176, 0.328]}
+\newcommand{\dIHAddSsB}{0.000}
+\newcommand{\cIHAddSsB}{[$-$0.006, 0.004]}
+\newcommand{\dIHChSsB}{0.110}
+\newcommand{\cIHChSsB}{[0.037, 0.209]}
+\newcommand{\dIHCtxSsB}{0.064}
+\newcommand{\cIHCtxSsB}{[0.012, 0.140]}
+\newcommand{\dIHProgSsB}{0.046}
+\newcommand{\cIHProgSsB}{[$-$0.011, 0.113]}
+\newcommand{\dIHWkLcA}{0.114}
+\newcommand{\cIHWkLcA}{[0.018, 0.219]}
+\newcommand{\dIHAddLcA}{0.004}
+\newcommand{\cIHAddLcA}{[$-$0.019, 0.017]}
+\newcommand{\dIHChLcA}{0.069}
+\newcommand{\cIHChLcA}{[$-$0.039, 0.196]}
+\newcommand{\dIHCtxLcA}{0.070}
+\newcommand{\cIHCtxLcA}{[$-$0.018, 0.193]}
+\newcommand{\dIHProgLcA}{$-$0.001}
+\newcommand{\cIHProgLcA}{[$-$0.018, 0.021]}
+\newcommand{\dIHWkLcB}{0.054}
+\newcommand{\cIHWkLcB}{[$-$0.069, 0.189]}
+\newcommand{\dIHAddLcB}{0.004}
+\newcommand{\cIHAddLcB}{[$-$0.011, 0.019]}
+\newcommand{\dIHChLcB}{0.073}
+\newcommand{\cIHChLcB}{[$-$0.046, 0.222]}
+\newcommand{\dIHCtxLcB}{0.073}
+\newcommand{\cIHCtxLcB}{[$-$0.034, 0.196]}
+\newcommand{\dIHProgLcB}{0.000}
+\newcommand{\cIHProgLcB}{[$-$0.019, 0.025]}
+\newcommand{\dIHWkSlA}{0.053}
+\newcommand{\cIHWkSlA}{[$-$0.044, 0.185]}
+\newcommand{\dIHAddSlA}{$-$0.003}
+\newcommand{\cIHAddSlA}{[$-$0.020, 0.007]}
+\newcommand{\dIHChSlA}{0.023}
+\newcommand{\cIHChSlA}{[$-$0.069, 0.128]}
+\newcommand{\dIHCtxSlA}{$-$0.005}
+\newcommand{\cIHCtxSlA}{[$-$0.096, 0.092]}
+\newcommand{\dIHProgSlA}{0.028}
+\newcommand{\cIHProgSlA}{[$-$0.036, 0.076]}
+\newcommand{\dIHWkSlB}{0.074}
+\newcommand{\cIHWkSlB}{[$-$0.028, 0.200]}
+\newcommand{\dIHAddSlB}{$-$0.011}
+\newcommand{\cIHAddSlB}{[$-$0.027, 0.008]}
+\newcommand{\dIHChSlB}{0.096}
+\newcommand{\cIHChSlB}{[$-$0.049, 0.270]}
+\newcommand{\dIHCtxSlB}{0.080}
+\newcommand{\cIHCtxSlB}{[$-$0.086, 0.255]}
+\newcommand{\dIHProgSlB}{0.016}
+\newcommand{\cIHProgSlB}{[$-$0.032, 0.053]}
+\newcommand{\HistProj}{15}
+\newcommand{\HistAddMax}{0.011}

@@ -119,5 +119,37 @@ def main():
         print(pd.read_csv(jr.RESULTS / f"{name}.csv").round(4).to_string())
 
 
+def confirm():
+    """The binomial predictor against gradient boosting on the confirmation set (projects not in the
+    development run), trained and tested on those projects only."""
+    from jr.confirm import keep
+    f = keep(pd.read_csv(jr.DATA / "planning_frame.csv", parse_dates=["start_date"]))
+    ne = f[f.nonempty].copy()
+    tr, te = ne[ne.split_nonempty == "train"], ne[ne.split_nonempty == "test"]
+    pooled = float(tr.completed_issue_count.sum() / tr.committed_issue_count.sum())
+    n_te, q_te = te.committed_issue_count.to_numpy(int), q_hat(te, pooled)
+    rows = []
+
+    def work(rng):
+        out = []
+        for label, y in (("spillover", "label_spillover"), ("serious_spillover", "label_serious_spillover")):
+            yy = te[y].astype(int)
+            s = {"binomial": pd.Series(risk_binomial(n_te, q_te, label), index=te.index)}
+            for name in ("scope", "strict+new"):
+                num, proj = PLAN_SETS[name]
+                s[name] = pd.Series(fit_predict(PRIMARY_MODEL, num, proj, tr, te, y), index=te.index)
+            for k, v in s.items():
+                out.append({"outcome": label, "model": k, "comparison": "", "auc": safe_auc(yy, v)})
+            for a, b in (("strict+new", "binomial"), ("binomial", "scope")):
+                r = diff_row({"outcome": label}, te.assign(**{y: yy}), y, s, a, b, rng, False)
+                out.append({**r, "model": ""})
+        return out
+
+    rows = unit("binomial_confirm_v1", work)
+    save(pd.DataFrame(rows), "binomial_confirm.csv")
+    print(pd.DataFrame(rows).round(3).to_string())
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    confirm() if "confirm" in sys.argv else main()

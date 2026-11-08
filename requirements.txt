@@ -1,4 +1,7 @@
-numpy
-pandas
-scikit-learn
-scipy
+# Versions used for the paper's run (Python 3.13). Other versions should work,
+# but the third decimal of some numbers may then differ.
+numpy==2.5.3
+pandas==3.0.5
+scikit-learn==1.9.1
+scipy==1.18.1
+matplotlib==3.11.2

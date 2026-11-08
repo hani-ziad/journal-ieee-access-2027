@@ -1,0 +1,145 @@
+robust planning late_closure
+robust planning seriously_late
+robust planning spillover
+robust planning serious_spillover
+robust planning scope_churn
+        protocol            outcome    features     n    auc                best  projects
+0    time, tuned       late_closure       scope  1118  0.692  (2, 0.03, 300, 10)       NaN
+1    time, tuned       late_closure      strict  1118  0.715  (3, 0.03, 100, 40)       NaN
+2    time, tuned       late_closure  strict+new  1118  0.713  (3, 0.03, 100, 40)       NaN
+3   calendar cut       late_closure       scope  1103  0.685          2018-01-29      20.0
+4   calendar cut       late_closure      strict  1103  0.720          2018-01-29      20.0
+5   calendar cut       late_closure  strict+new  1103  0.717          2018-01-29      20.0
+6    time, tuned     seriously_late       scope  1118  0.644  (2, 0.03, 100, 40)       NaN
+7    time, tuned     seriously_late      strict  1118  0.684  (2, 0.03, 300, 40)       NaN
+8    time, tuned     seriously_late  strict+new  1118  0.687   (2, 0.1, 100, 40)       NaN
+9   calendar cut     seriously_late       scope  1103  0.637          2018-01-29      20.0
+10  calendar cut     seriously_late      strict  1103  0.697          2018-01-29      20.0
+11  calendar cut     seriously_late  strict+new  1103  0.696          2018-01-29      20.0
+12   time, tuned          spillover       scope   734  0.844  (2, 0.03, 100, 40)       NaN
+13   time, tuned          spillover      strict   734  0.843  (3, 0.03, 100, 10)       NaN
+14   time, tuned          spillover  strict+new   734  0.871  (2, 0.03, 100, 40)       NaN
+15  calendar cut          spillover       scope   724  0.858          2018-02-12      20.0
+16  calendar cut          spillover      strict   724  0.876          2018-02-12      20.0
+17  calendar cut          spillover  strict+new   724  0.911          2018-02-12      20.0
+18   time, tuned  serious_spillover       scope   734  0.692  (3, 0.03, 100, 40)       NaN
+19   time, tuned  serious_spillover      strict   734  0.749  (3, 0.03, 300, 40)       NaN
+20   time, tuned  serious_spillover  strict+new   734  0.773  (2, 0.03, 100, 40)       NaN
+21  calendar cut  serious_spillover       scope   724  0.701          2018-02-12      20.0
+22  calendar cut  serious_spillover      strict   724  0.759          2018-02-12      20.0
+23  calendar cut  serious_spillover  strict+new   724  0.780          2018-02-12      20.0
+24   time, tuned        scope_churn       scope   412  0.534   (5, 0.1, 300, 40)       NaN
+25   time, tuned        scope_churn      strict   412  0.583   (2, 0.1, 100, 40)       NaN
+26   time, tuned        scope_churn  strict+new   412  0.629  (3, 0.03, 100, 40)       NaN
+27  calendar cut        scope_churn       scope   450  0.523          2018-02-26      18.0
+28  calendar cut        scope_churn      strict   450  0.499          2018-02-26      18.0
+29  calendar cut        scope_churn  strict+new   450  0.529          2018-02-26      18.0
+        protocol            outcome           comparison  delta  ci_low  ci_high  excludes_zero  primary  p_project  sprint_ci_low  sprint_ci_high
+0    time, tuned       late_closure  strict+new - strict -0.002  -0.009    0.003          False     True      0.482         -0.006           0.001
+1    time, tuned       late_closure   strict+new - scope  0.021  -0.021    0.057          False     True      0.386         -0.011           0.051
+2   calendar cut       late_closure  strict+new - strict -0.003  -0.009    0.003          False     True      0.372         -0.008           0.001
+3   calendar cut       late_closure   strict+new - scope  0.032  -0.047    0.081          False     True      0.492         -0.001           0.066
+4    time, tuned     seriously_late  strict+new - strict  0.003  -0.005    0.009          False     True      0.458         -0.002           0.008
+5    time, tuned     seriously_late   strict+new - scope  0.043  -0.013    0.114          False     True      0.154          0.009           0.075
+6   calendar cut     seriously_late  strict+new - strict -0.001  -0.022    0.006          False     True      0.614         -0.010           0.007
+7   calendar cut     seriously_late   strict+new - scope  0.059  -0.021    0.127          False     True      0.180          0.020           0.101
+8    time, tuned          spillover  strict+new - strict  0.028   0.009    0.042           True     True      0.006          0.013           0.044
+9    time, tuned          spillover   strict+new - scope  0.027   0.001    0.056           True     True      0.038          0.003           0.051
+10  calendar cut          spillover  strict+new - strict  0.035   0.018    0.056           True     True      0.000          0.011           0.061
+11  calendar cut          spillover   strict+new - scope  0.053   0.022    0.095           True     True      0.002          0.025           0.082
+12   time, tuned  serious_spillover  strict+new - strict  0.024   0.003    0.053           True     True      0.030          0.002           0.046
+13   time, tuned  serious_spillover   strict+new - scope  0.081   0.023    0.149           True     True      0.004          0.027           0.138
+14  calendar cut  serious_spillover  strict+new - strict  0.021  -0.006    0.058          False     True      0.132         -0.007           0.049
+15  calendar cut  serious_spillover   strict+new - scope  0.079   0.005    0.149           True     True      0.038          0.019           0.139
+16   time, tuned        scope_churn  strict+new - strict  0.046  -0.026    0.111          False     True      0.186          0.001           0.094
+17   time, tuned        scope_churn   strict+new - scope  0.095  -0.003    0.195          False     True      0.054          0.019           0.170
+18  calendar cut        scope_churn  strict+new - strict  0.030  -0.006    0.067          False     True      0.094          0.005           0.055
+19  calendar cut        scope_churn   strict+new - scope  0.006  -0.115    0.174          False     True      0.910         -0.061           0.078
+                     outcome    features  budget     n  flagged  hits  precision  prevalence  hits_per_100_sprints
+0               late_closure       scope     0.1  1118      112    69      0.616       0.346                 6.172
+1               late_closure       scope     0.2  1118      224   145      0.647       0.346                12.970
+2               late_closure       scope     0.3  1118      335   203      0.606       0.346                18.157
+3               late_closure      strict     0.1  1118      112    72      0.643       0.346                 6.440
+4               late_closure      strict     0.2  1118      224   144      0.643       0.346                12.880
+5               late_closure      strict     0.3  1118      335   201      0.600       0.346                17.979
+6               late_closure  strict+new     0.1  1118      112    71      0.634       0.346                 6.351
+7               late_closure  strict+new     0.2  1118      224   142      0.634       0.346                12.701
+8               late_closure  strict+new     0.3  1118      335   198      0.591       0.346                17.710
+9   serious_spillover_median       scope     0.1   734       73    55      0.753       0.569                 7.493
+10  serious_spillover_median       scope     0.2   734      147   100      0.680       0.569                13.624
+11  serious_spillover_median       scope     0.3   734      220   143      0.650       0.569                19.482
+12  serious_spillover_median      strict     0.1   734       73    57      0.781       0.569                 7.766
+13  serious_spillover_median      strict     0.2   734      147   104      0.707       0.569                14.169
+14  serious_spillover_median      strict     0.3   734      220   158      0.718       0.569                21.526
+15  serious_spillover_median  strict+new     0.1   734       73    59      0.808       0.569                 8.038
+16  serious_spillover_median  strict+new     0.2   734      147   110      0.748       0.569                14.986
+17  serious_spillover_median  strict+new     0.3   734      220   165      0.750       0.569                22.480
+18         serious_spillover       scope     0.1   734       73    72      0.986       0.850                 9.809
+19         serious_spillover       scope     0.2   734      147   139      0.946       0.850                18.937
+20         serious_spillover       scope     0.3   734      220   205      0.932       0.850                27.929
+21         serious_spillover      strict     0.1   734       73    70      0.959       0.850                 9.537
+22         serious_spillover      strict     0.2   734      147   139      0.946       0.850                18.937
+23         serious_spillover      strict     0.3   734      220   206      0.936       0.850                28.065
+24         serious_spillover  strict+new     0.1   734       73    70      0.959       0.850                 9.537
+25         serious_spillover  strict+new     0.2   734      147   139      0.946       0.850                18.937
+26         serious_spillover  strict+new     0.3   734      220   210      0.955       0.850                28.610
+             outcome  p_star    n  prevalence  nb_warn_all  nb_planning  nb_25  nb_50  breakeven_25  breakeven_50
+0  serious_spillover     0.3  728       0.852        0.552        0.550  0.556  0.568         0.989         0.969
+1  serious_spillover     0.5  728       0.852        0.352        0.353  0.369  0.380         0.957         0.928
+2  serious_spillover     0.7  728       0.852        0.152        0.177  0.187  0.201         0.950         0.881
+3  serious_spillover     0.9  728       0.852       -0.048        0.022  0.037  0.042         0.593         0.515
+4       late_closure     0.3  728       0.345        0.045        0.099  0.088  0.093         1.120         1.057
+5       late_closure     0.5  728       0.345       -0.155        0.032  0.032  0.033         1.022         0.979
+6       late_closure     0.7  728       0.345       -0.355       -0.004 -0.009 -0.003           NaN           NaN
+7       late_closure     0.9  728       0.345       -0.555       -0.002 -0.003 -0.004           NaN           NaN
+        stage            outcome  checkpoint           comparison  delta  ci_low  ci_high  excludes_zero  primary  p_project  sprint_ci_low  sprint_ci_high                           excluded_projects
+0    planning       late_closure         NaN  strict+new - strict  0.001  -0.012    0.014          False     True      0.794         -0.005           0.007  Appcelerator Daemon; Hyperledger Indy Node
+1    planning       late_closure         NaN   strict+new - scope  0.042  -0.015    0.091          False     True      0.160          0.010           0.076  Appcelerator Daemon; Hyperledger Indy Node
+2    planning     seriously_late         NaN  strict+new - strict -0.006  -0.017   -0.000           True     True      0.040         -0.012           0.000  Appcelerator Daemon; Hyperledger Indy Node
+3    planning     seriously_late         NaN   strict+new - scope  0.040  -0.025    0.098          False     True      0.250          0.006           0.078  Appcelerator Daemon; Hyperledger Indy Node
+4    planning          spillover         NaN  strict+new - strict  0.038   0.023    0.057           True     True      0.000          0.020           0.058  Appcelerator Daemon; Hyperledger Indy Node
+5    planning          spillover         NaN   strict+new - scope  0.031  -0.011    0.077          False     True      0.148         -0.006           0.068  Appcelerator Daemon; Hyperledger Indy Node
+6    planning  serious_spillover         NaN  strict+new - strict  0.018  -0.010    0.053          False     True      0.192         -0.007           0.043  Appcelerator Daemon; Hyperledger Indy Node
+7    planning  serious_spillover         NaN   strict+new - scope  0.071   0.003    0.146           True     True      0.032          0.015           0.127  Appcelerator Daemon; Hyperledger Indy Node
+8    planning        scope_churn         NaN  strict+new - strict  0.031  -0.026    0.078          False     True      0.320         -0.013           0.073  Appcelerator Daemon; Hyperledger Indy Node
+9    planning        scope_churn         NaN   strict+new - scope  0.073  -0.054    0.217          False     True      0.262         -0.000           0.145  Appcelerator Daemon; Hyperledger Indy Node
+10  in-sprint          spillover        0.25         ours - worki  0.133   0.082    0.203           True     True      0.000          0.073           0.192  Appcelerator Daemon; Hyperledger Indy Node
+11  in-sprint          spillover        0.25    ours+worki - ours -0.002  -0.007    0.002          False     True      0.266         -0.007           0.002  Appcelerator Daemon; Hyperledger Indy Node
+12  in-sprint          spillover        0.25         ours - choet  0.030  -0.004    0.066          False     True      0.076         -0.002           0.060  Appcelerator Daemon; Hyperledger Indy Node
+13  in-sprint          spillover        0.25    choet+ctx - choet  0.010  -0.015    0.040          False     True      0.466         -0.015           0.034  Appcelerator Daemon; Hyperledger Indy Node
+14  in-sprint          spillover        0.25     ours - choet+ctx  0.020  -0.008    0.048          False     True      0.162         -0.001           0.043  Appcelerator Daemon; Hyperledger Indy Node
+15  in-sprint          spillover        0.50         ours - worki  0.191   0.106    0.274           True     True      0.000          0.129           0.250  Appcelerator Daemon; Hyperledger Indy Node
+16  in-sprint          spillover        0.50    ours+worki - ours -0.000  -0.006    0.004          False     True      0.988         -0.004           0.004  Appcelerator Daemon; Hyperledger Indy Node
+17  in-sprint          spillover        0.50         ours - choet  0.033  -0.002    0.077          False     True      0.062          0.004           0.063  Appcelerator Daemon; Hyperledger Indy Node
+18  in-sprint          spillover        0.50    choet+ctx - choet  0.005  -0.016    0.031          False     True      0.600         -0.020           0.027  Appcelerator Daemon; Hyperledger Indy Node
+19  in-sprint          spillover        0.50     ours - choet+ctx  0.029  -0.003    0.065          False     True      0.082          0.005           0.056  Appcelerator Daemon; Hyperledger Indy Node
+20  in-sprint  serious_spillover        0.25         ours - worki  0.180   0.106    0.267           True     True      0.000          0.114           0.247  Appcelerator Daemon; Hyperledger Indy Node
+21  in-sprint  serious_spillover        0.25    ours+worki - ours -0.002  -0.009    0.004          False     True      0.510         -0.008           0.004  Appcelerator Daemon; Hyperledger Indy Node
+22  in-sprint  serious_spillover        0.25         ours - choet  0.040  -0.006    0.101          False     True      0.106         -0.004           0.084  Appcelerator Daemon; Hyperledger Indy Node
+23  in-sprint  serious_spillover        0.25    choet+ctx - choet  0.025  -0.015    0.082          False     True      0.290         -0.015           0.063  Appcelerator Daemon; Hyperledger Indy Node
+24  in-sprint  serious_spillover        0.25     ours - choet+ctx  0.015  -0.017    0.049          False     True      0.358         -0.014           0.046  Appcelerator Daemon; Hyperledger Indy Node
+25  in-sprint  serious_spillover        0.50         ours - worki  0.173   0.073    0.260           True     True      0.000          0.110           0.239  Appcelerator Daemon; Hyperledger Indy Node
+26  in-sprint  serious_spillover        0.50    ours+worki - ours  0.000  -0.006    0.005          False     True      0.978         -0.004           0.005  Appcelerator Daemon; Hyperledger Indy Node
+27  in-sprint  serious_spillover        0.50         ours - choet  0.051   0.000    0.113           True     True      0.050          0.011           0.093  Appcelerator Daemon; Hyperledger Indy Node
+28  in-sprint  serious_spillover        0.50    choet+ctx - choet  0.017  -0.023    0.069          False     True      0.428         -0.018           0.053  Appcelerator Daemon; Hyperledger Indy Node
+29  in-sprint  serious_spillover        0.50     ours - choet+ctx  0.034   0.003    0.071           True     True      0.034          0.002           0.066  Appcelerator Daemon; Hyperledger Indy Node
+30  in-sprint       late_closure        0.25         ours - worki  0.155   0.089    0.217           True     True      0.002          0.106           0.203  Appcelerator Daemon; Hyperledger Indy Node
+31  in-sprint       late_closure        0.25    ours+worki - ours  0.000  -0.011    0.010          False     True      0.982         -0.008           0.009  Appcelerator Daemon; Hyperledger Indy Node
+32  in-sprint       late_closure        0.25         ours - choet  0.050  -0.015    0.123          False     True      0.142          0.011           0.088  Appcelerator Daemon; Hyperledger Indy Node
+33  in-sprint       late_closure        0.25    choet+ctx - choet  0.058  -0.000    0.125          False     True      0.054          0.024           0.095  Appcelerator Daemon; Hyperledger Indy Node
+34  in-sprint       late_closure        0.25     ours - choet+ctx -0.008  -0.021    0.008          False     True      0.300         -0.023           0.006  Appcelerator Daemon; Hyperledger Indy Node
+35  in-sprint       late_closure        0.50         ours - worki  0.111   0.025    0.196           True     True      0.012          0.067           0.159  Appcelerator Daemon; Hyperledger Indy Node
+36  in-sprint       late_closure        0.50    ours+worki - ours  0.004  -0.003    0.012          False     True      0.278         -0.003           0.011  Appcelerator Daemon; Hyperledger Indy Node
+37  in-sprint       late_closure        0.50         ours - choet  0.053  -0.012    0.133          False     True      0.142          0.017           0.091  Appcelerator Daemon; Hyperledger Indy Node
+38  in-sprint       late_closure        0.50    choet+ctx - choet  0.064   0.000    0.143           True     True      0.050          0.027           0.099  Appcelerator Daemon; Hyperledger Indy Node
+39  in-sprint       late_closure        0.50     ours - choet+ctx -0.011  -0.024    0.002          False     True      0.084         -0.025           0.003  Appcelerator Daemon; Hyperledger Indy Node
+40  in-sprint     seriously_late        0.25         ours - worki  0.167   0.062    0.269           True     True      0.002          0.105           0.226  Appcelerator Daemon; Hyperledger Indy Node
+41  in-sprint     seriously_late        0.25    ours+worki - ours -0.001  -0.011    0.011          False     True      0.912         -0.012           0.010  Appcelerator Daemon; Hyperledger Indy Node
+42  in-sprint     seriously_late        0.25         ours - choet  0.056  -0.020    0.128          False     True      0.200          0.004           0.106  Appcelerator Daemon; Hyperledger Indy Node
+43  in-sprint     seriously_late        0.25    choet+ctx - choet  0.031  -0.041    0.099          False     True      0.486         -0.015           0.077  Appcelerator Daemon; Hyperledger Indy Node
+44  in-sprint     seriously_late        0.25     ours - choet+ctx  0.025   0.000    0.049           True     True      0.048         -0.001           0.052  Appcelerator Daemon; Hyperledger Indy Node
+45  in-sprint     seriously_late        0.50         ours - worki  0.156   0.064    0.245           True     True      0.000          0.095           0.216  Appcelerator Daemon; Hyperledger Indy Node
+46  in-sprint     seriously_late        0.50    ours+worki - ours -0.009  -0.020    0.004          False     True      0.140         -0.021           0.003  Appcelerator Daemon; Hyperledger Indy Node
+47  in-sprint     seriously_late        0.50         ours - choet  0.092  -0.001    0.192          False     True      0.054          0.037           0.148  Appcelerator Daemon; Hyperledger Indy Node
+48  in-sprint     seriously_late        0.50    choet+ctx - choet  0.097   0.003    0.192           True     True      0.042          0.049           0.145  Appcelerator Daemon; Hyperledger Indy Node
+49  in-sprint     seriously_late        0.50     ours - choet+ctx -0.005  -0.042    0.030          False     True      0.788         -0.035           0.027  Appcelerator Daemon; Hyperledger Indy Node
