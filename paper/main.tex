@@ -19,7 +19,7 @@
 
 \begin{document}
 
-\title{What Predicts Sprint Spillover Without Hindsight? A Benchmark of Feature Families on Public Jira Data}
+\title{What Predicts Sprint Spillover Without Hindsight? A Two-Source Benchmark of Feature Families on Public Jira Data}
 
 % Sole author (decided 8 Nov 2026).
 \author{Hani~AbuSharkh%
@@ -28,7 +28,7 @@
 \maketitle
 
 \begin{abstract}
-Sprint-risk models are usually trained on a present-day Jira export, which shows how a sprint ended rather than what the team knew when it began, and each study reports its own features on its own data. We state formally what a feature may use at prediction time and when an outcome can be measured, and work out four simple consequences that we check against the data. The measurability rule removes three TAWOS projects whose issues are mostly closed without a resolution date. On the remaining \NSprints{} sprints from \NProj{} projects, scored under one time-ordered protocol for five outcomes, progress counts carry the in-sprint signal. Burndown-shape features rank sprints worse by 0.13 to 0.19 AUC and add nothing when combined with progress counts, across projects and within them. Team history beats committed scope for serious spillover by \dPTHistSs{} AUC, but nearly all of that gain comes from telling teams apart. Within a project it falls to \dPWHistSs{}, with an interval that includes zero, as a binomial model with one completion rate per team implies. That model learns nothing and ranks sprints about as well as gradient boosting, but its probabilities are too extreme. Four new planning-time features add \dPTNewSp{} AUC for spillover, within projects too, but the gain does not hold on the \ConfProj{} projects that did not shape our hypotheses. Nothing we tried predicts late closure well, and on ten outside projects we see no sign that the history gains carry over.
+Sprint-risk models are usually trained on a present-day Jira export, which shows how a sprint ended rather than what the team knew when it began, and each study reports its own features on its own data. We state what a feature may use at prediction time and when an outcome can be measured, and benchmark feature families under one time-ordered protocol on two public Jira sources: \NSprints{} sprints from \NProj{} TAWOS projects, after a measurability check removes three whose issues are mostly closed without a resolution date, and \RHSprints{} sprints from \RHProj{} Red Hat projects chosen by a rule fixed before any label was computed. Of \NHyp{} hypothesis tests written before the full run, \NHoldRaw{} hold on TAWOS and \NHoldRH{} on Red Hat. Three findings hold in both sources. During a sprint, progress counts beat burndown-shape features by 0.09 to 0.22 AUC, within projects as well as across them, and burndown shape adds nothing to them. Four new planning-time features, such as the share of committed issues carried in from earlier sprints, add to committed scope and team history for spillover (\dPTNewSp{} and \dPXNewSp{} AUC), and a model trained on TAWOS with them ranks serious spillover better inside each Red Hat project (\dPZNewSs). Team history, in contrast, mostly tells teams apart: within a project it adds nothing in either source, as a binomial model with one completion rate per team implies. Late closure stays hard to predict in both.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -41,16 +41,17 @@ Agile software development, data leakage, data quality, Jira, machine learning, 
 
 Several studies have tried \cite{choet2018,sprint2vec,hearty2009,perez2024,obike2025}, and industrial work has studied what makes delivery late \cite{kula2022}. Their results are hard to use for three reasons. The first is hindsight. A Jira export is a snapshot taken years later: an issue's sprint field, story points and status are the final values unless the change log is replayed. A model trained on the snapshot can learn from facts that did not exist at planning \cite{kaufman2012,kapoor2023}. The second is measurement. A label such as ``work left over'' depends on when each issue was finished, and a tracker does not always record that. The third is comparability. Every study brings its own features, labels, data and protocol, so if one paper reports a good AUC with burndown features and another with iteration counts, nobody can tell which kind of signal does the work.
 
-Our earlier work \cite{abusharkh2027} rebuilt the board as it stood on the first day of each sprint for eight TAWOS projects \cite{tawos}, following the change-log reconstruction of iteration state by Choetkiertikul et al.\ \cite{choet2018}. Here we turn that reconstruction into a benchmark. We extend it to every TAWOS project with enough sprints, check that the outcomes can be measured, and score the feature families side by side on the same sprints, labels and split. The contributions are as follows.
+Our earlier work \cite{abusharkh2027} rebuilt the board as it stood on the first day of each sprint for eight TAWOS projects \cite{tawos}, following the change-log reconstruction of iteration state by Choetkiertikul et al.\ \cite{choet2018}. Here we turn that reconstruction into a benchmark and test it on a second source. The earlier paper asked whether leakage inflates results on eight projects. This one asks which kinds of signal predict sprint outcomes once leakage is controlled, on \BothSprints{} sprints from two sources, with new labels, new features, a within-project analysis and a formal account of the patterns. The contributions are as follows.
 \begin{enumerate}
-\item \emph{A head-to-head benchmark with fair comparisons} (Sections~\ref{sec:protocol} and \ref{sec:results}). Committed scope, team history, four new planning-time features, in-sprint progress counts, burndown-shape features after P\'erez Castillo et al.\ \cite{perez2024}, and the iteration counts of Choetkiertikul et al.\ \cite{choet2018} that a public export supports, compared both as stand-alone sets and by what each adds to the others.
-\item \emph{A measurability check} (Section~\ref{sec:setup}). In three TAWOS projects most sprint issues are closed without a resolution date. Removing them changes which of our hypotheses hold, so any study of spillover on TAWOS needs this check.
-\item \emph{Pooled and within-project ranking} (Section~\ref{sec:within}). AUC in this literature, ours included, is pooled over projects, so it also rewards telling teams apart. Scored only within projects, the in-sprint findings hold but most of the planning-time history gain disappears. This matters for any tool that a single team would use on its own sprints.
+\item \emph{A two-source benchmark with fair comparisons} (Sections~\ref{sec:protocol} and \ref{sec:results}). Committed scope, team history, four new planning-time features, in-sprint progress counts, burndown-shape features after P\'erez Castillo et al.\ \cite{perez2024}, and the iteration counts of Choetkiertikul et al.\ \cite{choet2018} that a public export supports, compared as stand-alone sets and by what each adds to the others, on \NProj{} TAWOS projects and on \RHProj{} Red Hat projects that TAWOS does not cover.
+\item \emph{An independent replication} (Section~\ref{sec:redhat}). All \NHyp{} hypothesis tests, fixed before the full TAWOS run, are rerun unchanged on the Red Hat cohort, and a model trained on TAWOS is scored inside each Red Hat project.
+\item \emph{Pooled and within-project ranking} (Section~\ref{sec:within}). AUC in this literature, ours included, is pooled over projects, so it also rewards telling teams apart. Scored only within projects, the in-sprint findings and the new features hold in both sources, and team history adds nothing. This matters for any tool that a single team would use on its own sprints.
+\item \emph{Two data-quality checks} (Section~\ref{sec:setup}). In three TAWOS projects most sprint issues are closed without a resolution date, and removing them changes which hypotheses hold. Public Jira also hides private issues; we measure how much of each project is hidden in both sources.
 \item \emph{A formal setting} (Section~\ref{sec:theory}). Admissible features and measurable outcomes are defined on the event log, with four elementary consequences: how empty sprints inflate ROC-AUC, the cost ratio a Youden threshold assumes, a binomial model of which spillover label history can help with, and a beta-binomial extension that says when that model's probabilities can be trusted.
-\item \emph{Three candidate labels with a verdict on each, a confirmation set, an outside test and a decision analysis.} Of the three new labels, only serious spillover can be ranked beyond committed scope; seriously late and scope churn cannot, and we report them as negative results. Every hypothesis test is repeated on the projects that played no part in writing the hypotheses, with a multiple-testing correction, and the gains are translated into what a warning is worth.
+\item \emph{Three candidate labels with a verdict on each, and a decision analysis.} Serious spillover can be ranked beyond committed scope in both sources; seriously late cannot, and scope churn only on Red Hat. The gains are translated into what a warning is worth.
 \end{enumerate}
 
-The short answer is that progress counts carry the in-sprint signal and burndown shape adds nothing. At planning time, team history mostly tells teams apart, not a team's good sprints from its bad ones, and most of what a learned model does is estimate one number per team. We see no sign that the history gains carry to another organisation. Our plan and hypotheses are in the first commit of the repository, made before the full run. We report where they failed and mark every analysis added later.
+The short answer is that progress counts carry the in-sprint signal and burndown shape adds nothing. At planning time, a few cheap features of the committed issues help in both sources and travel from one to the other, while team history mostly tells teams apart, not a team's good sprints from its bad ones. Our plan and hypotheses are in the first commit of the repository, made before the full run. We report where they failed and mark every analysis added later.
 
 \section{Related Work}
 \label{sec:related}
@@ -96,7 +97,32 @@ We checked the rule of Section~\ref{sec:theory} per project after the first full
 
 The cohort is the remaining \NProj{} projects. After dropping each project's first sprint as a cold start, it has \NSprints{} sprints from \DateFrom{} to \DateTo, between \SprintMin{} and \SprintMax{} per project (median \SprintMed). Of these, \NNonempty{} commit at least one issue; we call them nonempty. Before the check, \FullNothingPct\% of nonempty sprints finished none of their committed issues; after it, \CleanNothingPct\%.
 
-The outside set is the ten projects used in our earlier study: MariaDB MaxScale and ColumnStore, and eight MongoDB projects, exported from the organisations' public Jira and converted to the TAWOS layout. All ten pass the measurability check. They are used only for testing.
+The outside set is the ten projects used in our earlier study: MariaDB MaxScale and ColumnStore, and eight MongoDB projects, exported from the organisations' public Jira and converted to the TAWOS layout. All ten pass the measurability check. They are used only for testing. MariaDB records no story points and most of the MongoDB projects record few.
+
+\subsection{A second source: Red Hat}
+\label{sec:redhat}
+
+The \ConfProj{} held-out TAWOS projects (Section~\ref{sec:protocol}) are part of the same cohort, so they cannot give an independent replication. For that we built a second cohort from Red Hat's public Jira, which TAWOS does not cover. We read it through the public interface without logging in and fixed the selection rule before computing any label on it. Of the 293 public projects, 97 have at least 300 issues that were ever in a sprint. We kept those with at least 100 closed sprints of at most 60 days that mostly hold the project's own issues, with no more than 20\% of their sprints shared with other projects, with story points on at least half of their sprint issues, and with no more hidden issues than the worst TAWOS project (see below). This gives 18 projects. The last condition removes one of them, RHEL, which leaves \RHProj. The rule and the screening numbers seen before it was fixed are in the repository.
+
+We pulled the \RHIssues{} issues of these projects that were ever in a sprint, with their Sprint and Story Points change history, converted them to the TAWOS layout and ran the same reconstruction, labels, features and protocol. The only change is that every board of a project is kept, as TAWOS keeps every sprint of a project, and sprints whose issues mostly belong to another project are dropped. The Red Hat cohort has \RHSprints{} sprints from \RHFrom{} to \RHTo, \RHNonempty{} of them nonempty, and all \RHProj{} projects pass the measurability check (at most \RHUnrecMax\% of sprint issues closed without a date). Table~\ref{tab:labelstwo} compares the label rates. Red Hat is one company, but its projects belong to separate engineering teams, and its sprints are years more recent than those in TAWOS.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Outcomes in the two sources: sprints in each outcome's population and positive rate.}
+\label{tab:labelstwo}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& \multicolumn{2}{c}{TAWOS} & \multicolumn{2}{c}{Red Hat} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+Outcome & Sprints & Positive & Sprints & Positive \\
+\midrule
+\tabinput{tables/labels_two.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{Hidden issues.} Public Jira hides private issues from anonymous readers. Private, deleted and moved issues keep their numbers, so the share of issue numbers missing from a project, counted from its first sprint issue, bounds how much of it is hidden. A hidden issue that sat in a sprint makes that sprint's committed scope look smaller than it was. The share is \GapTwMin\% to \GapTwMax\% in the TAWOS cohort (median \GapTwMed\%) and \GapRhMin\% to \GapRhMax\% in the Red Hat cohort (median \GapRhMed\%). Neither source lets us see how many hidden issues were in sprints, because sprint reports need a login.
 
 \subsection{Reconstruction}
 
@@ -177,24 +203,26 @@ We wrote the study plan, the primary analysis and four hypotheses into a dated p
 \end{itemize}
 H4 and the binomial reading of Section~\ref{sec:theory} disagree about serious spillover. H4 says history adds nothing beyond scope; the binomial model says history should add more there than for plain spillover. Both were in the plan, and we did not reconcile them before the run. We judge the result against H4, which is the stated hypothesis.
 
-The plan was written after a development run on eight projects. Of these, \DevProj{} remain in the cohort and hold \DevSprints{} of its sprints. The other \ConfProj{} projects (\ConfSprints{} sprints) had not been looked at when the hypotheses were written, so we repeat every hypothesis test on them alone, training and testing on those projects only, as a confirmation set. The measurability and reconstruction checks, the choet+ctx set, the Holm adjustment, the confirmation set and the within-project analysis were added after the full run, and the plan logs them as such.
+The plan was written after a development run on eight projects. Of these, \DevProj{} remain in the cohort and hold \DevSprints{} of its sprints. The other \ConfProj{} projects (\ConfSprints{} sprints) had not been looked at when the hypotheses were written, so we repeat every hypothesis test on them alone, training and testing on those projects only. We call them the held-out subset. They are not an independent sample: they are part of the full cohort, and later choices were made with them in view. The independent test is the Red Hat cohort (Section~\ref{sec:redhat}), on which we rerun all hypothesis tests unchanged. The measurability and reconstruction checks, the choet+ctx set, the Holm adjustment, the held-out subset, the within-project analysis and the Red Hat cohort were added after the full run, and the plan logs them as such.
 
 \section{Results}
 \label{sec:results}
 
 \subsection{The hypotheses at a glance}
 
-Table~\ref{tab:hyp} and Fig.~\ref{fig:primary} give all \NHyp{} hypothesis comparisons. Of these, \NHoldRaw{} have a project-level interval above zero, \NHoldHolm{} survive the Holm adjustment, and \NHoldConf{} hold in both the full cohort and the confirmation set. These counts are less exact than they look. \NBoundary{} of the intervals, all for H3, end within 0.001 of zero. The one for spillover at 50\% clears zero by \LoChSpB{}, and with the 10,000 resamples used for the $p$-values it no longer does, while the one for serious spillover at 50\% then just clears it. We count them as the table shows but read none of them as evidence either way.
+Table~\ref{tab:hyp} and Fig.~\ref{fig:primary} give all \NHyp{} hypothesis comparisons. On TAWOS, \NHoldRaw{} have a project-level interval above zero, \NHoldHolm{} survive the Holm adjustment, and \NHoldConf{} hold in both the full cohort and the held-out subset. On Red Hat, trained and tested on its own sprints, \NHoldRH{} hold and \NHoldHolmRH{} survive the Holm adjustment. \NHoldBoth{} hold in both sources, \NHoldOnlyRH{} only on Red Hat and \NHoldOnlyTW{} only on TAWOS. The hypotheses fare better on the source that played no part in writing them, which argues against overfitting to TAWOS; the larger Red Hat cohort, with more sprints per project, also gives narrower intervals. The TAWOS counts are less exact than they look. \NBoundary{} of the intervals, all for H3, end within 0.001 of zero. The one for spillover at 50\% clears zero by \LoChSpB{}, and with the 10,000 resamples used for the $p$-values it no longer does, while the one for serious spillover at 50\% then just clears it. We count them as the table shows but read none of them as evidence either way.
 
 \begin{table*}[t]
 \centering
-\caption{All hypothesis comparisons (gradient boosting, per-project time split). $\Delta$: difference in AUC with its 95\% interval over projects. $p_{\mathrm{Holm}}$: bootstrap $p$-value from 10,000 project-level resamples, adjusted over the \NHyp{} comparisons. Confirmation: the same comparison trained and tested on the \ConfProj{} projects not used in the development run. $\checkmark$: interval above zero.}
+\caption{All hypothesis comparisons (gradient boosting, per-project time split). $\Delta$: difference in AUC with its 95\% interval over projects. $p_{\mathrm{Holm}}$: bootstrap $p$-value from 10,000 project-level resamples, adjusted over the \NHyp{} comparisons. Held-out: the same comparison trained and tested on the \ConfProj{} TAWOS projects not used in the development run. Red Hat: trained and tested on the \RHProj{} Red Hat projects. $\checkmark$: interval above zero.}
 \label{tab:hyp}
-\begin{tabular}{@{}llrccc rc@{}}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}llrccc rc rcc@{}}
 \toprule
-& & \multicolumn{4}{c}{\NProj{} projects} & \multicolumn{2}{c}{Confirmation} \\
-\cmidrule(lr){3-6}\cmidrule(l){7-8}
-& Outcome & $\Delta$ & 95\% interval & $p_{\mathrm{Holm}}$ & & $\Delta$ & \\
+& & \multicolumn{4}{c}{TAWOS, \NProj{} projects} & \multicolumn{2}{c}{Held-out} & \multicolumn{3}{c}{Red Hat, \RHProj{} projects} \\
+\cmidrule(lr){3-6}\cmidrule(lr){7-8}\cmidrule(l){9-11}
+& Outcome & $\Delta$ & 95\% interval & $p_{\mathrm{Holm}}$ & & $\Delta$ & & $\Delta$ & 95\% interval & \\
 \midrule
 \tabinput{tables/hypotheses.tex}
 \bottomrule
@@ -208,17 +236,17 @@ Table~\ref{tab:hyp} and Fig.~\ref{fig:primary} give all \NHyp{} hypothesis compa
 \label{fig:primary}
 \end{figure}
 
-\emph{H1, new features: holds for spillover only, and does not replicate.} The new features add \dPTNewSp{} \cPTNewSp{} for spillover, which survives the Holm adjustment, but only \dPCNewSp{} \cPCNewSp{} on the confirmation set. For serious spillover the gain is \dPTNewSs{} \cPTNewSs, with the same sign in all three models. For the two late labels it is about zero, as predicted (for seriously late the interval ends just below zero). Within projects the spillover gain is the same size (Section~\ref{sec:within}). We read H1 as a small gain for spillover that we cannot confirm.
+\emph{H1, new features: holds for spillover in both sources, and for serious spillover and scope churn on Red Hat.} The new features add \dPTNewSp{} \cPTNewSp{} for spillover on TAWOS, which survives the Holm adjustment, and \dPXNewSp{} \cPXNewSp{} on Red Hat. On the TAWOS held-out subset the gain is only \dPCNewSp{} \cPCNewSp. For serious spillover the gain is \dPTNewSs{} \cPTNewSs{} on TAWOS and \dPXNewSs{} \cPXNewSs{} on Red Hat, and for scope churn \dPTNewSc{} and \dPXNewSc{} \cPXNewSc. For the two late labels it is about zero in both sources, as predicted (on TAWOS the interval for seriously late ends just below zero). Within projects the spillover gain keeps its size on TAWOS (Section~\ref{sec:within}).
 
-\emph{H2, burndown shape: holds everywhere.} Ours beats worki by 0.13 to 0.19 AUC on both spillover labels at both checkpoints, in the full cohort and on the confirmation set. Because the two sets were built for different tasks (Section~\ref{sec:protocol}), the size of this gap says little by itself; the fair test is in Section~\ref{sec:fair}.
+\emph{H2, burndown shape: holds everywhere.} Ours beats worki by 0.09 to 0.22 AUC on both spillover labels at both checkpoints, on TAWOS, on the held-out subset and on Red Hat. Because the two sets were built for different tasks (Section~\ref{sec:protocol}), the size of this gap says little by itself; the fair test is in Section~\ref{sec:fair}.
 
-\emph{H3, planning context: right direction, too weak to hold.} Ours beats choet for every outcome, by 0.03 to 0.09, so in \NHThreeOver{} of the \NHThree{} comparisons the gain is above the 0.05 ceiling we predicted. On the full cohort the project-level interval clears zero clearly only for seriously late at 50\%; for the spillover labels it sits on zero. On the confirmation set the gain is larger and holds for both spillover labels. Section~\ref{sec:fair} shows where it comes from.
+\emph{H3, planning context: weak on TAWOS, holds on Red Hat.} Ours beats choet for every outcome in both sources, by 0.02 to 0.09, so in \NHThreeOver{} of the \NHThree{} TAWOS comparisons the gain is above the 0.05 ceiling we predicted. On TAWOS the project-level interval clears zero clearly only for seriously late at 50\%; for the spillover labels it sits on zero. On the held-out subset and on Red Hat the gain holds for both spillover labels, and on Red Hat for late closure too. Section~\ref{sec:fair} shows where it comes from.
 
-\emph{H4, new labels: fails where it was most specific.} We predicted that history would add nothing to serious spillover beyond scope. It adds \dPTHistSs{} \cPTHistSs{} on the time split, \dPLHistSs{} \cPLHistSs{} under leave-one-project-out testing and \dPCHistSs{} on the confirmation set. It does not survive the Holm adjustment, but it holds under leave-one-project-out testing and every robustness variant, and replicates on the confirmation set. All of these scores are pooled over projects, though, and within projects the gain falls to \dPWHistSs{} \cPWHistSs{} (Section~\ref{sec:within}). History tells which teams leave more work over, not which of a team's sprints will. Seriously late and scope churn do not hold.
+\emph{H4, new labels: holds for serious spillover in both sources, though we predicted it would not.} We predicted that the history-aware set (strict+new) would add nothing to serious spillover beyond scope. It adds \dPTHistSs{} \cPTHistSs{} on TAWOS, \dPLHistSs{} \cPLHistSs{} under leave-one-project-out testing, \dPCHistSs{} on the held-out subset and \dPXHistSs{} \cPXHistSs{} on Red Hat. It does not survive the Holm adjustment on TAWOS. The source of the gain differs, though. On TAWOS it is team history (strict minus scope, \dPTStrSs); on Red Hat it is the new features, and history alone adds \dPXStrSs{} \cPXStrSs. Seriously late does not hold in either source, and scope churn holds only on Red Hat (\dPXHistSc{} \cPXHistSc).
 
 \subsection{Planning time}
 
-Table~\ref{tab:planauc} gives the AUC of the planning-time sets. Late closure is hard: scope alone reaches \aPTLcScope, and the best set \aPTLcNew. The binomial model of Section~\ref{sec:theory} predicts that history should beat scope by more for serious spillover than for plain spillover. It does: strict minus scope is \dPTStrSp{} for spillover against \dPTStrSs{} for serious spillover on the time split, and \dPLStrSp{} against \dPLStrSs{} under leave-one-project-out testing. Plain spillover is mostly a matter of how many issues were committed; serious spillover is mostly a matter of which team committed them. The same model also limits what history can do, which we saw only after the full run. If $q_s$ is a property of the team and changes slowly, history separates teams but not the sprints of one team. Section~\ref{sec:within} checks this. The median-based serious-spillover label shows the same pattern more clearly: strict+new scores \aPTSmNew{} against \aPTSmScope{} for scope.
+Table~\ref{tab:planauc} gives the AUC of the planning-time sets. Late closure is hard: scope alone reaches \aPTLcScope, and the best set \aPTLcNew. The binomial model of Section~\ref{sec:theory} predicts that history should beat scope by more for serious spillover than for plain spillover. It does: strict minus scope is \dPTStrSp{} for spillover against \dPTStrSs{} for serious spillover on the time split, and \dPLStrSp{} against \dPLStrSs{} under leave-one-project-out testing. Plain spillover is mostly a matter of how many issues were committed; serious spillover is mostly a matter of which team committed them. On Red Hat this prediction fails: history alone adds \dPXStrSp{} for spillover and \dPXStrSs{} for serious spillover. The same model also limits what history can do, which we saw only after the full run. If $q_s$ is a property of the team and changes slowly, history separates teams but not the sprints of one team. Section~\ref{sec:within} checks this. The median-based serious-spillover label shows the same pattern more clearly: strict+new scores \aPTSmNew{} against \aPTSmScope{} for scope.
 
 \begin{table}[t]
 \centering
@@ -280,13 +308,13 @@ Outcome & At & Burndown shape added & Planning context added & Our progress coun
 
 \emph{Planning context adds little once progress counts are in.} Added to the choet counts, planning context changes AUC by \dITCtxSpA{} and \dITCtxSpB{} for spillover and \dITCtxSsA{} and \dITCtxSsB{} for serious spillover; none of these intervals clears zero. Under leave-one-project-out testing it helps serious spillover (\dILCtxSsA{} \cILCtxSsA{} at 25\%). For seriously late at 50\% it adds \dITCtxSlB{} \cITCtxSlB.
 
-\emph{Our progress counts add a little beyond theirs for serious spillover} at 50\% (\dITProgSsB{} \cITProgSsB), and on the confirmation set at both checkpoints. The H3 gap is therefore partly progress counts and partly context, and neither part is large.
+\emph{Our progress counts add a little beyond theirs for serious spillover} at 50\% (\dITProgSsB{} \cITProgSsB), on the held-out subset at both checkpoints, and on Red Hat (\dIXProgSsB{} \cIXProgSsB). On Red Hat, planning context added to the choet counts helps serious spillover at 25\% (\dIXCtxSsA{} \cIXCtxSsA) and late closure at 25\% (\dIXCtxLcA{} \cIXCtxLcA), and burndown shape again adds nothing. The H3 gap is therefore partly progress counts and partly context, and neither part is large.
 
 \emph{The spillover labels are where the signal is.} Serious spillover goes from \aPTSsNew{} at planning time to \aITSsAOurs{} at 25\% and \aITSsBOurs{} at 50\%. For late closure our set reaches only \aITLcAOurs{} and \aITLcBOurs, against \aITLcAScope{} and \aITLcBScope{} for scope alone on the same sprints.
 
 \subsection{A model with no learning}
 
-Table~\ref{tab:binomial} scores the binomial model of Section~\ref{sec:theory} as a predictor. For each sprint, $q_s$ is the pooled completion rate of the team's last three finished sprints known at the start, or the training-set rate where there is no history. Nothing else is fitted. Its AUC is \aBinSp{} against \aBinGbSp{} for gradient boosting on spillover (difference \dGbBinSp{} \cGbBinSp) and \aBinSs{} against \aBinGbSs{} on serious spillover (\dGbBinSs{} \cGbBinSs). The two cannot be told apart. For serious spillover the binomial model beats scope alone by \dBinScopeSs{} \cBinScopeSs. On the confirmation set the gap to gradient boosting is wider (\dGbBinCSp{} and \dGbBinCSs, intervals \cGbBinCSp{} and \cGbBinCSs) and the binomial model still beats scope for serious spillover (\dBinScopeCSs{} \cBinScopeCSs). Most of what the learned model adds over scope at planning time is therefore an estimate of one number per team.
+Table~\ref{tab:binomial} scores the binomial model of Section~\ref{sec:theory} as a predictor. For each sprint, $q_s$ is the pooled completion rate of the team's last three finished sprints known at the start, or the training-set rate where there is no history. Nothing else is fitted. Its AUC is \aBinSp{} against \aBinGbSp{} for gradient boosting on spillover (difference \dGbBinSp{} \cGbBinSp) and \aBinSs{} against \aBinGbSs{} on serious spillover (\dGbBinSs{} \cGbBinSs). The two cannot be told apart. For serious spillover the binomial model beats scope alone by \dBinScopeSs{} \cBinScopeSs. On the held-out subset the gap to gradient boosting is wider (\dGbBinCSp{} and \dGbBinCSs, intervals \cGbBinCSp{} and \cGbBinCSs) and the binomial model still beats scope for serious spillover (\dBinScopeCSs{} \cBinScopeCSs). Most of what the learned model adds over scope at planning time is therefore an estimate of one number per team.
 
 \begin{table}[t]
 \centering
@@ -315,19 +343,21 @@ Every AUC so far is pooled over the test sprints of all \NProj{} projects. A pai
 \begin{table*}[t]
 \centering
 \footnotesize
-\caption{Pooled and within-project differences in AUC with 95\% intervals over projects (gradient boosting, time split). Pooled: all test sprints, as in the rest of the paper. Within: only pairs of sprints from the same project. $k$: projects with both classes in the test set. Planning time unless a checkpoint is given.}
+\caption{Pooled and within-project differences in AUC with 95\% intervals over projects (gradient boosting, time split), in both sources. Pooled: all test sprints, as in the rest of the paper. Within: only pairs of sprints from the same project. New features: strict+new $-$ strict. History alone: strict $-$ scope. Both: strict+new $-$ scope. Planning time unless a checkpoint is given.}
 \label{tab:within}
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{@{}llccr@{}}
+\setlength{\tabcolsep}{2.7pt}
+\begin{tabular}{@{}llcccc@{}}
 \toprule
-Comparison & Outcome & Pooled & Within & $k$ \\
+& & \multicolumn{2}{c}{TAWOS} & \multicolumn{2}{c}{Red Hat} \\
+\cmidrule(lr){3-4}\cmidrule(l){5-6}
+Comparison & Outcome & Pooled & Within & Pooled & Within \\
 \midrule
 \tabinput{tables/within.tex}
 \bottomrule
 \end{tabular}
 \end{table*}
 
-The in-sprint findings hold. Progress counts beat burndown shape by \dIWWkSpB{} \cIWWkSpB{} for spillover at 50\%, and burndown shape still adds nothing. The new features keep their gain for spillover (\dPWNewSp{} \cPWNewSp). The history gain does not. For serious spillover it falls from \dPTHistSs{} to \dPWHistSs{} \cPWHistSs, and for late closure the history-aware set ranks a team's own sprints worse than scope alone (\dPWHistLc{} \cPWHistLc). This is the binomial reading again. The last three sprints estimate a team's completion rate, which separates teams well, but a rate that changes slowly says little about which of the team's next sprints will go badly. It also bears on the outside test of Section~\ref{sec:external}, which averages AUC within each outside project. Within TAWOS projects the history-aware set ranks serious spillover at \wPTSsNew{} against \wPTSsScope{} for scope, so the outside test asked history for a gain it does not show at home either.
+The in-sprint findings hold in both sources. Progress counts beat burndown shape by \dIWWkSpB{} \cIWWkSpB{} on TAWOS and \dIYWkSpB{} \cIYWkSpB{} on Red Hat for spillover at 50\%, and burndown shape still adds nothing. The new features keep their gain: \dPWNewSp{} \cPWNewSp{} for spillover on TAWOS and \dPYNewSs{} \cPYNewSs{} for serious spillover on Red Hat. Team history does not. Within projects, history alone adds \dPWStrSs{} \cPWStrSs{} for serious spillover on TAWOS and \dPYStrSs{} \cPYStrSs{} on Red Hat, and for late closure on TAWOS it ranks a team's own sprints worse than scope (\dPWStrLc{} \cPWStrLc). On Red Hat, history alone helps late closure when pooled (\dPXStrLc{} \cPXStrLc) and adds \dPYStrLc{} within projects. This is the binomial reading again. The last three sprints estimate a team's completion rate, which separates teams well, but a rate that changes slowly says little about which of the team's next sprints will go badly. It also bears on the outside test of Section~\ref{sec:external}, which averages AUC within each outside project. Within TAWOS projects the history-aware set ranks serious spillover at \wPTSsNew{} against \wPTSsScope{} for scope, so the MariaDB and MongoDB test asked history for a gain it does not show at home either.
 
 \subsection{What a warning is worth}
 
@@ -362,6 +392,23 @@ Outcome & $p^{*}$ & All & Planning & 25\% & 50\% \\
 
 Table~\ref{tab:external} trains on all of TAWOS and tests on each outside project with at least five sprints in each class. We find no evidence of transfer. For the two spillover labels, where history helped most inside TAWOS, scope alone scores \eSpScope{} and \eSsScope, and the history-aware sets score lower. For late closure all three sets sit between \eLcStrict{} and \eLcScope. Only \eKSp{} outside projects are testable for spillover, and the spread across projects is large, so we can only say that we see no transfer, not that there is none. We cannot tell whether the cause is the new organisations, because two simpler reasons could explain it. The outside test scores ranking within each project, where history adds little even inside TAWOS (Section~\ref{sec:within}), and its feature sets leave out story points, which MariaDB does not record.
 
+The Red Hat cohort allows a better test of transfer: \ZKSs{} projects can be scored for serious spillover, against \eKSs{} here, and story points can stay in. Table~\ref{tab:transfer} trains on all of TAWOS, without the project feature, and scores each Red Hat project on its own sprints. Here the models do transfer. For serious spillover the per-project AUC rises from \zPSsScope{} for scope to \zPSsNew{} for strict+new. The gain comes from the new features (\dPZNewSs{} \cPZNewSs), not from history (\dPZStrSs{} \cPZStrSs), which matches the within-project results. The new features also help spillover (\dPZNewSp{} \cPZNewSp, \ZKSp{} projects) and, slightly, seriously late (\dPZNewSl{} \cPZNewSl). Scope churn does not transfer. The contrast with the MariaDB and MongoDB test is partly story points: two of the four new features, the unestimated and re-estimated shares, carry no information where story points are missing.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Trained on all TAWOS sprints, scored on each Red Hat project: mean per-project AUC (gradient boosting, no project feature, story points kept), and paired differences with 95\% intervals over projects. $k$: Red Hat projects with at least five sprints in each class.}
+\label{tab:transfer}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrccccc@{}}
+\toprule
+Outcome & $k$ & scope & strict & strict+new & New features & History alone \\
+\midrule
+\tabinput{tables/transfer.tex}
+\bottomrule
+\end{tabular}
+\end{table*}
+
 \begin{table}[t]
 \centering
 \footnotesize
@@ -387,11 +434,11 @@ Table~\ref{tab:robust} in the Appendix repeats the main planning-time comparison
 
 \subsection{What a team can take from this}
 
-During a sprint, simple progress counts (how much is done, how much is left, how fast it is going) carry nearly all of the signal, within a team as well as across teams, and their warnings for leftover work are close to calibrated. Burndown-shape indicators add nothing on top of them.
+During a sprint, simple progress counts (how much is done, how much is left, how fast it is going) carry nearly all of the signal, in both sources and within a team as well as across teams, and their warnings for leftover work are close to calibrated. Burndown-shape indicators add nothing on top of them.
 
-Before a sprint starts, the picture depends on who is looking. Someone who oversees many teams learns most from each team's recent completion rate, and the binomial model gives that ranking with nothing learned, though its probabilities need the beta-binomial correction or a learned model before anyone acts on them. A single team learns little from its own history that the size of the sprint does not already say. The new features help a little with plain spillover, but that gain did not hold on the confirmation set.
+Before a sprint starts, four cheap facts about the committed issues help: how many were carried in from earlier sprints, how old they are, and how many are unestimated or were re-estimated. They help in both sources, inside single projects, and in a model trained on one source and used on the other, provided story points are recorded. Team history is different. Someone who oversees many teams learns from each team's recent completion rate, and the binomial model gives that ranking with nothing learned, though its probabilities need the beta-binomial correction or a learned model before anyone acts on them. A single team learns nothing from its own history that the size of the sprint does not already say.
 
-We see no sign that a model trained on other organisations' teams does better than a size rule, and a threshold carried from one team to another changes what a miss is worth (Proposition~\ref{prop:youden}). For outcomes as common as spillover, the decision analysis adds a further caution: unless a warning is costly, warning on every sprint is nearly as good as any model.
+A threshold carried from one team to another changes what a miss is worth (Proposition~\ref{prop:youden}), so a model that ranks well on another organisation's teams still needs its threshold set locally. For outcomes as common as spillover, the decision analysis adds a further caution: unless a warning is costly, warning on every sprint is nearly as good as any model.
 
 \subsection{Why lateness is hard}
 
@@ -402,21 +449,21 @@ Late closure is the moment someone pressed ``Complete sprint'' in Jira. That dep
 
 \emph{Construct.} The labels come from Jira fields, not from asking teams whether a sprint went badly. Late closure and seriously late measure when a sprint was closed in the tool. Spillover counts issues, not effort. The median nonempty sprint leaves \CarryMedPct\% of its committed issues unresolved at the planned end, and \CleanNothingPct\% of nonempty sprints resolve none. In open-source projects an issue is often resolved at a release or a merge rather than when the work stops, so the carry ratio partly measures when a project resolves issues, not only how much work was left. The measurability check catches only issues closed with no date at all; a project that sets resolution dates late passes it and still overstates spillover. We think this is the largest threat to the spillover labels, and only the teams themselves can settle it.
 
-\emph{Internal.} The reconstruction depends on the change log. Where it is missing, story points fall back on the exported value; we measured the share and repeated the main comparisons without it. Issue type, priority and assignee are left out because only their final values exist, which also means the choet set lacks team and issue features its authors used. The strict, choet+ctx and ours sets carry the project as a feature; leave-one-project-out testing removes it.
+\emph{Internal.} Both sources hide private issues from anonymous readers (Section~\ref{sec:redhat}), more so on Red Hat (median \GapRhMed\% of issue numbers) than on TAWOS (\GapTwMed\%). A hidden issue in a sprint lowers its committed scope and can hide spillover. The findings that hold in both sources survive this difference, but the absolute AUC values in either source may be off. The reconstruction depends on the change log. Where it is missing, story points fall back on the exported value; we measured the share and repeated the main comparisons without it. Issue type, priority and assignee are left out because only their final values exist, which also means the choet set lacks team and issue features its authors used. The strict, choet+ctx and ours sets carry the project as a feature; leave-one-project-out testing removes it.
 
-\emph{Hypotheses and analysis choices.} The hypotheses were written after a development run on eight projects. Several choices were made after the full run: the measurability check, the choet+ctx set, the Holm adjustment, the confirmation set, the tuned and calendar-cut variants, the within-project analysis and the decision analysis. All are logged with dates and reasons, and we report their effect whichever way it went. The confirmation set is our main answer to this threat: the in-sprint and serious-spillover results hold there, the new-features result does not. It is not an independent replication, though. Its \ConfProj{} projects are part of the full cohort, so the two estimates share \ConfSprints{} sprints, and every choice made after the full run was made with those projects in view.
+\emph{Hypotheses and analysis choices.} The hypotheses were written after a development run on eight projects. Several choices were made after the full run: the measurability check, the choet+ctx set, the Holm adjustment, the held-out subset, the Red Hat cohort, the tuned and calendar-cut variants, the within-project analysis and the decision analysis. All are logged with dates and reasons, and we report their effect whichever way it went. The TAWOS held-out subset is not an independent replication: its \ConfProj{} projects are part of the full cohort, so the two estimates share \ConfSprints{} sprints, and every choice made after the full run was made with those projects in view. The Red Hat cohort is our main answer to this threat. Its projects were chosen by a rule fixed before any label was computed on them, and the hypotheses, labels, features, protocol and code were not changed for it. One thing was seen beforehand: the screening of candidate projects printed rough label rates, which the rule does not use. The Red Hat cohort was added after the full TAWOS run, so it is a replication we chose to run, and we report it whichever way it went.
 
 \emph{Conclusion.} The project-level interval resamples only \NProj{} clusters, so it is wide. We treat a result as holding only when the project interval clears zero, and report the adjusted values beside it.
 
-\emph{External.} All projects are open source, and a handful of organisations contribute most TAWOS projects. The outside test covers two more organisations and ten projects, few of which have enough sprints in both classes for every label.
+\emph{External.} All projects use public Jira. A handful of organisations contribute most TAWOS projects, and Red Hat is one company, although its projects belong to separate engineering teams and its sprints run to \RHTo. The MariaDB and MongoDB test covers two more organisations, but few of its ten projects have enough sprints in both classes for every label. Industrial teams on private trackers may behave differently.
 
 \section{Conclusion}
 
-Under one leakage-aware protocol, and after checking that the outcomes can be measured, the kinds of signal used in the sprint-risk literature differ sharply. Progress counts dominate during a sprint and burndown shape adds nothing. Team history tells teams apart, but adds little to ranking one team's own sprints and nothing for when a sprint is closed, and we see no sign that it helps on another organisation's projects. Because every AUC in this literature is pooled over projects, results like ours should be reported within projects too. The formal setting gives simple reasons for these patterns: empty sprints inflate AUC by an exact amount, a fitted threshold carries a hidden cost ratio, the choice between ``any'' and ``serious'' spillover decides whether history can matter, a completion rate that belongs to the team says little about which of that team's sprints will go badly, and issues that do not finish independently explain why a model with no learning ranks well but cannot give trustworthy probabilities. The obvious next step is to ask teams whether the sprints these models flag are the ones they would have wanted to hear about.
+Under one leakage-aware protocol, and after checking that the outcomes can be measured, the kinds of signal used in the sprint-risk literature differ sharply. Progress counts dominate during a sprint and burndown shape adds nothing, in two independent sources. A few cheap features of the committed issues help before the sprint starts, within projects and across sources. Team history tells teams apart but adds nothing to ranking one team's own sprints. Because every AUC in this literature is pooled over projects, results like ours should be reported within projects too, and on more than one source. The formal setting gives simple reasons for these patterns: empty sprints inflate AUC by an exact amount, a fitted threshold carries a hidden cost ratio, the choice between ``any'' and ``serious'' spillover decides whether history can matter, a completion rate that belongs to the team says little about which of that team's sprints will go badly, and issues that do not finish independently explain why a model with no learning ranks well but cannot give trustworthy probabilities. The obvious next step is to ask teams whether the sprints these models flag are the ones they would have wanted to hear about.
 
 \section*{Data Availability}
 
-Code, export queries, the measurability and reconstruction checks, the reconstructed frames, every result file and the dated study plan with its change log are at \url{https://github.com/hani-ziad/journal-ieee-access-2027}. TAWOS \cite{tawos} is released under the Apache License 2.0 for research use. The repository includes the eight-project extract used for development and the SQL that makes the full extract from the public TAWOS database; the full extract is too large for the repository and is available from the author. The outside projects' issues come from the public Jira sites of MariaDB and MongoDB; we do not redistribute them, but the repository includes the scripts that pull and convert them.
+Code, export queries, the measurability and reconstruction checks, the reconstructed frames, every result file and the dated study plan with its change log are at \url{https://github.com/hani-ziad/journal-ieee-access-2027}. TAWOS \cite{tawos} is released under the Apache License 2.0 for research use. The repository includes the eight-project extract used for development and the SQL that makes the full extract from the public TAWOS database; the full extract is too large for the repository and is available from the author. The outside projects' issues come from the public Jira sites of MariaDB and MongoDB, and the Red Hat cohort from Red Hat's public Jira; we do not redistribute them, but the repository includes the scripts that pull and convert them, the Red Hat selection rule, and the reconstructed frames.
 
 \appendix
 

@@ -22,7 +22,11 @@ Choices (all fixed before looking at any outcome):
 * Story points are copied when the instance has them; the transfer test drops
   the story-point features anyway, because not every source uses them.
 
-Usage: python convert_jira.py <pull.json> <out_dir> KEY="Project name" [KEY="..."]
+Usage: python convert_jira.py <pull.json> <out_dir> [--all-boards] KEY="Project name" [KEY="..."]
+
+--all-boards (added 14 Nov 2026 for the Red Hat replication): keep every board of a project and drop
+only sprints whose visible issues are less than 80% the owner project's. Jira Cloud pulls also work: the
+Sprint field arrives as a dict with boardId.
 """
 from __future__ import annotations
 
@@ -35,6 +39,7 @@ from pathlib import Path
 import pandas as pd
 
 PROJECT_NAMES: dict[str, str] = {}
+ALL_BOARDS = False
 
 
 def to_utc(value):
@@ -92,10 +97,18 @@ def main(src: Path, out_dir: Path) -> None:
     # Keep each project's home board only (the board that holds most of its
     # sprints). Stray sprints on other teams' boards (e.g. a server release
     # sprint that a MaxScale issue passed through) have scope we cannot see.
-    home = sdf.groupby("Project_Name")["Board_ID"].agg(lambda b: b.value_counts().idxmax())
-    stray = sdf["Board_ID"] != sdf["Project_Name"].map(home)
-    print("home boards:", home.to_dict(), "| stray sprints dropped:", int(stray.sum()))
-    sdf = sdf[~stray]
+    if ALL_BOARDS:
+        # Multi-team projects (Red Hat): keep every board, as TAWOS keeps every sprint of a project, but
+        # drop sprints whose visible issues are mostly another project's (owner share below 80%).
+        share = {sid: v.most_common(1)[0][1] / sum(v.values()) for sid, v in owner_votes.items()}
+        mixed = sdf["ID"].astype(str).map(share) < 0.8
+        print("all boards kept | mixed sprints dropped:", int(mixed.sum()))
+        sdf = sdf[~mixed]
+    else:
+        home = sdf.groupby("Project_Name")["Board_ID"].agg(lambda b: b.value_counts().idxmax())
+        stray = sdf["Board_ID"] != sdf["Project_Name"].map(home)
+        print("home boards:", home.to_dict(), "| stray sprints dropped:", int(stray.sum()))
+        sdf = sdf[~stray]
 
     irows, crows = [], []
     for it in issues:
@@ -133,6 +146,9 @@ def main(src: Path, out_dir: Path) -> None:
 
 
 if __name__ == "__main__":
+    if "--all-boards" in sys.argv:
+        ALL_BOARDS = True
+        sys.argv.remove("--all-boards")
     for kv in sys.argv[3:]:
         k, v = kv.split("=", 1)
         PROJECT_NAMES[k] = v

@@ -152,10 +152,10 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
   <h1>What predicts sprint spillover without hindsight?</h1>
   <p class="lead">A benchmark of the feature families used to predict sprint risk, scored side by side on public Jira data, with a small theory that says what should happen before the data say what does.</p>
   <div class="tiles">
-    <div class="tile"><b class="num" data-count="26">0</b><span>TAWOS projects in the cohort</span></div>
-    <div class="tile"><b class="num" data-count="3676">0</b><span>sprints, Feb 2012 to Oct 2020</span></div>
+    <div class="tile"><b class="num" data-count="43">0</b><span>projects: 26 TAWOS and 17 Red Hat</span></div>
+    <div class="tile"><b class="num" data-count="9183">0</b><span>sprints, 2012 to 2026</span></div>
     <div class="tile"><b class="num" data-count="22">0</b><span>hypothesis tests, written before the full run</span></div>
-    <div class="tile"><b class="num" data-count="5">0</b><span>survive the Holm correction</span></div>
+    <div class="tile"><b class="num" data-count="15">0</b><span>hold on Red Hat (8 on TAWOS)</span></div>
   </div>
 </header>
 
@@ -218,8 +218,10 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
     <details><summary>Show the data</summary><div id="tbMeas"></div></details>
   </div>
   <p>Removing these three projects changes which hypotheses hold, so the check is reported as a contribution: any study of spillover on TAWOS needs it.</p>
-  <h3>The confirmation set</h3>
-  <p>The hypotheses were written after a development run on eight projects. Seven of those are in the cohort. The other <b>19 projects</b> had never been looked at, so every hypothesis test is repeated on them alone. A result that holds on both is much harder to explain away as tuning to the data.</p>
+  <h3>The held-out subset, and a second source</h3>
+  <p>The hypotheses were written after a development run on eight projects. Seven of those are in the cohort. The other <b>19 projects</b> had never been looked at, so every hypothesis test is repeated on them alone. They are still part of the same cohort, though, so they are not an independent sample.</p>
+  <p>For a real replication the study adds <b>17 Red Hat projects</b> (5,507 sprints, 2014 to 2026) from Red Hat's public Jira, chosen by a rule written down before any label was computed. Every test is rerun there unchanged. <b>15 of the 22 tests hold on Red Hat</b>, against 8 on TAWOS.</p>
+  <p>Both sources share one weakness: public Jira hides private issues. The share of missing issue numbers is 0 to 68% in the TAWOS projects (median 23%) and 5 to 66% in the Red Hat projects (median 44%).</p>
 </section>
 
 <section id="s-outcomes" class="reveal">
@@ -297,18 +299,18 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
 <section id="s-results" class="reveal">
   <div class="kicker">6 · The results</div>
   <h2>All 22 hypothesis tests on one chart</h2>
-  <p>Each row is one comparison, written down before the full run. Toggle to see the same comparison trained and tested on the 19 confirmation projects only.</p>
+  <p>Each row is one comparison, written down before the full run. Toggle to see the same comparison trained and tested on the 19 held-out TAWOS projects only, or on the 17 Red Hat projects, a second source that played no part in writing the hypotheses.</p>
   <div class="card">
-    <div class="row" role="group" aria-label="Data set"><button class="seg" data-fset="full" aria-pressed="true" type="button">Full cohort (26)</button><button class="seg" data-fset="conf" aria-pressed="false" type="button">Confirmation set (19)</button></div>
-    <div class="legend"><span><i class="dot" style="background:var(--s1)"></i>interval above zero (holds)</span><span><i class="dot" style="border:2px solid var(--muted);background:transparent"></i>interval touches zero</span><span>★ survives Holm (full cohort)</span></div>
+    <div class="row" role="group" aria-label="Data set"><button class="seg" data-fset="full" aria-pressed="true" type="button">TAWOS (26)</button><button class="seg" data-fset="conf" aria-pressed="false" type="button">Held-out subset (19)</button><button class="seg" data-fset="rh" aria-pressed="false" type="button">Red Hat (17)</button></div>
+    <div class="legend"><span><i class="dot" style="background:var(--s1)"></i>interval above zero (holds)</span><span><i class="dot" style="border:2px solid var(--muted);background:transparent"></i>interval touches zero</span><span>★ survives Holm (TAWOS)</span></div>
     <div id="chForest"></div>
     <details><summary>Show the data</summary><div id="tbForest"></div></details>
   </div>
   <div class="grid2">
-    <div class="callout"><b>H2 holds everywhere.</b> Progress counts beat burndown shape by 0.13 to 0.19 AUC, in both sets, at both checkpoints.</div>
-    <div class="callout"><b>H4 failed where it was most specific.</b> We predicted history would add nothing to serious spillover. It adds 0.088, and 0.178 on the confirmation set.</div>
-    <div class="callout warn"><b>H1 is a small gain we cannot confirm.</b> New features add 0.037 for spillover (survives Holm) but only 0.016 on the confirmation set.</div>
-    <div class="callout warn"><b>H3 is the right direction but too weak.</b> Ours beats choet by 0.03 to 0.09, yet the interval sits on zero for the spillover labels.</div>
+    <div class="callout"><b>H2 holds everywhere.</b> Progress counts beat burndown shape by 0.09 to 0.22 AUC, on TAWOS, the held-out subset and Red Hat, at both checkpoints.</div>
+    <div class="callout"><b>H4 failed where it was most specific.</b> We predicted no gain for serious spillover. The gain is 0.088 on TAWOS and 0.060 on Red Hat, but on Red Hat it comes from the new features, not from team history.</div>
+    <div class="callout"><b>H1 holds in both sources.</b> New features add 0.037 for spillover on TAWOS (survives Holm) and 0.016 on Red Hat, plus 0.070 for serious spillover on Red Hat. Only the TAWOS held-out subset misses it.</div>
+    <div class="callout warn"><b>H3 is weak on TAWOS, clear on Red Hat.</b> Ours beats choet by 0.02 to 0.09 in both sources; on TAWOS the interval sits on zero for the spillover labels, on Red Hat it clears it.</div>
   </div>
 
   <h3>At planning time</h3>
@@ -357,7 +359,7 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
   </div>
 
   <h3>Outside projects</h3>
-  <p>Trained on all of TAWOS, tested on ten MariaDB and MongoDB projects the model never saw. History stops helping, but this test averages AUC within each project, and within a project history adds little even inside TAWOS.</p>
+  <p>Trained on all of TAWOS, tested on ten MariaDB and MongoDB projects the model never saw. History stops helping, but this test averages AUC within each project, and within a project history adds little even inside TAWOS. Only 4 to 9 of these projects are testable, and most record no story points. On the 17 Red Hat projects, where 16 are testable and story points are kept, the model trained on TAWOS does transfer, through the four new features.</p>
   <div class="card">
     <p class="chart-title">Mean AUC across outside projects</p>
     <p class="chart-sub">Whiskers show ± one standard deviation across projects. k = projects with at least five sprints in each class.</p>
@@ -372,8 +374,8 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
   <h2>What a team can take from this</h2>
   <ol class="take">
     <li><b>During a sprint, count.</b> How much is done, how much is left, and how fast it is going carry nearly all of the signal, and their warnings are calibrated. Burndown-shape indicators add nothing on top.</li>
-    <li><b>Before a sprint, history tells teams apart, not a team's sprints.</b> Across many teams, each team's recent completion rate is the best guide to how much will be left over, and the binomial model gets most of the way with one number per team. Within one team it adds little to the size of the sprint: the serious-spillover gain falls from 0.088 to 0.015 AUC when only pairs of sprints from the same project are compared.</li>
-    <li><b>Be careful importing a model or a threshold from another organisation.</b> We saw no sign that either carried over, and a threshold changes what a miss is worth when the share of bad sprints changes.</li>
+    <li><b>Before a sprint, look at the committed issues, not the team's record.</b> Four cheap facts (how many were carried in, how old they are, how many are unestimated or re-estimated) help in both sources and inside single projects. Team history tells teams apart, but within one project it adds nothing in either source: the gain for serious spillover is 0.003 on TAWOS and −0.007 on Red Hat.</li>
+    <li><b>A model trained on one organisation can rank another's sprints, if story points are recorded.</b> Trained on TAWOS, it ranks serious spillover inside each Red Hat project better than scope alone (0.683 against 0.613 per-project AUC), thanks to the four new features. A threshold still has to be set locally, because it changes what a miss is worth when the share of bad sprints changes.</li>
     <li><b>For outcomes as common as spillover, warning on every sprint is almost as good as any model</b> unless warnings are costly.</li>
     <li><b>Late closure is mostly noise.</b> It records when someone pressed "Complete sprint", and nothing tried here predicts it well.</li>
   </ol>
@@ -381,7 +383,7 @@ footer{padding:40px 16px 80px;color:var(--muted);font-size:13px;text-align:cente
   <ul>
     <li>The labels come from Jira fields, not from asking teams whether a sprint went badly. No practitioner has yet judged the flagged sprints.</li>
     <li>Only 26 project clusters, so project-level intervals are wide. Only 5 of 22 tests survive Holm.</li>
-    <li>Some analysis choices were made after the full run (the measurability check, the confirmation set, the Holm step). All are logged with dates, and the confirmation set is the main defence, though its 19 projects are part of the full cohort, so it is not an independent replication.</li>
+    <li>Some analysis choices were made after the full run (the measurability check, the held-out subset, the Holm step, the within-project analysis, the Red Hat cohort). All are logged with dates. The Red Hat projects were chosen by a rule fixed before any label was computed, and the tests were rerun unchanged.</li>
     <li>Every AUC in this literature is pooled over projects, which also rewards telling teams apart. The paper now scores the main comparisons within projects too, and most of the planning-time history gain disappears there.</li>
     <li>21% of issues placed in a sprint have no sprint history, so the replay has to assume their exported sprint. The main results hold on the 15 projects with at least 85% coverage.</li>
     <li>All data are open source, and a handful of organisations contribute most TAWOS projects.</li>
@@ -582,29 +584,30 @@ function drawVar(){const D=[["1–3",471,.2008,.1203,.1318],["4–7",373,.0942,.
 /* ---------- results ---------- */
 const OUT={spillover:"Spillover",serious_spillover:"Serious spillover",late_closure:"Late closure",seriously_late:"Seriously late",scope_churn:"Scope churn"};
 const HYP=[
-["H1","late_closure",null,.000969,-.012871,.012040,-.009328,-.024544,.005183,.9747],
-["H1","seriously_late",null,-.005859,-.015645,-.000297,.002342,-.006062,.011520,.6285],
-["H1","spillover",null,.037283,.022039,.055553,.015780,-.015929,.048448,.0057],
-["H1","serious_spillover",null,.017191,-.008396,.047643,.034953,-.007331,.080464,.9747],
-["H1","scope_churn",null,.025999,-.027682,.069415,.005549,-.043902,.056394,.9747],
-["H2","spillover",.25,.130501,.077317,.195869,.157801,.057022,.248822,.0022],
-["H2","spillover",.5,.193629,.109306,.272051,.252196,.139990,.365904,.0022],
-["H2","serious_spillover",.25,.178781,.107957,.256241,.236341,.173052,.321082,.0022],
-["H2","serious_spillover",.5,.178129,.083051,.261008,.248381,.167661,.299717,.0057],
-["H3","spillover",.25,.030931,-.002066,.067206,.053413,.007334,.100787,.7271],
-["H3","spillover",.5,.033949,.000205,.077587,.080534,.022017,.144720,.7140],
-["H3","serious_spillover",.25,.049236,-.000312,.110559,.110716,.037627,.208577,.6617],
-["H3","serious_spillover",.5,.052823,-.000372,.116526,.098525,.047534,.165167,.6482],
-["H3","late_closure",.25,.050670,-.009525,.124758,.031707,-.028062,.087691,.9747],
-["H3","late_closure",.5,.052812,-.012708,.124699,.028046,-.030903,.082570,.9747],
-["H3","seriously_late",.25,.066931,-.007695,.137962,.072830,.009999,.141576,.9370],
-["H3","seriously_late",.5,.092514,.007289,.192647,.026586,-.029533,.088158,.6224],
-["H4","late_closure",null,.042765,-.013057,.093097,.016114,-.050153,.081137,.9747],
-["H4","seriously_late",null,.044719,-.020124,.101345,.043582,-.009311,.085066,.9747],
-["H4","spillover",null,.033915,-.005106,.081772,.088608,.044304,.137001,.9747],
-["H4","serious_spillover",null,.087893,.018099,.160990,.177824,.092490,.255720,.2227],
-["H4","scope_churn",null,.063073,-.056015,.206576,.064706,-.105311,.193330,.9747]];
-const HNAME={H1:"H1 · new features (strict+new − strict)",H2:"H2 · burndown shape (ours − worki)",H3:"H3 · planning context (ours − choet)",H4:"H4 · history over scope (strict+new − scope)"};
+["H1","late_closure",null,.000969,-.012871,.012040,-.009328,-.024544,.005183,0.9747,-.007877,-.022386,.004049],
+["H1","seriously_late",null,-.005859,-.015645,-.000297,.002342,-.006062,.011520,0.6285,.000064,-.011033,.012871],
+["H1","spillover",null,.037283,.022039,.055553,.015780,-.015929,.048448,0.0057,.015708,.002383,.027763],
+["H1","serious_spillover",null,.017191,-.008396,.047643,.034953,-.007331,.080464,0.9747,.069976,.040136,.143167],
+["H1","scope_churn",null,.025999,-.027682,.069415,.005549,-.043902,.056394,0.9747,.037894,.004767,.069601],
+["H2","spillover",.25,.130501,.077317,.195869,.157801,.057022,.248822,0.0022,.224681,.161893,.265649],
+["H2","spillover",.5,.193629,.109306,.272051,.252196,.139990,.365904,0.0022,.109757,.035075,.141621],
+["H2","serious_spillover",.25,.178781,.107957,.256241,.236341,.173052,.321082,0.0022,.133986,.080156,.171341],
+["H2","serious_spillover",.5,.178129,.083051,.261008,.248381,.167661,.299717,0.0057,.088064,.040964,.118746],
+["H3","spillover",.25,.030931,-.002066,.067206,.053413,.007334,.100787,0.7271,.023673,.005048,.033760],
+["H3","spillover",.5,.033949,.000205,.077587,.080534,.022017,.144720,0.7140,.019695,.005482,.028788],
+["H3","serious_spillover",.25,.049236,-.000312,.110559,.110716,.037627,.208577,0.6617,.067286,.042475,.121169],
+["H3","serious_spillover",.5,.052823,-.000372,.116526,.098525,.047534,.165167,0.6482,.063275,.039545,.087672],
+["H3","late_closure",.25,.050670,-.009525,.124758,.031707,-.028062,.087691,0.9747,.058413,.018809,.112052],
+["H3","late_closure",.5,.052812,-.012708,.124699,.028046,-.030903,.082570,0.9747,.046920,.005537,.095374],
+["H3","seriously_late",.25,.066931,-.007695,.137962,.072830,.009999,.141576,0.9370,.055793,-.006465,.102824],
+["H3","seriously_late",.5,.092514,.007289,.192647,.026586,-.029533,.088158,0.6224,.048761,-.009347,.095364],
+["H4","late_closure",null,.042765,-.013057,.093097,.016114,-.050153,.081137,0.9747,.036966,-.004832,.081591],
+["H4","seriously_late",null,.044719,-.020124,.101345,.043582,-.009311,.085066,0.9747,.054685,-.008638,.116491],
+["H4","spillover",null,.033915,-.005106,.081772,.088608,.044304,.137001,0.9747,.021626,-.001902,.041496],
+["H4","serious_spillover",null,.087893,.018099,.160990,.177824,.092490,.255720,0.2227,.060464,.020274,.105474],
+["H4","scope_churn",null,.063073,-.056015,.206576,.064706,-.105311,.193330,0.9747,.081416,.030614,.142224]];
+const HNAME={H1:"H1 · new features (strict+new − strict)",H2:"H2 · burndown shape (ours − worki)",H3:"H3 · planning context (ours − choet)",H4:"H4 · history and new features over scope (strict+new − scope)"};
+const PICK=(h,w)=>w==="full"?[h[3],h[4],h[5]]:w==="conf"?[h[6],h[7],h[8]]:[h[10],h[11],h[12]];
 let forestSet,fWhich="full";
 function drawForest(){
   const W=NW(780,440),L=NW(250,150),R=NW(70,40),rh=21,gap=26;let rowsY=[],yy=6,prev=null;HYP.forEach(h=>{if(h[0]!==prev){yy+=gap;prev=h[0];}rowsY.push(yy);yy+=rh;});const H=yy+30;
@@ -618,14 +621,14 @@ function drawForest(){
     const dt=el("circle",{cy:y,r:5.5,style:{strokeWidth:2}},s);
     if(h[9]<.05)el("text",{x:W-R+NW(14,6),y:y+4,class:"lblb",text:"★"},s);
     const hit=el("rect",{x:0,y:rowsY[i],width:W,height:rh,style:{fill:"transparent"}},s);
-    hover(hit,()=>{const t=fWhich==="full"?[h[3],h[4],h[5]]:[h[6],h[7],h[8]];return [{v:(t[0]>=0?"+":"")+f3(t[0]),l:"AUC difference"},{l:OUT[h[1]]+(h[2]?" at "+h[2]*100+"%":"")+", "+h[0]},{l:"95% interval ["+f3(t[1])+", "+f3(t[2])+"]"},{l:fWhich==="full"?"Full cohort, p(Holm) = "+h[9].toFixed(3):"Confirmation set"}];});
+    hover(hit,()=>{const t=PICK(h,fWhich);return [{v:(t[0]>=0?"+":"")+f3(t[0]),l:"AUC difference"},{l:OUT[h[1]]+(h[2]?" at "+h[2]*100+"%":"")+", "+h[0]},{l:"95% interval ["+f3(t[1])+", "+f3(t[2])+"]"},{l:fWhich==="full"?"TAWOS, p(Holm) = "+h[9].toFixed(3):fWhich==="conf"?"TAWOS held-out subset":"Red Hat, 17 projects"}];});
     items.push({h,ln,dt,hit});});
   let cur=null;
-  forestSet=(which)=>{const from=cur?cur.map(o=>o.slice()):null;const to=items.map(o=>which==="full"?[o.h[3],o.h[4],o.h[5]]:[o.h[6],o.h[7],o.h[8]]);
+  forestSet=(which)=>{const from=cur?cur.map(o=>o.slice()):null;const to=items.map(o=>PICK(o.h,which));
     fWhich=which;
     tween(700,k=>{items.forEach((o,i)=>{const a=from?from[i]:[0,0,0],b=to[i];const v=a.map((av,j)=>av+(b[j]-av)*k);o.ln.setAttribute("x1",x(v[1]));o.ln.setAttribute("x2",x(v[2]));o.dt.setAttribute("cx",x(v[0]));const holds=b[1]>0;o.dt.style.fill=holds?"var(--s1)":"var(--surface)";o.dt.style.stroke=holds?"var(--surface)":"var(--muted)";});},()=>{cur=to;});};
   forestSet("full");
-  table($("#tbForest"),["Hypothesis","Outcome","Δ full","95% interval","p (Holm)","Δ confirmation","95% interval"],HYP.map(h=>[h[0],OUT[h[1]]+(h[2]?" @"+h[2]*100+"%":""),f3(h[3]),"["+f3(h[4])+", "+f3(h[5])+"]",h[9].toFixed(3),f3(h[6]),"["+f3(h[7])+", "+f3(h[8])+"]"]));
+  table($("#tbForest"),["Hypothesis","Outcome","Δ TAWOS","95% interval","p (Holm)","Δ held-out","95% interval","Δ Red Hat","95% interval"],HYP.map(h=>[h[0],OUT[h[1]]+(h[2]?" @"+h[2]*100+"%":""),f3(h[3]),"["+f3(h[4])+", "+f3(h[5])+"]",h[9].toFixed(3),f3(h[6]),"["+f3(h[7])+", "+f3(h[8])+"]",f3(h[10]),"["+f3(h[11])+", "+f3(h[12])+"]"]));
   segGroup($$("[data-fset]"),b=>forestSet(b.dataset.fset));
 }
 

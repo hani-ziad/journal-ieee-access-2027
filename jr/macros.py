@@ -206,6 +206,59 @@ def main():
             if r.outcome in OUTC and r.features in SETS:
                 put(f"wPT{OUTC[r.outcome]}{SETS[r.features]}", num(r.within))
 
+    # second source: Red Hat (jr/replicate.py, added 14 Nov 2026). X: replication on Red Hat (time split),
+    # Y: within-project on Red Hat, Z: trained on TAWOS, per-project AUC on Red Hat.
+    RHR = jr.ROOT / "results" / "redhat_clean"
+    if (RHR / "replicate_differences.csv").exists():
+        rd = pd.read_csv(RHR / "replicate_differences.csv")
+        diff_macros(rd[rd.stage == "planning"], "P", "redhat", "X")
+        diff_macros(rd[rd.stage == "in-sprint"], "I", "redhat", "X", checkpoint=True)
+        ra = pd.read_csv(RHR / "replicate_auc.csv")
+        for r in ra[ra.stage == "planning"].itertuples():
+            if r.outcome in OUTC and r.features in SETS:
+                put(f"aPX{OUTC[r.outcome]}{SETS[r.features]}", num(r.auc))
+        for r in ra[ra.stage == "in-sprint"].itertuples():
+            if r.outcome in OUTC and r.features in SETS:
+                put(f"aIX{OUTC[r.outcome]}{CP[r.checkpoint]}{SETS[r.features]}", num(r.auc))
+        put("NHoldRH", f"{int((h.r_lo > 0).sum())}")
+        put("NHoldHolmRH", f"{int((h.r_p_holm < 0.05).sum())}")
+        put("NHoldBoth", f"{int(((h.lo > 0) & (h.r_lo > 0)).sum())}")
+        put("NHoldOnlyRH", f"{int(((h.lo <= 0) & (h.r_lo > 0)).sum())}")
+        put("NHoldOnlyTW", f"{int(((h.lo > 0) & (h.r_lo <= 0)).sum())}")
+        wy = pd.read_csv(RHR / "within_differences.csv")
+        diff_macros(wy[wy.stage == "planning"], "P", "redhat within", "Y")
+        diff_macros(wy[wy.stage == "in-sprint"], "I", "redhat within", "Y", checkpoint=True)
+        td = pd.read_csv(RHR / "transfer_differences.csv")
+        diff_macros(td.assign(checkpoint=np.nan), "P", "transfer", "Z")
+        ta = pd.read_csv(RHR / "transfer_from_tawos.csv")
+        for r in ta.itertuples():
+            put(f"zP{OUTC[r.outcome]}{SETS[r.features]}", num(r.per_project_mean))
+        put("ZKSs", f"{int(ta[ta.outcome == 'serious_spillover'].k.iloc[0])}")
+        put("ZKSp", f"{int(ta[ta.outcome == 'spillover'].k.iloc[0])}")
+        rf = pd.read_csv(jr.ROOT / "data" / "redhat_clean" / "planning_frame.csv", parse_dates=["start_date"])
+        put("RHProj", f"{rf.project.nunique()}")
+        put("RHSprints", f"{len(rf):,}")
+        put("RHNonempty", f"{int(rf.nonempty.sum()):,}")
+        put("RHFrom", rf.start_date.min().strftime("%B %Y"))
+        put("RHTo", rf.start_date.max().strftime("%B %Y"))
+        ne = rf[rf.nonempty == 1]
+        put("RHPosSp", f"{100 * ne.label_spillover.mean():.0f}")
+        put("RHPosSs", f"{100 * ne.label_serious_spillover.mean():.0f}")
+        put("RHPosLc", f"{100 * rf.label_delay.mean():.0f}")
+        sel = json.loads((jr.ROOT / "data" / "raw" / "redhat_pull" / "redhat_pull.json").read_text())
+        put("RHIssues", f"{len(sel['issues']):,}")
+        rc = pd.read_csv(jr.ROOT / "data" / "redhat_clean" / "recording_check.csv")
+        put("RHUnrecMax", f"{100 * rc.share.max():.0f}")
+        put("BothSprints", f"{len(rf) + len(f):,}")
+    vg = jr.ROOT / "results" / "visibility_gaps.csv"
+    if vg.exists():
+        g = pd.read_csv(vg)
+        tw, rhg = g[g.source == "TAWOS"].gap, g[g.source == "Red Hat"].gap
+        put("GapTwMed", f"{100 * tw.median():.0f}"); put("GapTwMax", f"{100 * tw.max():.0f}")
+        put("GapTwMin", f"{100 * tw.min():.0f}")
+        put("GapRhMed", f"{100 * rhg.median():.0f}"); put("GapRhMax", f"{100 * rhg.max():.0f}")
+        put("GapRhMin", f"{100 * rhg.min():.0f}")
+
     # theory numbers for the cohort
     t = json.loads((R / "theory_numbers.json").read_text())
     put("QhatPct", f"{100 * t['minimal_model']['q']:.0f}")

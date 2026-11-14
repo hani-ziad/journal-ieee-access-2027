@@ -34,6 +34,9 @@ Outcomes: late closure and spillover (as before), plus three new labels: serious
 | `jr/confirm.py`, `jr/binomial.py` | The confirmation set (19 projects not in the development run) and the binomial and beta-binomial predictors. |
 | `jr/paper_checks.py` | Checks every number typed into the paper's text against the result files. |
 | `jr/within.py` | The main comparisons rescored with within-project AUC (pairs of sprints from the same project only). Added after the full run. |
+| `jr/replicate.py` | Independent replication on Red Hat's public Jira: all 22 hypothesis tests rerun there, and a TAWOS-trained model scored per Red Hat project (`transfer`). Added 14 Nov 2026. |
+| `jr/visibility.py` | Share of each project's issue numbers that an anonymous reader cannot see (private, deleted or moved), both sources. |
+| `data_export/redhat/` | Selection rule (`SELECTION.md`) and browser pull script (`pull_jira_cloud.js`) for the Red Hat cohort. |
 | `results/dev_8projects/` | Development run on the current 8-project extract, used to test the code. Not the paper's results. |
 | `prior/` | Vendored reconstruction code: `src` (Phase 1 loader, planning snapshot, labels), `phase2` (planning-time features, models), `phase3` (in-sprint progress features). |
 | `data/raw/tawos_8projects/` | The eight-project TAWOS extract used for development. |
@@ -73,6 +76,16 @@ python -m jr.validate             # reconstruction consistency check and sprint-
 python -m jr.robust history       # main comparisons on projects with good sprint-history coverage
 python -m jr.hypotheses_fine      # the 22 hypothesis tests with 10,000 resamples, for the Holm adjustment
 python -m jr.within               # the main comparisons scored within projects only, about 15 seconds
+
+# Red Hat replication (second source). Pull in the browser with data_export/redhat/pull_jira_cloud.js, save as
+# data/raw/redhat_pull/redhat_pull.json, then:
+python data_export/outside/convert_jira.py data/raw/redhat_pull/redhat_pull.json data/raw/redhat --all-boards OSPRH="Red Hat OSPRH" CNV="Red Hat CNV" ...   # all 17 keys, see SELECTION.md
+JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.data        # frames, about 30 s
+JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.replicate   # 22 tests on Red Hat, about 60 min
+JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.within      # within-project on Red Hat
+JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.validate    # reconstruction check on Red Hat
+python -m jr.replicate transfer   # (TAWOS settings) trained on TAWOS, scored per Red Hat project, about 15 min
+python -m jr.visibility           # hidden-issue gaps, both sources
 python -m jr.tables               # the paper's tables
 python -m jr.macros               # every number in the paper's text
 python -m jr.build_paper          # assembles paper/main.tex from main_body.tex with the verified references

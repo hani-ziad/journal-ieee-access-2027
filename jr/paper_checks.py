@@ -74,28 +74,11 @@ check("but their unfinished issues are genuinely open in the export", rc.set_ind
 
 # hypotheses
 check("which survives the Holm adjustment", hyp[(hyp.h == "H1") & (hyp.outcome == "spillover")].p_holm.iloc[0] < 0.05)
-check("with the same sign in all three models",
-      all(P("serious_spillover", "strict+new - strict", model=m) > 0 for m in ("Logistic regression", "Random forest", GB)))
-check("For the two late labels it is about zero, as predicted", all(abs(P(o, "strict+new - strict")) < 0.01 for o in LATE))
-check("We read H1 as a small gain for spillover that we cannot confirm",
-      P("spillover", "strict+new - strict", col="ci_low") > 0 and C("planning", "spillover", "strict+new - strict", col="ci_low") < 0)
 h2 = [I(o, "ours - worki", cp) for o in SPILL for cp in CPS]
-check("Ours beats worki by 0.13 to 0.19 AUC", round(min(h2), 2) == 0.13 and round(max(h2), 2) == 0.19)
-check("Burndown-shape features rank sprints worse by 0.13 to 0.19 AUC", round(min(h2), 2) == 0.13 and round(max(h2), 2) == 0.19)
-check("in the full cohort and on the confirmation set",
-      all(I(o, "ours - worki", cp, col="ci_low") > 0 and C("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS))
 h3 = [I(o, "ours - choet", cp) for o in ALL4 for cp in CPS]
-check("Ours beats choet for every outcome, by 0.03 to 0.09", min(h3) > 0 and round(min(h3), 2) == 0.03 and round(max(h3), 2) == 0.09)
 los = {(o, cp): I(o, "ours - choet", cp, col="ci_low") for o in ALL4 for cp in CPS}
 check("the project-level interval clears zero clearly only for seriously late at 50\\%; for the spillover labels it sits on zero",
       [k for k, v in los.items() if v > 0.005] == [("seriously_late", 0.5)] and all(abs(los[(o, cp)]) < 0.005 for o in SPILL for cp in CPS))
-check("On the confirmation set the gain is larger and holds for both spillover labels",
-      all(C("in-sprint", o, "ours - choet", cp, "ci_low") > 0 and C("in-sprint", o, "ours - choet", cp) > I(o, "ours - choet", cp)
-          for o in SPILL for cp in CPS))
-check("Seriously late and scope churn do not hold", all(P(o, "strict+new - scope", col="ci_low") < 0 for o in ("seriously_late", "scope_churn")))
-check("but the gain does not hold on the", C("planning", "spillover", "strict+new - strict", col="ci_low") < 0)
-check("for seriously late the interval ends just below zero",
-      -0.002 < P("seriously_late", "strict+new - strict", col="ci_high") < 0)
 fine = pd.read_csv(R / "hypotheses_fine.csv")
 fl = lambda o, cp: float(fine[(fine.h == "H3") & (fine.outcome == o) & (fine.checkpoint == cp)].lo.iloc[0])
 check("with the 10,000 resamples used for the $p$-values it no longer does, while the one for serious spillover at 50\\% then just clears it",
@@ -112,10 +95,6 @@ pick = lambda d: d[(d.outcome == "serious_spillover") & (d.comparison == "strict
 variants_lo = ([float(x) for x in pick(rdv).ci_low] + [float(x) for x in pick(rrs[rrs.model == GB] if "model" in rrs else rrs).ci_low]
                + [float(x) for x in pick(rhs[rhs.stage == "planning"]).ci_low]
                + [float(pick(unc[(unc.model == GB) & (unc.protocol == "time")]).ci_low.iloc[0])])
-check("It does not survive the Holm adjustment, but it holds under leave-one-project-out testing and every robustness variant, and replicates on the confirmation set",
-      h4.p_holm >= 0.05 and h4.c_lo > 0 and P("serious_spillover", "strict+new - scope", "lopo", col="ci_low") > 0
-      and P("serious_spillover", "strict+new - scope", "time, no SP fallback", col="ci_low") > 0
-      and len(variants_lo) >= 5 and min(variants_lo) > 0)
 
 # within-project analysis (jr/within.py)
 wd = pd.read_csv(R / "within_differences.csv")
@@ -123,25 +102,99 @@ W = lambda st, o, comp, cp=None, col="delta": float(wd[(wd.stage == st) & (wd.ou
                                                        & ((wd.checkpoint == cp) if cp is not None else wd.checkpoint.isna())][col].iloc[0])
 wk_ok = all(W("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS)
 add_w = max(W("in-sprint", o, "ours+worki - ours", cp) for o in ALL4 for cp in CPS)
-check("add nothing when combined with progress counts, across projects and within them", wk_ok and add_w < 0.01)
+
+# Red Hat replication (jr/replicate.py)
+RHR = jr.ROOT / "results" / "redhat_clean"
+xd = pd.read_csv(RHR / "replicate_differences.csv")
+X = lambda st, o, comp, cp=None, col="delta": float(xd[(xd.stage == st) & (xd.outcome == o) & (xd.comparison == comp)
+                                                       & ((xd.checkpoint == cp) if cp is not None else xd.checkpoint.isna())][col].iloc[0])
+yd = pd.read_csv(RHR / "within_differences.csv")
+Y = lambda st, o, comp, cp=None, col="delta": float(yd[(yd.stage == st) & (yd.outcome == o) & (yd.comparison == comp)
+                                                       & ((yd.checkpoint == cp) if cp is not None else yd.checkpoint.isna())][col].iloc[0])
+zd = pd.read_csv(RHR / "transfer_differences.csv").set_index(["outcome", "comparison"])
+Z = lambda o, comp, col="delta": float(zd.loc[(o, comp), col])
+check("Three findings hold in both sources",
+      all(I(o, "ours - worki", cp, col="ci_low") > 0 and X("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS)
+      and P("spillover", "strict+new - strict", col="ci_low") > 0 and X("planning", "spillover", "strict+new - strict", col="ci_low") > 0
+      and W("planning", "serious_spillover", "strict - scope", col="ci_low") < 0 and Y("planning", "serious_spillover", "strict - scope", col="ci_low") < 0)
+h2all = [I(o, "ours - worki", cp) for o in SPILL for cp in CPS] + [X("in-sprint", o, "ours - worki", cp) for o in SPILL for cp in CPS]
+check("progress counts beat burndown-shape features by 0.09 to 0.22 AUC", round(min(h2all), 2) == 0.09 and round(max(h2all), 2) == 0.22)
+check("Ours beats worki by 0.09 to 0.22 AUC", round(min(h2all), 2) == 0.09 and round(max(h2all), 2) == 0.22)
+check("on TAWOS, on the held-out subset and on Red Hat",
+      all(I(o, "ours - worki", cp, col="ci_low") > 0 and C("in-sprint", o, "ours - worki", cp, "ci_low") > 0
+          and X("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS))
+check("within projects as well as across them, and burndown shape adds nothing to them",
+      all(W("in-sprint", o, "ours - worki", cp, "ci_low") > 0 and Y("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS)
+      and max(max(W("in-sprint", o, "ours+worki - ours", cp), Y("in-sprint", o, "ours+worki - ours", cp)) for o in ALL4 for cp in CPS) < 0.01)
+check("ranks serious spillover better inside each Red Hat project", Z("serious_spillover", "strict+new - strict", "ci_low") > 0)
+check("within a project it adds nothing in either source",
+      W("planning", "serious_spillover", "strict - scope", col="ci_low") < 0 and Y("planning", "serious_spillover", "strict - scope", col="ci_low") < 0
+      and W("planning", "spillover", "strict - scope", col="ci_low") < 0 and Y("planning", "spillover", "strict - scope", col="ci_low") < 0)
+check("Late closure stays hard to predict in both",
+      max(P("late_closure", "strict+new - scope"), X("planning", "late_closure", "strict+new - scope")) < 0.05)
+check("The hypotheses fare better on the source that played no part in writing them",
+      (hyp.r_lo > 0).sum() > (hyp.lo > 0).sum())
+check("holds for spillover in both sources, and for serious spillover and scope churn on Red Hat",
+      P("spillover", "strict+new - strict", col="ci_low") > 0 and all(X("planning", o, "strict+new - strict", col="ci_low") > 0
+                                                                      for o in ("spillover", "serious_spillover", "scope_churn")))
+check("For the two late labels it is about zero in both sources, as predicted",
+      all(abs(P(o, "strict+new - strict")) < 0.01 and abs(X("planning", o, "strict+new - strict")) < 0.01 for o in LATE))
+check("on TAWOS the interval for seriously late ends just below zero", -0.002 < P("seriously_late", "strict+new - strict", col="ci_high") < 0)
+check("Within projects the spillover gain keeps its size on TAWOS",
+      abs(W("planning", "spillover", "strict+new - strict") - P("spillover", "strict+new - strict")) < 0.01)
+h3all = [I(o, "ours - choet", cp) for o in ALL4 for cp in CPS] + [X("in-sprint", o, "ours - choet", cp) for o in ALL4 for cp in CPS]
+check("Ours beats choet for every outcome in both sources, by 0.02 to 0.09",
+      min(h3all) > 0 and round(min(h3all), 2) == 0.02 and round(max(h3all), 2) == 0.09)
+check("On the held-out subset and on Red Hat the gain holds for both spillover labels, and on Red Hat for late closure too",
+      all(C("in-sprint", o, "ours - choet", cp, "ci_low") > 0 and X("in-sprint", o, "ours - choet", cp, "ci_low") > 0 for o in SPILL for cp in CPS)
+      and all(X("in-sprint", "late_closure", "ours - choet", cp, "ci_low") > 0 for cp in CPS))
+check("holds for serious spillover in both sources, though we predicted it would not",
+      P("serious_spillover", "strict+new - scope", col="ci_low") > 0 and X("planning", "serious_spillover", "strict+new - scope", col="ci_low") > 0)
+check("On TAWOS it is team history",
+      P("serious_spillover", "strict - scope") > P("serious_spillover", "strict+new - strict")
+      and X("planning", "serious_spillover", "strict+new - strict") > X("planning", "serious_spillover", "strict - scope"))
+check("Seriously late does not hold in either source, and scope churn holds only on Red Hat",
+      P("seriously_late", "strict+new - scope", col="ci_low") < 0 and X("planning", "seriously_late", "strict+new - scope", col="ci_low") < 0
+      and P("scope_churn", "strict+new - scope", col="ci_low") < 0 and X("planning", "scope_churn", "strict+new - scope", col="ci_low") > 0)
+check("On Red Hat this prediction fails", X("planning", "serious_spillover", "strict - scope") < X("planning", "spillover", "strict - scope"))
+check("and burndown shape again adds nothing", max(X("in-sprint", o, "ours+worki - ours", cp) for o in ALL4 for cp in CPS) < 0.01)
+check("helps serious spillover at 25\\%", X("in-sprint", "serious_spillover", "choet+ctx - choet", 0.25, "ci_low") > 0
+      and X("in-sprint", "late_closure", "choet+ctx - choet", 0.25, "ci_low") > 0)
+check("on Red Hat (", X("in-sprint", "serious_spillover", "ours - choet+ctx", 0.5, "ci_low") > 0)
+check("The in-sprint findings hold in both sources",
+      all(W("in-sprint", o, "ours - worki", cp, "ci_low") > 0 and Y("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS))
+check("The new features keep their gain",
+      W("planning", "spillover", "strict+new - strict", col="ci_low") > 0 and Y("planning", "serious_spillover", "strict+new - strict", col="ci_low") > 0)
+check("Team history does not. Within projects",
+      W("planning", "serious_spillover", "strict - scope", col="ci_low") < 0 and Y("planning", "serious_spillover", "strict - scope", col="ci_low") < 0)
+check("for late closure on TAWOS it ranks a team's own sprints worse than scope", W("planning", "late_closure", "strict - scope", col="ci_high") < 0)
+check("history alone helps late closure when pooled",
+      X("planning", "late_closure", "strict - scope", col="ci_low") > 0 and Y("planning", "late_closure", "strict - scope", col="ci_low") < 0)
+check("so the MariaDB and MongoDB test asked history for a gain it does not show at home either",
+      W("planning", "serious_spillover", "strict+new - scope", col="ci_low") < 0)
+check("Here the models do transfer", Z("serious_spillover", "strict+new - scope", "ci_low") > 0)
+check("The gain comes from the new features", Z("serious_spillover", "strict+new - strict", "ci_low") > 0 and Z("serious_spillover", "strict - scope", "ci_low") < 0)
+check("The new features also help spillover", Z("spillover", "strict+new - strict", "ci_low") > 0 and Z("seriously_late", "strict+new - strict", "ci_low") > 0)
+check("Scope churn does not transfer", Z("scope_churn", "strict+new - scope", "ci_low") < 0 and Z("scope_churn", "strict+new - strict", "ci_low") < 0)
+check("Serious spillover can be ranked beyond committed scope in both sources; seriously late cannot, and scope churn only on Red Hat",
+      P("serious_spillover", "strict+new - scope", col="ci_low") > 0 and X("planning", "serious_spillover", "strict+new - scope", col="ci_low") > 0
+      and P("seriously_late", "strict+new - scope", col="ci_low") < 0 and X("planning", "seriously_late", "strict+new - scope", col="ci_low") < 0
+      and P("scope_churn", "strict+new - scope", col="ci_low") < 0 and X("planning", "scope_churn", "strict+new - scope", col="ci_low") > 0)
+check("They help in both sources, inside single projects, and in a model trained on one source and used on the other",
+      P("spillover", "strict+new - strict", col="ci_low") > 0 and X("planning", "spillover", "strict+new - strict", col="ci_low") > 0
+      and W("planning", "spillover", "strict+new - strict", col="ci_low") > 0 and Y("planning", "serious_spillover", "strict+new - strict", col="ci_low") > 0
+      and Z("serious_spillover", "strict+new - strict", "ci_low") > 0)
+check("A single team learns nothing from its own history that the size of the sprint does not already say",
+      all(W("planning", o, "strict - scope", col="ci_low") < 0 and Y("planning", o, "strict - scope", col="ci_low") < 0
+          for o in ("spillover", "serious_spillover", "late_closure")))
+rh_rc = pd.read_csv(jr.ROOT / "data" / "redhat_clean" / "recording_check.csv")
+check("all \\RHProj{} projects pass the measurability check", (~rh_rc.excluded).all() and len(rh_rc) == 17)
+
 check("within a team as well as across teams", wk_ok)
 check("and burndown shape still adds nothing", add_w < 0.01)
-check("but nearly all of that gain comes from telling teams apart",
-      W("planning", "serious_spillover", "strict+new - scope") < 0.25 * P("serious_spillover", "strict+new - scope")
-      and W("planning", "serious_spillover", "strict+new - scope", col="ci_low") < 0)
-check("with an interval that includes zero", W("planning", "serious_spillover", "strict+new - scope", col="ci_low") < 0)
 check("within projects too", W("planning", "spillover", "strict+new - strict", col="ci_low") > 0)
-check("The new features keep their gain for spillover", W("planning", "spillover", "strict+new - strict", col="ci_low") > 0)
-check("Within projects the spillover gain is the same size",
-      abs(W("planning", "spillover", "strict+new - strict") - P("spillover", "strict+new - strict")) < 0.01)
-check("the history-aware set ranks a team's own sprints worse than scope alone",
-      W("planning", "late_closure", "strict+new - scope", col="ci_high") < 0)
-check("so the outside test asked history for a gain it does not show at home either",
-      W("planning", "serious_spillover", "strict+new - scope", col="ci_low") < 0)
-check("Scored only within projects, the in-sprint findings hold but most of the planning-time history gain disappears",
-      wk_ok and W("planning", "serious_spillover", "strict+new - scope") < 0.25 * P("serious_spillover", "strict+new - scope"))
-check("A single team learns little from its own history that the size of the sprint does not already say",
-      all(W("planning", o, "strict+new - scope", col="ci_low") < 0 for o in ("spillover", "serious_spillover", "late_closure")))
+check("Scored only within projects, the in-sprint findings and the new features hold in both sources, and team history adds nothing",
+      wk_ok and W("planning", "spillover", "strict+new - strict", col="ci_low") > 0 and W("planning", "serious_spillover", "strict - scope", col="ci_low") < 0)
 
 # planning time
 check("Plain spillover is mostly a matter of how many issues were committed",
@@ -162,15 +215,14 @@ check("none of these intervals clears zero", all(I(o, "choet+ctx - choet", cp, c
 check("Under leave-one-project-out testing it helps serious spillover", I("serious_spillover", "choet+ctx - choet", 0.25, "lopo", "ci_low") > 0)
 check("For seriously late at 50\\% it adds", I("seriously_late", "choet+ctx - choet", 0.5, col="ci_low") > 0)
 check("Our progress counts add a little beyond theirs for serious spillover", I("serious_spillover", "ours - choet+ctx", 0.5, col="ci_low") > 0)
-check("and on the confirmation set at both checkpoints", all(C("in-sprint", "serious_spillover", "ours - choet+ctx", cp, "ci_low") > 0 for cp in CPS))
+check("on the held-out subset at both checkpoints", all(C("in-sprint", "serious_spillover", "ours - choet+ctx", cp, "ci_low") > 0 for cp in CPS))
 
 # binomial
 bd = pd.read_csv(R / "binomial_differences.csv")
 gb_bin = lambda d, o: d[(d.outcome == o) & (d.comparison == "strict+new - binomial")]
 check("The two cannot be told apart", all(gb_bin(bd, o).ci_low.iloc[0] < 0 for o in SPILL))
-check("ranks sprints about as well as gradient boosting", all(gb_bin(bd, o).ci_low.iloc[0] < 0 for o in SPILL))
 bc = pd.read_csv(R / "binomial_confirm.csv")
-check("On the confirmation set the gap to gradient boosting is wider",
+check("On the held-out subset the gap to gradient boosting is wider",
       all(gb_bin(bc, o).delta.iloc[0] > gb_bin(bd, o).delta.iloc[0] for o in SPILL))
 check("and the binomial model still beats scope for serious spillover",
       bc[(bc.outcome == "serious_spillover") & (bc.comparison == "binomial - scope")].ci_low.iloc[0] > 0)
@@ -195,7 +247,7 @@ od = od[(od.model == GB) & (od.protocol == "time") & (od.comparison == "strict+n
 check("the new features added more for serious spillover and less for spillover",
       od.loc["serious_spillover", "delta"] > P("serious_spillover", "strict+new - strict")
       and od.loc["spillover", "delta"] < P("spillover", "strict+new - strict"))
-check("Removing them changes which of our hypotheses hold",
+check("removing them changes which hypotheses hold",
       (od.loc["serious_spillover", "ci_low"] > 0) != (P("serious_spillover", "strict+new - strict", col="ci_low") > 0))
 cal = pd.read_csv(R / "calibration.csv")
 check("which are overconfident", (cal[cal.outcome.isin(LATE) & cal.features.isin(["strict+new", "ours"])].slope < 1).all())

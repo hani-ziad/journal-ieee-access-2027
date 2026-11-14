@@ -7,3 +7,7 @@ results/*/cache/
 
 # Outside-project data pulled from public Jira sites is not redistributed; rebuild it with data_export/outside/
 data/raw/external/
+
+# Red Hat Jira pull (public issues, not redistributed); rebuild with data_export/redhat/pull_jira_cloud.js
+data/raw/redhat_pull/
+data/raw/redhat/

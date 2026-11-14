@@ -53,7 +53,7 @@ FRONT = r"""\begin{document}
 \history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
 \doi{10.1109/ACCESS.2024.0429000}
 
-\title{What Predicts Sprint Spillover Without Hindsight? A Benchmark of Feature Families on Public Jira Data}
+\title{What Predicts Sprint Spillover Without Hindsight? A Two-Source Benchmark of Feature Families on Public Jira Data}
 
 \author{\uppercase{Hani AbuSharkh}\authorrefmark{1}}
 
@@ -74,12 +74,12 @@ ACK = r"""\section*{Acknowledgment}
 %% stated here. This paragraph describes how the work was actually done in the Claude project. Keep it
 %% accurate: if you rewrite sections yourself or review the code, change the wording to match.
 The sprint-start reconstruction code reused here was written for \cite{abusharkh2027}, with Maryam Hanif
-and Rafat Damseh. The author used Claude (Anthropic), a large language model, throughout this study.
-Under the author's direction it wrote the analysis code in the repository, ran the experiments, drafted
-the text of every section, including the formal setting, and reviewed the drafts critically. The author
-chose the research question and the venue, approved the study plan and every change to it, and checked
-the statements, numbers and references against the result files. The author takes full responsibility
-for the content.
+and Rafat Damseh. The author used Claude (Anthropic), a large language model, to write and run the
+analysis code and to draft and edit the text. The author set the research question, approved the study
+design and every change to it, and checked all statements, numbers and references. The author takes full
+responsibility for the content.
+%% After you rewrite the Introduction and Discussion yourself, add: "The author wrote the Introduction
+%% and Discussion."
 
 """
 

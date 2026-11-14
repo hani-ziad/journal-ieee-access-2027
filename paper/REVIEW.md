@@ -1,5 +1,15 @@
 # Review log
 
+## Sixth pass (14 Nov 2026): independent replication on Red Hat
+
+Weak points from the fifth pass and what was done:
+1. Mostly negative results. Fixed by replication: all 22 tests rerun on 17 Red Hat projects (5,507 sprints) chosen by a rule fixed before any label was computed. 15 of 22 hold there (TAWOS 8); 7 hold in both. Paper reframed around what replicates: progress counts beat burndown shape and burndown adds nothing (both sources, within projects too); the four new features help in both sources and transfer TAWOS to Red Hat (serious spillover +0.059 per-project AUC); team history adds nothing within projects in either source.
+2. Overlap with CCECE: one paragraph in the Introduction now says what is new. Hani will rework this.
+3. "Confirmation set" was not independent: renamed "held-out subset"; Red Hat is the independent test.
+4. One data source: Red Hat added as a second source; MariaDB/MongoDB kept as a small outside check, with its limits (4 to 9 testable projects, few story points) stated.
+5. AI disclosure: shortened to "write and run the analysis code and draft and edit the text"; add "The author wrote the Introduction and Discussion" once he has.
+New threat found and reported for both sources: public Jira hides private issues (missing issue numbers: TAWOS median 23%, Red Hat median 44%; RHEL at 89% excluded). Within table now separates history alone from the new features. 82 claim checks, all pass.
+
 ## Fifth pass (8 Nov 2026)
 
 Fixed: (1) pooled AUC hid that the history gain is between teams; new within-project analysis (`jr/within.py`, Section 6.5, Table 8) and the abstract, introduction, H4 text, outside-project reading, discussion and conclusion rewritten around it. (2) Section 5.3 said "1,118 test sprints, 734 of them nonempty", but those come from two different splits; Proposition 1 used the all-sprint split (688 nonempty), which is why its 0.885 differed from Table 4's 0.869. Both now explained. (3) "Before any modelling we checked" was false; the check came after the first full run. (4) Proposition 2's "sensitivity falls with prevalence" is not a consequence of the proposition; moved to the text with the actual mechanism. (5) The plan held H4 (no gain for serious spillover) and the binomial reading (a gain) at once; the paper now says so. (6) Three H3 intervals end within 0.001 of zero and flip between 2,000 and 10,000 resamples; flagged. (7) H3's 0.05 ceiling was exceeded in 5 of 8 comparisons; now said. (8) Confirmation set described as overlapping the full cohort. (9) Data statement claimed the full TAWOS extract is in the repository; it is not. (10) AI disclosure made specific. 67 claim checks, all pass.

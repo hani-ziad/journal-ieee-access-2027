@@ -1,0 +1,18 @@
+project,closed_without_date,sprint_issues,share,excluded
+Red Hat CLE,70,1126,0.06216696269982238,False
+Red Hat FDP,18,1371,0.01312910284463895,False
+Red Hat SAT,49,7344,0.006672113289760349,False
+Red Hat CONSOLE,4,1016,0.003937007874015748,False
+Red Hat JBIDE,2,3619,0.0005526388505111909,False
+Red Hat CNV,1,10960,9.124087591240875e-05,False
+Red Hat ACM,0,7400,0.0,False
+Red Hat HMS,0,2167,0.0,False
+Red Hat GITOPS,0,3515,0.0,False
+Red Hat KATA,0,1327,0.0,False
+Red Hat NEXUS,0,503,0.0,False
+Red Hat RHCLOUD,0,6708,0.0,False
+Red Hat OSPRH,0,7622,0.0,False
+Red Hat RHDEVDOCS,0,3453,0.0,False
+Red Hat RHODS,0,4074,0.0,False
+Red Hat SRVKP,0,3832,0.0,False
+Red Hat TRACING,0,3110,0.0,False

@@ -16,6 +16,7 @@ NAMES = {"late_closure": "Late closure", "seriously_late": "Seriously late", "sp
          "serious_spillover": "Serious spillover", "scope_churn": "Scope churn"}
 ORDER = ["spillover", "serious_spillover", "late_closure", "seriously_late", "scope_churn"]
 GB = "Gradient boosting"
+RH = jr.ROOT / "results" / "redhat_clean"  # second source (jr/replicate.py)
 
 
 def f3(x):
@@ -236,6 +237,8 @@ def hypothesis_rows():
     pdf = pd.read_csv(jr.RESULTS / "planning_differences.csv")
     idf = pd.read_csv(jr.RESULTS / "insprint_differences.csv")
     cf = pd.read_csv(jr.RESULTS / "confirm_differences.csv")
+    rf = RH / "replicate_differences.csv"
+    rh = pd.read_csv(rf) if rf.exists() else None
     out = []
     for h, st, comp, outs, cps in HYP:
         for o in outs:
@@ -246,10 +249,17 @@ def hypothesis_rows():
                 else:
                     r = idf[(idf.primary == True) & (idf.outcome == o) & (idf.comparison == comp) & (idf.checkpoint == cp)].iloc[0]  # noqa: E712
                     c = cf[(cf.stage == "in-sprint") & (cf.outcome == o) & (cf.comparison == comp) & (cf.checkpoint == cp)].iloc[0]
-                out.append({"h": h, "outcome": o, "checkpoint": cp, "delta": r.delta, "lo": r.ci_low, "hi": r.ci_high,
-                            "p": r.p_project, "c_delta": c.delta, "c_lo": c.ci_low, "c_hi": c.ci_high})
+                row = {"h": h, "outcome": o, "checkpoint": cp, "delta": r.delta, "lo": r.ci_low, "hi": r.ci_high,
+                       "p": r.p_project, "c_delta": c.delta, "c_lo": c.ci_low, "c_hi": c.ci_high}
+                if rh is not None:  # independent replication on Red Hat (jr/replicate.py)
+                    q = rh[(rh.stage == st) & (rh.outcome == o) & (rh.comparison == comp)
+                           & ((rh.checkpoint == cp) if cp is not None else rh.checkpoint.isna())].iloc[0]
+                    row.update({"r_delta": q.delta, "r_lo": q.ci_low, "r_hi": q.ci_high, "r_p": q.p_project})
+                out.append(row)
     d = pd.DataFrame(out)
     d["p_holm"] = holm(d.p)
+    if rh is not None:
+        d["r_p_holm"] = holm(d.r_p)
     fine = jr.RESULTS / "hypotheses_fine.csv"
     if fine.exists():  # 10,000 resamples: finer p-values for the Holm adjustment
         fz = pd.read_csv(fine)
@@ -272,7 +282,8 @@ def hypothesis_table():
             rows.append("\\midrule")
         lab = NAMES[r.outcome] + ("" if pd.isna(r.checkpoint) else f", {int(r.checkpoint * 100)}\\%")
         p = "$<$0.001" if r.p_holm < 0.001 else f"{r.p_holm:.3f}"
-        rows.append(f"{r.h} & {lab} & {d3(r.delta)} & {ci(r.lo, r.hi)} & {p} & {mark(r.lo)} & {d3(r.c_delta)} & {mark(r.c_lo)} \\\\")
+        rows.append(f"{r.h} & {lab} & {d3(r.delta)} & {ci(r.lo, r.hi)} & {p} & {mark(r.lo)} & {d3(r.c_delta)} & {mark(r.c_lo)}"
+                    f" & {d3(r.r_delta)} & {ci(r.r_lo, r.r_hi)} & {mark(r.r_lo)} \\\\")
         prev = r.h
     write("hypotheses", "\n".join(rows) + "\n")
 
@@ -349,14 +360,16 @@ def within_table():
     pdf = pd.read_csv(jr.RESULTS / "planning_differences.csv"); pdf = pdf[pdf.primary == True]  # noqa: E712
     idf = pd.read_csv(jr.RESULTS / "insprint_differences.csv"); idf = idf[idf.primary == True]  # noqa: E712
     wd = pd.read_csv(jr.RESULTS / "within_differences.csv")
+    rp = pd.read_csv(RH / "replicate_differences.csv")
+    rw = pd.read_csv(RH / "within_differences.csv")
     names = {**NAMES, "serious_spillover_median": "Serious sp.\\ (median)"}
     rows_spec = [
         ("New features", "planning", "strict+new - strict", "spillover", None),
         ("", "planning", "strict+new - strict", "serious_spillover", None),
-        ("History over scope", "planning", "strict+new - scope", "spillover", None),
-        ("", "planning", "strict+new - scope", "serious_spillover", None),
-        ("", "planning", "strict+new - scope", "serious_spillover_median", None),
-        ("", "planning", "strict+new - scope", "late_closure", None),
+        ("History alone", "planning", "strict - scope", "spillover", None),
+        ("", "planning", "strict - scope", "serious_spillover", None),
+        ("", "planning", "strict - scope", "late_closure", None),
+        ("Both (H4)", "planning", "strict+new - scope", "serious_spillover", None),
         ("Progress over burndown", "in-sprint", "ours - worki", "spillover", 0.5),
         ("", "in-sprint", "ours - worki", "serious_spillover", 0.5),
         ("Burndown added", "in-sprint", "ours+worki - ours", "serious_spillover", 0.5),
@@ -373,10 +386,43 @@ def within_table():
             allp = pd.read_csv(jr.RESULTS / "planning_differences.csv")
             q = allp[(allp.model == GB) & (allp.protocol == "time") & (allp.outcome == o) & (allp.comparison == comp)]
         q, w = q.iloc[0], w.iloc[0]
+        sel = lambda t: t[(t.stage == st) & (t.outcome == o) & (t.comparison == comp)
+                          & ((t.checkpoint == cp) if cp is not None else t.checkpoint.isna())]
+        a, b = sel(rp), sel(rw)
+        rh = (f"{d3(a.delta.iloc[0])} {ci(a.ci_low.iloc[0], a.ci_high.iloc[0])} & {d3(b.delta.iloc[0])} "
+              f"{ci(b.ci_low.iloc[0], b.ci_high.iloc[0])}") if len(a) and len(b) else "-- & --"
         at = "" if cp is None else f", {int(cp * 100)}\\%"
         rows.append(f"{lab} & {names[o]}{at} & {d3(q.delta)} {ci(q.ci_low, q.ci_high)} & "
-                    f"{d3(w.delta)} {ci(w.ci_low, w.ci_high)} & {int(w.projects)} \\\\")
+                    f"{d3(w.delta)} {ci(w.ci_low, w.ci_high)} & {rh} \\\\")
     write("within", "\n".join(rows) + "\n")
+
+
+def transfer_table():
+    """Trained on TAWOS, tested on each Red Hat project (jr/replicate.py transfer)."""
+    t = pd.read_csv(RH / "transfer_from_tawos.csv")
+    d = pd.read_csv(RH / "transfer_differences.csv")
+    rows = []
+    for o in ORDER:
+        a = t[t.outcome == o].set_index("features")
+        new = d[(d.outcome == o) & (d.comparison == "strict+new - strict")].iloc[0]
+        hist = d[(d.outcome == o) & (d.comparison == "strict - scope")].iloc[0]
+        rows.append(f"{NAMES[o]} & {int(a.k.iloc[0])} & " + " & ".join(f"{a.loc[s, 'per_project_mean']:.3f}" for s in ("scope", "strict", "strict+new"))
+                    + f" & {d3(new.delta)} {ci(new.ci_low, new.ci_high)} & {d3(hist.delta)} {ci(hist.ci_low, hist.ci_high)} \\\\")
+    write("transfer", "\n".join(rows) + "\n")
+
+
+def redhat_labels_table():
+    """Outcomes and positive rates on the Red Hat cohort, next to TAWOS."""
+    from phase2.data import population
+    from jr.data import OUTCOMES
+    tw = pd.read_csv(jr.DATA / "planning_frame.csv")
+    rh = pd.read_csv(jr.ROOT / "data" / "redhat_clean" / "planning_frame.csv")
+    rows = []
+    for o in ORDER:
+        pop, y = OUTCOMES[o]
+        a = population(tw, pop).dropna(subset=[y]); b = population(rh, pop).dropna(subset=[y])
+        rows.append(f"{NAMES[o]} & {len(a):,} & {100 * a[y].mean():.0f}\\% & {len(b):,} & {100 * b[y].mean():.0f}\\% \\\\")
+    write("labels_two", "\n".join(rows) + "\n")
 
 
 if __name__ == "__main__":
@@ -390,6 +436,8 @@ if __name__ == "__main__":
     apneg_table()
     if (jr.RESULTS / "within_differences.csv").exists():
         within_table()
+    if (RH / "transfer_differences.csv").exists():
+        transfer_table(); redhat_labels_table()
     if (jr.RESULTS / "robust_restricted.csv").exists():
         robust_table()
         decision_table()

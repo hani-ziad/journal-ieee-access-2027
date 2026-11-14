@@ -83,7 +83,7 @@ PRE = r"""% Journal draft for IEEE Access, assembled by jr/build_paper.py from m
 
 \begin{document}
 
-\title{What Predicts Sprint Spillover Without Hindsight? A Benchmark of Feature Families on Public Jira Data}
+\title{What Predicts Sprint Spillover Without Hindsight? A Two-Source Benchmark of Feature Families on Public Jira Data}
 
 % Sole author (decided 8 Nov 2026).
 \author{Hani~AbuSharkh%
