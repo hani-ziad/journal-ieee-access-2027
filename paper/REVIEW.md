@@ -1,8 +1,15 @@
 # Review log
 
+## Eighth pass (14 Nov 2026, late): two open problems named by Sprint2Vec
+
+1. Cross-project training: the TAWOS to Red Hat transfer test already answers it for tabular features; the transfer paragraph now says so.
+2. Effect of time: new analysis `jr/decay.py`, fixed in PLAN.md section 11 before it was run. Red Hat: a three-year-old model loses 0.084 (spillover), 0.058 (serious spillover) and 0.102 (late closure) AUC within project-years, all intervals below zero. TAWOS: same direction, no interval clear; spillover not scorable (2 project-years). So hypothesis H5 (both sources) holds on Red Hat only, and the paper says so. Size-matched control added after the first results (marked as such): spillover -0.067 and late closure -0.053 remain clear, serious spillover -0.027 does not. Weak points left: early Red Hat years hold few projects; 10 project-years for spillover. Scopus query on drift/sliding window for sprint prediction: 3 hits, none on sprint outcomes (titles only). 97 of 97 claim checks pass.
+
 ## Seventh pass (14 Nov 2026): lead with the positive result
 
 The four new planning-time features are the one gain that holds in both sources, within projects and from TAWOS to Red Hat, but the abstract opened with burndown shape. They now lead the abstract, the contributions (new first item) and the conclusion. Literature check: Choetkiertikul et al. (TSE 2018) used iteration counts and issue metadata (priority, description and fix-version changes, readability) but not issue age, carry-in, unestimated or re-estimated shares; Kula et al. (2021, 2022) used team dynamics; Pasuksmit et al. (EMSE 2022) studied story-point changes for single issues, not sprint outcomes, and is now cited. Sprint2Vec (TSE 2025) already uses issue text, so text features would not be new. Abstract 248 words. 84 of 84 claim checks pass.
+
+Sprint2Vec full text read (TSE 51(1), 2025): it predicts at sprint start with a 60:20:20 time-ordered split, reads committed issues from the change log, and its issue-text features beat the same model without text in all ten project and outcome pairs. The Introduction said cited studies suffer from hindsight as a group; it now says Choetkiertikul et al. and Sprint2Vec replay the change log. Related work now states Sprint2Vec's text result and that this paper does not test text. Its feature table (sprint, issue metadata, readability, developer activity) has none of the four new features. Scopus check (Hani's HCT login, five queries) found no study that uses them.
 
 ## Sixth pass (14 Nov 2026): independent replication on Red Hat
 

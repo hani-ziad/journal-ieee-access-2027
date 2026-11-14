@@ -131,6 +131,34 @@ check(r"also within projects (\dPWNewSp{} on TAWOS, and \dPYNewSs{} for serious 
 check("They add to committed scope and team history in both sources, within projects, and when a model trained on one source is used on the other",
       P("spillover", "strict+new - strict", col="ci_low") > 0 and X("planning", "spillover", "strict+new - strict", col="ci_low") > 0
       and W("planning", "spillover", "strict+new - strict", col="ci_low") > 0 and Z("serious_spillover", "strict+new - strict", "ci_low") > 0)
+# model ageing (jr/decay.py)
+gR = pd.read_csv(RHR / "decay_differences.csv"); gT = pd.read_csv(jr.RESULTS / "decay_differences.csv")
+gaR = pd.read_csv(RHR / "decay_auc.csv"); gaT = pd.read_csv(jr.RESULTS / "decay_auc.csv")
+G = lambda df, o, k, feat="strict+new", col="delta": float(df[(df.outcome == o) & (df.features == feat) & (df.age == k)][col].iloc[0])
+AGED3 = ("spillover", "serious_spillover", "late_closure")
+check("On Red Hat a three-year-old model ranks every outcome worse", all(G(gR, o, 3, col="ci_high") < 0 for o in AGED3))
+check("and the loss grows with age", all(G(gR, o, 1) > G(gR, o, 2) > G(gR, o, 3) for o in AGED3))
+check("It shows on Red Hat only", G(gT, "serious_spillover", 3, col="ci_high") > 0
+      and all(G(gR, o, 3, col="ci_high") < 0 for o in ("spillover", "serious_spillover")))
+check("On TAWOS the estimates point the same way but no interval excludes zero",
+      all(G(gT, o, 3) < 0 for o in ("serious_spillover", "late_closure"))
+      and all(G(gT, o, k, col="ci_low") < 0 < G(gT, o, k, col="ci_high") for o in ("serious_spillover", "late_closure") for k in (1, 2, 3)))
+check("plain spillover cannot be scored there",
+      int(gaT[(gaT.outcome == "spillover") & (gaT.features == "strict+new") & (gaT.age == 0)].project_years.iloc[0]) < 5)
+check("as few as", int(gaR[(gaR.features == "strict+new") & (gaR.age == 3)].n_train_min.min()) == 209
+      and int(gaR[(gaR.features == "strict+new") & (gaR.age == 0)].n_train_min.min()) == 905)
+MS = "strict+new (size-matched)"
+check("Against that model the three-year-old one still loses", G(gR, "spillover", 3, MS, "ci_high") < 0 and G(gR, "late_closure", 3, MS, "ci_high") < 0)
+check("while for serious spillover the loss is no longer clear", G(gR, "serious_spillover", 3, MS, "ci_high") > 0)
+check("about half of the loss for late closure and most of it for spillover",
+      0.4 < G(gR, "late_closure", 3, MS) / G(gR, "late_closure", 3) < 0.6 and G(gR, "spillover", 3, MS) / G(gR, "spillover", 3) > 0.7)
+check("The gain of the new features survives ageing", G(gR, "serious_spillover", 3, "new gain", "ci_low") > 0)
+check("a three-year-old model lost 0.06 to 0.10 AUC",
+      round(min(-G(gR, o, 3) for o in AGED3), 2) == 0.06 and round(max(-G(gR, o, 3) for o in AGED3), 2) == 0.10)
+check("at least half of that loss came from age",
+      all(G(gR, o, 3, MS) / G(gR, o, 3) >= 0.5 for o in ("spillover", "late_closure")))
+check("the features that carry across are the new ones",
+      Z("serious_spillover", "strict+new - strict", "ci_low") > 0 and Z("serious_spillover", "strict - scope", "ci_low") < 0)
 check("ranks serious spillover better inside each Red Hat project", Z("serious_spillover", "strict+new - strict", "ci_low") > 0)
 check("within a project it adds nothing in either source",
       W("planning", "serious_spillover", "strict - scope", col="ci_low") < 0 and Y("planning", "serious_spillover", "strict - scope", col="ci_low") < 0

@@ -1,0 +1,481 @@
+outcome,year,age,features,project,auc,w,n_train
+spillover,2017,0,scope,Sonatype Nexus,0.3181818181818182,66,1226
+spillover,2017,0,strict,Sonatype Nexus,0.36363636363636365,66,1226
+spillover,2017,0,strict+new,Sonatype Nexus,0.4090909090909091,66,1226
+spillover,2017,1,scope,Sonatype Nexus,0.3636363636363636,66,830
+spillover,2017,1,strict,Sonatype Nexus,0.3939393939393939,66,830
+spillover,2017,1,strict+new,Sonatype Nexus,0.4090909090909091,66,830
+spillover,2017,2,scope,Sonatype Nexus,0.25757575757575757,66,477
+spillover,2017,2,strict,Sonatype Nexus,0.409090909090909,66,477
+spillover,2017,2,strict+new,Sonatype Nexus,0.3484848484848485,66,477
+spillover,2018,0,scope,Mule,0.7481481481481481,135,1629
+spillover,2018,0,strict,Mule,0.8444444444444444,135,1629
+spillover,2018,0,strict+new,Mule,0.9407407407407408,135,1629
+spillover,2018,1,scope,Mule,0.8185185185185185,135,1226
+spillover,2018,1,strict,Mule,0.8444444444444443,135,1226
+spillover,2018,1,strict+new,Mule,0.9037037037037037,135,1226
+spillover,2018,2,scope,Mule,0.788888888888889,135,830
+spillover,2018,2,strict,Mule,0.8444444444444444,135,830
+spillover,2018,2,strict+new,Mule,0.8814814814814815,135,830
+spillover,2018,3,scope,Mule,0.6925925925925926,135,477
+spillover,2018,3,strict,Mule,0.8592592592592594,135,477
+spillover,2018,3,strict+new,Mule,0.874074074074074,135,477
+serious_spillover,2017,0,scope,Mule,0.5745798319327731,952,1226
+serious_spillover,2017,0,scope,Sonatype Nexus,0.5,72,1226
+serious_spillover,2017,0,scope,Titanium Mobile Platform,0.8646616541353384,266,1226
+serious_spillover,2017,0,strict,Mule,0.6449579831932772,952,1226
+serious_spillover,2017,0,strict,Sonatype Nexus,0.611111111111111,72,1226
+serious_spillover,2017,0,strict,Titanium Mobile Platform,0.7218045112781954,266,1226
+serious_spillover,2017,0,strict+new,Mule,0.6428571428571429,952,1226
+serious_spillover,2017,0,strict+new,Sonatype Nexus,0.5972222222222222,72,1226
+serious_spillover,2017,0,strict+new,Titanium Mobile Platform,0.7593984962406015,266,1226
+serious_spillover,2017,1,scope,Mule,0.5110294117647058,952,830
+serious_spillover,2017,1,scope,Sonatype Nexus,0.48611111111111105,72,830
+serious_spillover,2017,1,scope,Titanium Mobile Platform,0.8421052631578947,266,830
+serious_spillover,2017,1,strict,Mule,0.6932773109243698,952,830
+serious_spillover,2017,1,strict,Sonatype Nexus,0.5972222222222222,72,830
+serious_spillover,2017,1,strict,Titanium Mobile Platform,0.7105263157894737,266,830
+serious_spillover,2017,1,strict+new,Mule,0.5850840336134453,952,830
+serious_spillover,2017,1,strict+new,Sonatype Nexus,0.5694444444444444,72,830
+serious_spillover,2017,1,strict+new,Titanium Mobile Platform,0.793233082706767,266,830
+serious_spillover,2017,2,scope,Mule,0.43487394957983194,952,477
+serious_spillover,2017,2,scope,Sonatype Nexus,0.4166666666666667,72,477
+serious_spillover,2017,2,scope,Titanium Mobile Platform,0.6992481203007519,266,477
+serious_spillover,2017,2,strict,Mule,0.6197478991596638,952,477
+serious_spillover,2017,2,strict,Sonatype Nexus,0.4722222222222222,72,477
+serious_spillover,2017,2,strict,Titanium Mobile Platform,0.6466165413533835,266,477
+serious_spillover,2017,2,strict+new,Mule,0.5850840336134453,952,477
+serious_spillover,2017,2,strict+new,Sonatype Nexus,0.5416666666666666,72,477
+serious_spillover,2017,2,strict+new,Titanium Mobile Platform,0.7481203007518797,266,477
+serious_spillover,2018,0,scope,Hyperledger Indy SDK,0.5676691729323309,133,1629
+serious_spillover,2018,0,scope,Mule,0.7037037037037037,135,1629
+serious_spillover,2018,0,strict,Hyperledger Indy SDK,0.5263157894736843,133,1629
+serious_spillover,2018,0,strict,Mule,0.8814814814814815,135,1629
+serious_spillover,2018,0,strict+new,Hyperledger Indy SDK,0.4887218045112782,133,1629
+serious_spillover,2018,0,strict+new,Mule,0.9629629629629629,135,1629
+serious_spillover,2018,1,scope,Hyperledger Indy SDK,0.5563909774436091,133,1226
+serious_spillover,2018,1,scope,Mule,0.7703703703703704,135,1226
+serious_spillover,2018,1,strict,Hyperledger Indy SDK,0.6165413533834587,133,1226
+serious_spillover,2018,1,strict,Mule,0.8666666666666667,135,1226
+serious_spillover,2018,1,strict+new,Hyperledger Indy SDK,0.5037593984962406,133,1226
+serious_spillover,2018,1,strict+new,Mule,0.9555555555555556,135,1226
+serious_spillover,2018,2,scope,Hyperledger Indy SDK,0.6165413533834586,133,830
+serious_spillover,2018,2,scope,Mule,0.7407407407407407,135,830
+serious_spillover,2018,2,strict,Hyperledger Indy SDK,0.5413533834586466,133,830
+serious_spillover,2018,2,strict,Mule,0.8592592592592593,135,830
+serious_spillover,2018,2,strict+new,Hyperledger Indy SDK,0.4511278195488722,133,830
+serious_spillover,2018,2,strict+new,Mule,0.837037037037037,135,830
+serious_spillover,2018,3,scope,Hyperledger Indy SDK,0.4736842105263158,133,477
+serious_spillover,2018,3,scope,Mule,0.3851851851851852,135,477
+serious_spillover,2018,3,strict,Hyperledger Indy SDK,0.593984962406015,133,477
+serious_spillover,2018,3,strict,Mule,0.6518518518518519,135,477
+serious_spillover,2018,3,strict+new,Hyperledger Indy SDK,0.5488721804511278,133,477
+serious_spillover,2018,3,strict+new,Mule,0.6370370370370371,135,477
+serious_spillover,2019,0,scope,Apache Mesos,0.4703703703703703,135,1990
+serious_spillover,2019,0,scope,Hyperledger Blockchain Explorer,0.5277777777777778,72,1990
+serious_spillover,2019,0,scope,Hyperledger Indy SDK,0.525,120,1990
+serious_spillover,2019,0,scope,Lsstcorp Data management,0.646875,320,1990
+serious_spillover,2019,0,strict,Apache Mesos,0.5555555555555555,135,1990
+serious_spillover,2019,0,strict,Hyperledger Blockchain Explorer,0.3402777777777778,72,1990
+serious_spillover,2019,0,strict,Hyperledger Indy SDK,0.7333333333333334,120,1990
+serious_spillover,2019,0,strict,Lsstcorp Data management,0.578125,320,1990
+serious_spillover,2019,0,strict+new,Apache Mesos,0.49629629629629624,135,1990
+serious_spillover,2019,0,strict+new,Hyperledger Blockchain Explorer,0.5833333333333333,72,1990
+serious_spillover,2019,0,strict+new,Hyperledger Indy SDK,0.6166666666666666,120,1990
+serious_spillover,2019,0,strict+new,Lsstcorp Data management,0.625,320,1990
+serious_spillover,2019,1,scope,Apache Mesos,0.4925925925925926,135,1629
+serious_spillover,2019,1,scope,Hyperledger Blockchain Explorer,0.5902777777777778,72,1629
+serious_spillover,2019,1,scope,Hyperledger Indy SDK,0.625,120,1629
+serious_spillover,2019,1,scope,Lsstcorp Data management,0.5984375,320,1629
+serious_spillover,2019,1,strict,Apache Mesos,0.48888888888888893,135,1629
+serious_spillover,2019,1,strict,Hyperledger Blockchain Explorer,0.36111111111111116,72,1629
+serious_spillover,2019,1,strict,Hyperledger Indy SDK,0.6333333333333333,120,1629
+serious_spillover,2019,1,strict,Lsstcorp Data management,0.625,320,1629
+serious_spillover,2019,1,strict+new,Apache Mesos,0.42962962962962953,135,1629
+serious_spillover,2019,1,strict+new,Hyperledger Blockchain Explorer,0.5972222222222222,72,1629
+serious_spillover,2019,1,strict+new,Hyperledger Indy SDK,0.5916666666666667,120,1629
+serious_spillover,2019,1,strict+new,Lsstcorp Data management,0.665625,320,1629
+serious_spillover,2019,2,scope,Apache Mesos,0.5407407407407407,135,1226
+serious_spillover,2019,2,scope,Hyperledger Blockchain Explorer,0.4930555555555556,72,1226
+serious_spillover,2019,2,scope,Hyperledger Indy SDK,0.5583333333333333,120,1226
+serious_spillover,2019,2,scope,Lsstcorp Data management,0.575,320,1226
+serious_spillover,2019,2,strict,Apache Mesos,0.5592592592592592,135,1226
+serious_spillover,2019,2,strict,Hyperledger Blockchain Explorer,0.2986111111111111,72,1226
+serious_spillover,2019,2,strict,Hyperledger Indy SDK,0.7416666666666667,120,1226
+serious_spillover,2019,2,strict,Lsstcorp Data management,0.571875,320,1226
+serious_spillover,2019,2,strict+new,Apache Mesos,0.5629629629629629,135,1226
+serious_spillover,2019,2,strict+new,Hyperledger Blockchain Explorer,0.5,72,1226
+serious_spillover,2019,2,strict+new,Hyperledger Indy SDK,0.6166666666666666,120,1226
+serious_spillover,2019,2,strict+new,Lsstcorp Data management,0.640625,320,1226
+serious_spillover,2019,3,scope,Apache Mesos,0.5222222222222223,135,830
+serious_spillover,2019,3,scope,Hyperledger Blockchain Explorer,0.75,72,830
+serious_spillover,2019,3,scope,Hyperledger Indy SDK,0.7666666666666668,120,830
+serious_spillover,2019,3,scope,Lsstcorp Data management,0.65625,320,830
+serious_spillover,2019,3,strict,Apache Mesos,0.5703703703703704,135,830
+serious_spillover,2019,3,strict,Hyperledger Blockchain Explorer,0.39583333333333337,72,830
+serious_spillover,2019,3,strict,Hyperledger Indy SDK,0.6,120,830
+serious_spillover,2019,3,strict,Lsstcorp Data management,0.5531250000000001,320,830
+serious_spillover,2019,3,strict+new,Apache Mesos,0.49629629629629624,135,830
+serious_spillover,2019,3,strict+new,Hyperledger Blockchain Explorer,0.6111111111111112,72,830
+serious_spillover,2019,3,strict+new,Hyperledger Indy SDK,0.4916666666666667,120,830
+serious_spillover,2019,3,strict+new,Lsstcorp Data management,0.659375,320,830
+late_closure,2017,0,scope,Alloy Framework,0.7307692307692307,65,1865
+late_closure,2017,0,scope,Apache Mesos,0.5222222222222221,90,1865
+late_closure,2017,0,scope,Appcelerator Daemon,0.5892857142857143,84,1865
+late_closure,2017,0,scope,Appcelerator Studio,0.7159090909090909,132,1865
+late_closure,2017,0,scope,Atlassian Confluence Server,0.7622950819672131,488,1865
+late_closure,2017,0,scope,Atlassian Jira Server,0.8518518518518519,54,1865
+late_closure,2017,0,scope,Atlassian Software Cloud,0.7571428571428571,35,1865
+late_closure,2017,0,scope,Command-Line Interface,0.6071428571428571,98,1865
+late_closure,2017,0,scope,Hyperledger Fabric,0.547979797979798,792,1865
+late_closure,2017,0,scope,Hyperledger Indy Node,0.6527777777777778,72,1865
+late_closure,2017,0,scope,Lsstcorp Data management,0.6409090909090909,550,1865
+late_closure,2017,0,scope,Mule,0.594679186228482,1278,1865
+late_closure,2017,0,scope,Mule APIkit,0.873015873015873,126,1865
+late_closure,2017,0,scope,The Titanium SDK,0.5685483870967742,496,1865
+late_closure,2017,0,scope,Titanium Mobile Platform,0.24375000000000002,400,1865
+late_closure,2017,0,strict,Alloy Framework,0.4923076923076922,65,1865
+late_closure,2017,0,strict,Apache Mesos,0.6,90,1865
+late_closure,2017,0,strict,Appcelerator Daemon,0.5773809523809523,84,1865
+late_closure,2017,0,strict,Appcelerator Studio,0.42424242424242425,132,1865
+late_closure,2017,0,strict,Atlassian Confluence Server,0.6680327868852459,488,1865
+late_closure,2017,0,strict,Atlassian Jira Server,0.7222222222222223,54,1865
+late_closure,2017,0,strict,Atlassian Software Cloud,0.5714285714285714,35,1865
+late_closure,2017,0,strict,Command-Line Interface,0.6632653061224489,98,1865
+late_closure,2017,0,strict,Hyperledger Fabric,0.5612373737373737,792,1865
+late_closure,2017,0,strict,Hyperledger Indy Node,0.638888888888889,72,1865
+late_closure,2017,0,strict,Lsstcorp Data management,0.45999999999999996,550,1865
+late_closure,2017,0,strict,Mule,0.6025039123630673,1278,1865
+late_closure,2017,0,strict,Mule APIkit,0.7857142857142857,126,1865
+late_closure,2017,0,strict,The Titanium SDK,0.655241935483871,496,1865
+late_closure,2017,0,strict,Titanium Mobile Platform,0.4975,400,1865
+late_closure,2017,0,strict+new,Alloy Framework,0.5307692307692308,65,1865
+late_closure,2017,0,strict+new,Apache Mesos,0.5111111111111111,90,1865
+late_closure,2017,0,strict+new,Appcelerator Daemon,0.5476190476190476,84,1865
+late_closure,2017,0,strict+new,Appcelerator Studio,0.3257575757575758,132,1865
+late_closure,2017,0,strict+new,Atlassian Confluence Server,0.6618852459016393,488,1865
+late_closure,2017,0,strict+new,Atlassian Jira Server,0.7222222222222223,54,1865
+late_closure,2017,0,strict+new,Atlassian Software Cloud,0.6285714285714286,35,1865
+late_closure,2017,0,strict+new,Command-Line Interface,0.5102040816326531,98,1865
+late_closure,2017,0,strict+new,Hyperledger Fabric,0.605429292929293,792,1865
+late_closure,2017,0,strict+new,Hyperledger Indy Node,0.6388888888888888,72,1865
+late_closure,2017,0,strict+new,Lsstcorp Data management,0.39090909090909093,550,1865
+late_closure,2017,0,strict+new,Mule,0.621283255086072,1278,1865
+late_closure,2017,0,strict+new,Mule APIkit,0.7857142857142857,126,1865
+late_closure,2017,0,strict+new,The Titanium SDK,0.6391129032258065,496,1865
+late_closure,2017,0,strict+new,Titanium Mobile Platform,0.49749999999999994,400,1865
+late_closure,2017,1,scope,Alloy Framework,0.7230769230769232,65,1326
+late_closure,2017,1,scope,Apache Mesos,0.43888888888888883,90,1326
+late_closure,2017,1,scope,Appcelerator Daemon,0.6011904761904762,84,1326
+late_closure,2017,1,scope,Appcelerator Studio,0.5075757575757576,132,1326
+late_closure,2017,1,scope,Atlassian Confluence Server,0.6823770491803279,488,1326
+late_closure,2017,1,scope,Atlassian Jira Server,0.6851851851851852,54,1326
+late_closure,2017,1,scope,Atlassian Software Cloud,0.6571428571428571,35,1326
+late_closure,2017,1,scope,Command-Line Interface,0.6224489795918366,98,1326
+late_closure,2017,1,scope,Hyperledger Fabric,0.5460858585858587,792,1326
+late_closure,2017,1,scope,Hyperledger Indy Node,0.5902777777777778,72,1326
+late_closure,2017,1,scope,Lsstcorp Data management,0.5409090909090909,550,1326
+late_closure,2017,1,scope,Mule,0.690923317683881,1278,1326
+late_closure,2017,1,scope,Mule APIkit,0.6666666666666666,126,1326
+late_closure,2017,1,scope,The Titanium SDK,0.620967741935484,496,1326
+late_closure,2017,1,scope,Titanium Mobile Platform,0.28750000000000003,400,1326
+late_closure,2017,1,strict,Alloy Framework,0.576923076923077,65,1326
+late_closure,2017,1,strict,Apache Mesos,0.3666666666666667,90,1326
+late_closure,2017,1,strict,Appcelerator Daemon,0.6071428571428572,84,1326
+late_closure,2017,1,strict,Appcelerator Studio,0.3939393939393939,132,1326
+late_closure,2017,1,strict,Atlassian Confluence Server,0.6987704918032787,488,1326
+late_closure,2017,1,strict,Atlassian Jira Server,0.8333333333333334,54,1326
+late_closure,2017,1,strict,Atlassian Software Cloud,0.4571428571428572,35,1326
+late_closure,2017,1,strict,Command-Line Interface,0.596938775510204,98,1326
+late_closure,2017,1,strict,Hyperledger Fabric,0.6136363636363638,792,1326
+late_closure,2017,1,strict,Hyperledger Indy Node,0.7361111111111112,72,1326
+late_closure,2017,1,strict,Lsstcorp Data management,0.5054545454545455,550,1326
+late_closure,2017,1,strict,Mule,0.7785602503912363,1278,1326
+late_closure,2017,1,strict,Mule APIkit,0.873015873015873,126,1326
+late_closure,2017,1,strict,The Titanium SDK,0.689516129032258,496,1326
+late_closure,2017,1,strict,Titanium Mobile Platform,0.5525,400,1326
+late_closure,2017,1,strict+new,Alloy Framework,0.5692307692307692,65,1326
+late_closure,2017,1,strict+new,Apache Mesos,0.5,90,1326
+late_closure,2017,1,strict+new,Appcelerator Daemon,0.5119047619047619,84,1326
+late_closure,2017,1,strict+new,Appcelerator Studio,0.3939393939393939,132,1326
+late_closure,2017,1,strict+new,Atlassian Confluence Server,0.6290983606557377,488,1326
+late_closure,2017,1,strict+new,Atlassian Jira Server,0.7962962962962963,54,1326
+late_closure,2017,1,strict+new,Atlassian Software Cloud,0.4857142857142857,35,1326
+late_closure,2017,1,strict+new,Command-Line Interface,0.5051020408163266,98,1326
+late_closure,2017,1,strict+new,Hyperledger Fabric,0.6553030303030303,792,1326
+late_closure,2017,1,strict+new,Hyperledger Indy Node,0.6805555555555556,72,1326
+late_closure,2017,1,strict+new,Lsstcorp Data management,0.5127272727272727,550,1326
+late_closure,2017,1,strict+new,Mule,0.795774647887324,1278,1326
+late_closure,2017,1,strict+new,Mule APIkit,0.8492063492063492,126,1326
+late_closure,2017,1,strict+new,The Titanium SDK,0.6824596774193549,496,1326
+late_closure,2017,1,strict+new,Titanium Mobile Platform,0.47750000000000004,400,1326
+late_closure,2017,2,scope,Alloy Framework,0.5384615384615384,65,835
+late_closure,2017,2,scope,Apache Mesos,0.5055555555555555,90,835
+late_closure,2017,2,scope,Appcelerator Daemon,0.4107142857142857,84,835
+late_closure,2017,2,scope,Appcelerator Studio,0.4810606060606061,132,835
+late_closure,2017,2,scope,Atlassian Confluence Server,0.7469262295081966,488,835
+late_closure,2017,2,scope,Atlassian Jira Server,0.7592592592592593,54,835
+late_closure,2017,2,scope,Atlassian Software Cloud,0.6714285714285715,35,835
+late_closure,2017,2,scope,Command-Line Interface,0.4387755102040816,98,835
+late_closure,2017,2,scope,Hyperledger Fabric,0.5290404040404041,792,835
+late_closure,2017,2,scope,Hyperledger Indy Node,0.4375,72,835
+late_closure,2017,2,scope,Lsstcorp Data management,0.5572727272727274,550,835
+late_closure,2017,2,scope,Mule,0.6686228482003129,1278,835
+late_closure,2017,2,scope,Mule APIkit,0.5952380952380952,126,835
+late_closure,2017,2,scope,The Titanium SDK,0.7530241935483871,496,835
+late_closure,2017,2,scope,Titanium Mobile Platform,0.2975,400,835
+late_closure,2017,2,strict,Alloy Framework,0.2923076923076923,65,835
+late_closure,2017,2,strict,Apache Mesos,0.37777777777777777,90,835
+late_closure,2017,2,strict,Appcelerator Daemon,0.38095238095238093,84,835
+late_closure,2017,2,strict,Appcelerator Studio,0.4469696969696969,132,835
+late_closure,2017,2,strict,Atlassian Confluence Server,0.6680327868852459,488,835
+late_closure,2017,2,strict,Atlassian Jira Server,0.7407407407407407,54,835
+late_closure,2017,2,strict,Atlassian Software Cloud,0.4571428571428572,35,835
+late_closure,2017,2,strict,Command-Line Interface,0.46938775510204084,98,835
+late_closure,2017,2,strict,Hyperledger Fabric,0.6938131313131314,792,835
+late_closure,2017,2,strict,Hyperledger Indy Node,0.3958333333333333,72,835
+late_closure,2017,2,strict,Lsstcorp Data management,0.4563636363636364,550,835
+late_closure,2017,2,strict,Mule,0.6948356807511737,1278,835
+late_closure,2017,2,strict,Mule APIkit,0.746031746031746,126,835
+late_closure,2017,2,strict,The Titanium SDK,0.7368951612903225,496,835
+late_closure,2017,2,strict,Titanium Mobile Platform,0.4275,400,835
+late_closure,2017,2,strict+new,Alloy Framework,0.3384615384615385,65,835
+late_closure,2017,2,strict+new,Apache Mesos,0.4444444444444444,90,835
+late_closure,2017,2,strict+new,Appcelerator Daemon,0.24999999999999997,84,835
+late_closure,2017,2,strict+new,Appcelerator Studio,0.40151515151515155,132,835
+late_closure,2017,2,strict+new,Atlassian Confluence Server,0.6659836065573771,488,835
+late_closure,2017,2,strict+new,Atlassian Jira Server,0.8518518518518519,54,835
+late_closure,2017,2,strict+new,Atlassian Software Cloud,0.5142857142857142,35,835
+late_closure,2017,2,strict+new,Command-Line Interface,0.3673469387755102,98,835
+late_closure,2017,2,strict+new,Hyperledger Fabric,0.6660353535353536,792,835
+late_closure,2017,2,strict+new,Hyperledger Indy Node,0.4027777777777778,72,835
+late_closure,2017,2,strict+new,Lsstcorp Data management,0.47818181818181815,550,835
+late_closure,2017,2,strict+new,Mule,0.687793427230047,1278,835
+late_closure,2017,2,strict+new,Mule APIkit,0.7380952380952381,126,835
+late_closure,2017,2,strict+new,The Titanium SDK,0.7651209677419355,496,835
+late_closure,2017,2,strict+new,Titanium Mobile Platform,0.49,400,835
+late_closure,2017,3,scope,Alloy Framework,0.7615384615384616,65,403
+late_closure,2017,3,scope,Apache Mesos,0.7222222222222222,90,403
+late_closure,2017,3,scope,Appcelerator Daemon,0.5773809523809524,84,403
+late_closure,2017,3,scope,Appcelerator Studio,0.7121212121212122,132,403
+late_closure,2017,3,scope,Atlassian Confluence Server,0.6752049180327869,488,403
+late_closure,2017,3,scope,Atlassian Jira Server,0.8703703703703705,54,403
+late_closure,2017,3,scope,Atlassian Software Cloud,0.6571428571428571,35,403
+late_closure,2017,3,scope,Command-Line Interface,0.7142857142857143,98,403
+late_closure,2017,3,scope,Hyperledger Fabric,0.5271464646464646,792,403
+late_closure,2017,3,scope,Hyperledger Indy Node,0.4305555555555556,72,403
+late_closure,2017,3,scope,Lsstcorp Data management,0.45818181818181813,550,403
+late_closure,2017,3,scope,Mule,0.42723004694835676,1278,403
+late_closure,2017,3,scope,Mule APIkit,0.746031746031746,126,403
+late_closure,2017,3,scope,The Titanium SDK,0.5675403225806452,496,403
+late_closure,2017,3,scope,Titanium Mobile Platform,0.3975,400,403
+late_closure,2017,3,strict,Alloy Framework,0.7307692307692307,65,403
+late_closure,2017,3,strict,Apache Mesos,0.49999999999999994,90,403
+late_closure,2017,3,strict,Appcelerator Daemon,0.7261904761904763,84,403
+late_closure,2017,3,strict,Appcelerator Studio,0.3333333333333333,132,403
+late_closure,2017,3,strict,Atlassian Confluence Server,0.7377049180327868,488,403
+late_closure,2017,3,strict,Atlassian Jira Server,0.5,54,403
+late_closure,2017,3,strict,Atlassian Software Cloud,0.4857142857142857,35,403
+late_closure,2017,3,strict,Command-Line Interface,0.7142857142857143,98,403
+late_closure,2017,3,strict,Hyperledger Fabric,0.7954545454545455,792,403
+late_closure,2017,3,strict,Hyperledger Indy Node,0.4652777777777778,72,403
+late_closure,2017,3,strict,Lsstcorp Data management,0.47363636363636363,550,403
+late_closure,2017,3,strict,Mule,0.4350547730829421,1278,403
+late_closure,2017,3,strict,Mule APIkit,0.626984126984127,126,403
+late_closure,2017,3,strict,The Titanium SDK,0.49798387096774194,496,403
+late_closure,2017,3,strict,Titanium Mobile Platform,0.59,400,403
+late_closure,2017,3,strict+new,Alloy Framework,0.6769230769230768,65,403
+late_closure,2017,3,strict+new,Apache Mesos,0.4333333333333333,90,403
+late_closure,2017,3,strict+new,Appcelerator Daemon,0.8214285714285714,84,403
+late_closure,2017,3,strict+new,Appcelerator Studio,0.37878787878787884,132,403
+late_closure,2017,3,strict+new,Atlassian Confluence Server,0.6639344262295083,488,403
+late_closure,2017,3,strict+new,Atlassian Jira Server,0.462962962962963,54,403
+late_closure,2017,3,strict+new,Atlassian Software Cloud,0.39999999999999997,35,403
+late_closure,2017,3,strict+new,Command-Line Interface,0.6785714285714286,98,403
+late_closure,2017,3,strict+new,Hyperledger Fabric,0.6698232323232324,792,403
+late_closure,2017,3,strict+new,Hyperledger Indy Node,0.3611111111111111,72,403
+late_closure,2017,3,strict+new,Lsstcorp Data management,0.45272727272727276,550,403
+late_closure,2017,3,strict+new,Mule,0.3243348982785602,1278,403
+late_closure,2017,3,strict+new,Mule APIkit,0.8253968253968254,126,403
+late_closure,2017,3,strict+new,The Titanium SDK,0.4717741935483871,496,403
+late_closure,2017,3,strict+new,Titanium Mobile Platform,0.5375,400,403
+late_closure,2018,0,scope,Apache Mesos,0.4218106995884774,243,2492
+late_closure,2018,0,scope,Atlassian Confluence Server,0.6531862745098039,816,2492
+late_closure,2018,0,scope,Hyperledger Blockchain Explorer,0.4538461538461539,130,2492
+late_closure,2018,0,scope,Lsstcorp Data management,0.6112500000000001,1200,2492
+late_closure,2018,0,scope,Mule,0.7044334975369458,203,2492
+late_closure,2018,0,scope,The Titanium SDK,0.6410256410256411,156,2492
+late_closure,2018,0,strict,Apache Mesos,0.5534979423868313,243,2492
+late_closure,2018,0,strict,Atlassian Confluence Server,0.5281862745098039,816,2492
+late_closure,2018,0,strict,Hyperledger Blockchain Explorer,0.3,130,2492
+late_closure,2018,0,strict,Lsstcorp Data management,0.6191666666666666,1200,2492
+late_closure,2018,0,strict,Mule,0.6354679802955665,203,2492
+late_closure,2018,0,strict,The Titanium SDK,0.5256410256410255,156,2492
+late_closure,2018,0,strict+new,Apache Mesos,0.5164609053497943,243,2492
+late_closure,2018,0,strict+new,Atlassian Confluence Server,0.4987745098039216,816,2492
+late_closure,2018,0,strict+new,Hyperledger Blockchain Explorer,0.30769230769230765,130,2492
+late_closure,2018,0,strict+new,Lsstcorp Data management,0.6575,1200,2492
+late_closure,2018,0,strict+new,Mule,0.6157635467980296,203,2492
+late_closure,2018,0,strict+new,The Titanium SDK,0.5448717948717949,156,2492
+late_closure,2018,1,scope,Apache Mesos,0.40534979423868317,243,1865
+late_closure,2018,1,scope,Atlassian Confluence Server,0.6470588235294118,816,1865
+late_closure,2018,1,scope,Hyperledger Blockchain Explorer,0.42307692307692313,130,1865
+late_closure,2018,1,scope,Lsstcorp Data management,0.6583333333333333,1200,1865
+late_closure,2018,1,scope,Mule,0.5985221674876848,203,1865
+late_closure,2018,1,scope,The Titanium SDK,0.6217948717948718,156,1865
+late_closure,2018,1,strict,Apache Mesos,0.39917695473251025,243,1865
+late_closure,2018,1,strict,Atlassian Confluence Server,0.4901960784313726,816,1865
+late_closure,2018,1,strict,Hyperledger Blockchain Explorer,0.3,130,1865
+late_closure,2018,1,strict,Lsstcorp Data management,0.5912499999999999,1200,1865
+late_closure,2018,1,strict,Mule,0.4630541871921182,203,1865
+late_closure,2018,1,strict,The Titanium SDK,0.576923076923077,156,1865
+late_closure,2018,1,strict+new,Apache Mesos,0.4156378600823045,243,1865
+late_closure,2018,1,strict+new,Atlassian Confluence Server,0.46568627450980393,816,1865
+late_closure,2018,1,strict+new,Hyperledger Blockchain Explorer,0.35384615384615387,130,1865
+late_closure,2018,1,strict+new,Lsstcorp Data management,0.5974999999999999,1200,1865
+late_closure,2018,1,strict+new,Mule,0.5172413793103448,203,1865
+late_closure,2018,1,strict+new,The Titanium SDK,0.49358974358974356,156,1865
+late_closure,2018,2,scope,Apache Mesos,0.49382716049382713,243,1326
+late_closure,2018,2,scope,Atlassian Confluence Server,0.7095588235294118,816,1326
+late_closure,2018,2,scope,Hyperledger Blockchain Explorer,0.5615384615384615,130,1326
+late_closure,2018,2,scope,Lsstcorp Data management,0.5820833333333333,1200,1326
+late_closure,2018,2,scope,Mule,0.5467980295566504,203,1326
+late_closure,2018,2,scope,The Titanium SDK,0.6858974358974359,156,1326
+late_closure,2018,2,strict,Apache Mesos,0.5246913580246915,243,1326
+late_closure,2018,2,strict,Atlassian Confluence Server,0.5551470588235294,816,1326
+late_closure,2018,2,strict,Hyperledger Blockchain Explorer,0.2615384615384615,130,1326
+late_closure,2018,2,strict,Lsstcorp Data management,0.5429166666666666,1200,1326
+late_closure,2018,2,strict,Mule,0.7093596059113301,203,1326
+late_closure,2018,2,strict,The Titanium SDK,0.5512820512820512,156,1326
+late_closure,2018,2,strict+new,Apache Mesos,0.5493827160493827,243,1326
+late_closure,2018,2,strict+new,Atlassian Confluence Server,0.5723039215686275,816,1326
+late_closure,2018,2,strict+new,Hyperledger Blockchain Explorer,0.3,130,1326
+late_closure,2018,2,strict+new,Lsstcorp Data management,0.5175000000000001,1200,1326
+late_closure,2018,2,strict+new,Mule,0.7044334975369458,203,1326
+late_closure,2018,2,strict+new,The Titanium SDK,0.532051282051282,156,1326
+late_closure,2018,3,scope,Apache Mesos,0.4012345679012346,243,835
+late_closure,2018,3,scope,Atlassian Confluence Server,0.7107843137254901,816,835
+late_closure,2018,3,scope,Hyperledger Blockchain Explorer,0.4076923076923077,130,835
+late_closure,2018,3,scope,Lsstcorp Data management,0.49291666666666667,1200,835
+late_closure,2018,3,scope,Mule,0.6305418719211824,203,835
+late_closure,2018,3,scope,The Titanium SDK,0.7756410256410257,156,835
+late_closure,2018,3,strict,Apache Mesos,0.5185185185185185,243,835
+late_closure,2018,3,strict,Atlassian Confluence Server,0.5943627450980392,816,835
+late_closure,2018,3,strict,Hyperledger Blockchain Explorer,0.3076923076923077,130,835
+late_closure,2018,3,strict,Lsstcorp Data management,0.4766666666666667,1200,835
+late_closure,2018,3,strict,Mule,0.6354679802955665,203,835
+late_closure,2018,3,strict,The Titanium SDK,0.6858974358974359,156,835
+late_closure,2018,3,strict+new,Apache Mesos,0.5061728395061729,243,835
+late_closure,2018,3,strict+new,Atlassian Confluence Server,0.5919117647058824,816,835
+late_closure,2018,3,strict+new,Hyperledger Blockchain Explorer,0.32307692307692304,130,835
+late_closure,2018,3,strict+new,Lsstcorp Data management,0.49083333333333334,1200,835
+late_closure,2018,3,strict+new,Mule,0.5862068965517241,203,835
+late_closure,2018,3,strict+new,The Titanium SDK,0.6153846153846154,156,835
+late_closure,2019,0,scope,Apache Mesos,0.7515151515151516,660,2993
+late_closure,2019,0,scope,Appcelerator Daemon,0.44791666666666674,48,2993
+late_closure,2019,0,scope,Atlassian Confluence Server,0.6380208333333334,384,2993
+late_closure,2019,0,scope,Hyperledger Blockchain Explorer,0.32857142857142857,70,2993
+late_closure,2019,0,scope,Hyperledger Indy Node,0.2936507936507936,126,2993
+late_closure,2019,0,scope,Hyperledger Indy SDK,0.4935897435897436,156,2993
+late_closure,2019,0,scope,Lsstcorp Data management,0.7282964782964783,2442,2993
+late_closure,2019,0,scope,Moodle,0.6228070175438596,171,2993
+late_closure,2019,0,scope,The Titanium SDK,0.6215277777777778,144,2993
+late_closure,2019,0,strict,Apache Mesos,0.7848484848484849,660,2993
+late_closure,2019,0,strict,Appcelerator Daemon,0.4166666666666667,48,2993
+late_closure,2019,0,strict,Atlassian Confluence Server,0.5833333333333333,384,2993
+late_closure,2019,0,strict,Hyperledger Blockchain Explorer,0.42857142857142855,70,2993
+late_closure,2019,0,strict,Hyperledger Indy Node,0.36904761904761907,126,2993
+late_closure,2019,0,strict,Hyperledger Indy SDK,0.6474358974358974,156,2993
+late_closure,2019,0,strict,Lsstcorp Data management,0.7440622440622441,2442,2993
+late_closure,2019,0,strict,Moodle,0.6695906432748538,171,2993
+late_closure,2019,0,strict,The Titanium SDK,0.42361111111111116,144,2993
+late_closure,2019,0,strict+new,Apache Mesos,0.7863636363636364,660,2993
+late_closure,2019,0,strict+new,Appcelerator Daemon,0.4270833333333333,48,2993
+late_closure,2019,0,strict+new,Atlassian Confluence Server,0.5416666666666666,384,2993
+late_closure,2019,0,strict+new,Hyperledger Blockchain Explorer,0.4857142857142857,70,2993
+late_closure,2019,0,strict+new,Hyperledger Indy Node,0.4047619047619047,126,2993
+late_closure,2019,0,strict+new,Hyperledger Indy SDK,0.6025641025641025,156,2993
+late_closure,2019,0,strict+new,Lsstcorp Data management,0.778050778050778,2442,2993
+late_closure,2019,0,strict+new,Moodle,0.6520467836257311,171,2993
+late_closure,2019,0,strict+new,The Titanium SDK,0.4236111111111111,144,2993
+late_closure,2019,1,scope,Apache Mesos,0.7696969696969697,660,2492
+late_closure,2019,1,scope,Appcelerator Daemon,0.40625,48,2492
+late_closure,2019,1,scope,Atlassian Confluence Server,0.6393229166666666,384,2492
+late_closure,2019,1,scope,Hyperledger Blockchain Explorer,0.3,70,2492
+late_closure,2019,1,scope,Hyperledger Indy Node,0.4285714285714286,126,2492
+late_closure,2019,1,scope,Hyperledger Indy SDK,0.4551282051282052,156,2492
+late_closure,2019,1,scope,Lsstcorp Data management,0.6928746928746929,2442,2492
+late_closure,2019,1,scope,Moodle,0.6345029239766081,171,2492
+late_closure,2019,1,scope,The Titanium SDK,0.5416666666666666,144,2492
+late_closure,2019,1,strict,Apache Mesos,0.7969696969696969,660,2492
+late_closure,2019,1,strict,Appcelerator Daemon,0.35416666666666663,48,2492
+late_closure,2019,1,strict,Atlassian Confluence Server,0.640625,384,2492
+late_closure,2019,1,strict,Hyperledger Blockchain Explorer,0.4214285714285715,70,2492
+late_closure,2019,1,strict,Hyperledger Indy Node,0.3492063492063492,126,2492
+late_closure,2019,1,strict,Hyperledger Indy SDK,0.5961538461538461,156,2492
+late_closure,2019,1,strict,Lsstcorp Data management,0.6629811629811629,2442,2492
+late_closure,2019,1,strict,Moodle,0.6257309941520468,171,2492
+late_closure,2019,1,strict,The Titanium SDK,0.4722222222222222,144,2492
+late_closure,2019,1,strict+new,Apache Mesos,0.7787878787878788,660,2492
+late_closure,2019,1,strict+new,Appcelerator Daemon,0.34375,48,2492
+late_closure,2019,1,strict+new,Atlassian Confluence Server,0.5677083333333334,384,2492
+late_closure,2019,1,strict+new,Hyperledger Blockchain Explorer,0.42857142857142855,70,2492
+late_closure,2019,1,strict+new,Hyperledger Indy Node,0.3968253968253968,126,2492
+late_closure,2019,1,strict+new,Hyperledger Indy SDK,0.5961538461538461,156,2492
+late_closure,2019,1,strict+new,Lsstcorp Data management,0.7084357084357085,2442,2492
+late_closure,2019,1,strict+new,Moodle,0.6228070175438597,171,2492
+late_closure,2019,1,strict+new,The Titanium SDK,0.5138888888888888,144,2492
+late_closure,2019,2,scope,Apache Mesos,0.734848484848485,660,1865
+late_closure,2019,2,scope,Appcelerator Daemon,0.4583333333333334,48,1865
+late_closure,2019,2,scope,Atlassian Confluence Server,0.7552083333333334,384,1865
+late_closure,2019,2,scope,Hyperledger Blockchain Explorer,0.20714285714285713,70,1865
+late_closure,2019,2,scope,Hyperledger Indy Node,0.35714285714285715,126,1865
+late_closure,2019,2,scope,Hyperledger Indy SDK,0.4230769230769231,156,1865
+late_closure,2019,2,scope,Lsstcorp Data management,0.6210073710073709,2442,1865
+late_closure,2019,2,scope,Moodle,0.5818713450292398,171,1865
+late_closure,2019,2,scope,The Titanium SDK,0.38541666666666663,144,1865
+late_closure,2019,2,strict,Apache Mesos,0.6666666666666667,660,1865
+late_closure,2019,2,strict,Appcelerator Daemon,0.3958333333333333,48,1865
+late_closure,2019,2,strict,Atlassian Confluence Server,0.6848958333333334,384,1865
+late_closure,2019,2,strict,Hyperledger Blockchain Explorer,0.39285714285714285,70,1865
+late_closure,2019,2,strict,Hyperledger Indy Node,0.33333333333333337,126,1865
+late_closure,2019,2,strict,Hyperledger Indy SDK,0.6153846153846154,156,1865
+late_closure,2019,2,strict,Lsstcorp Data management,0.5421785421785422,2442,1865
+late_closure,2019,2,strict,Moodle,0.7748538011695906,171,1865
+late_closure,2019,2,strict,The Titanium SDK,0.3888888888888889,144,1865
+late_closure,2019,2,strict+new,Apache Mesos,0.7060606060606059,660,1865
+late_closure,2019,2,strict+new,Appcelerator Daemon,0.3958333333333333,48,1865
+late_closure,2019,2,strict+new,Atlassian Confluence Server,0.609375,384,1865
+late_closure,2019,2,strict+new,Hyperledger Blockchain Explorer,0.38571428571428573,70,1865
+late_closure,2019,2,strict+new,Hyperledger Indy Node,0.33333333333333337,126,1865
+late_closure,2019,2,strict+new,Hyperledger Indy SDK,0.6217948717948718,156,1865
+late_closure,2019,2,strict+new,Lsstcorp Data management,0.5159705159705159,2442,1865
+late_closure,2019,2,strict+new,Moodle,0.6754385964912282,171,1865
+late_closure,2019,2,strict+new,The Titanium SDK,0.40277777777777773,144,1865
+late_closure,2019,3,scope,Apache Mesos,0.7378787878787879,660,1326
+late_closure,2019,3,scope,Appcelerator Daemon,0.28125,48,1326
+late_closure,2019,3,scope,Atlassian Confluence Server,0.7578124999999999,384,1326
+late_closure,2019,3,scope,Hyperledger Blockchain Explorer,0.2714285714285714,70,1326
+late_closure,2019,3,scope,Hyperledger Indy Node,0.3968253968253968,126,1326
+late_closure,2019,3,scope,Hyperledger Indy SDK,0.36538461538461536,156,1326
+late_closure,2019,3,scope,Lsstcorp Data management,0.5866093366093366,2442,1326
+late_closure,2019,3,scope,Moodle,0.6929824561403509,171,1326
+late_closure,2019,3,scope,The Titanium SDK,0.4930555555555555,144,1326
+late_closure,2019,3,strict,Apache Mesos,0.7022727272727273,660,1326
+late_closure,2019,3,strict,Appcelerator Daemon,0.3125,48,1326
+late_closure,2019,3,strict,Atlassian Confluence Server,0.6067708333333334,384,1326
+late_closure,2019,3,strict,Hyperledger Blockchain Explorer,0.5714285714285714,70,1326
+late_closure,2019,3,strict,Hyperledger Indy Node,0.2936507936507936,126,1326
+late_closure,2019,3,strict,Hyperledger Indy SDK,0.6730769230769231,156,1326
+late_closure,2019,3,strict,Lsstcorp Data management,0.5053235053235052,2442,1326
+late_closure,2019,3,strict,Moodle,0.5467836257309941,171,1326
+late_closure,2019,3,strict,The Titanium SDK,0.3819444444444444,144,1326
+late_closure,2019,3,strict+new,Apache Mesos,0.7151515151515152,660,1326
+late_closure,2019,3,strict+new,Appcelerator Daemon,0.3125,48,1326
+late_closure,2019,3,strict+new,Atlassian Confluence Server,0.5963541666666667,384,1326
+late_closure,2019,3,strict+new,Hyperledger Blockchain Explorer,0.48571428571428577,70,1326
+late_closure,2019,3,strict+new,Hyperledger Indy Node,0.27777777777777773,126,1326
+late_closure,2019,3,strict+new,Hyperledger Indy SDK,0.6666666666666666,156,1326
+late_closure,2019,3,strict+new,Lsstcorp Data management,0.46560196560196565,2442,1326
+late_closure,2019,3,strict+new,Moodle,0.6374269005847953,171,1326
+late_closure,2019,3,strict+new,The Titanium SDK,0.4131944444444444,144,1326

@@ -411,6 +411,28 @@ def transfer_table():
     write("transfer", "\n".join(rows) + "\n")
 
 
+def decay_table():
+    """Model ageing (jr/decay.py): loss of a k-year-old model against a fresh one, strict+new, both sources."""
+    rows = []
+    for src, name in (("tawos_all_clean", "TAWOS"), ("redhat_clean", "Red Hat")):
+        base = jr.ROOT / "results" / src
+        a = pd.read_csv(base / "decay_auc.csv"); d = pd.read_csv(base / "decay_differences.csv")
+        first = True
+        for o in ("spillover", "serious_spillover", "late_closure"):
+            f0 = a[(a.outcome == o) & (a.features == "strict+new") & (a.age == 0)].iloc[0]
+            if f0.project_years < 5:  # too few project-years to say anything (TAWOS spillover)
+                continue
+            cells = []
+            for k in (1, 2, 3):
+                r = d[(d.outcome == o) & (d.features == "strict+new") & (d.age == k)].iloc[0]
+                cells.append(f"{d3(r.delta)} {ci(r.ci_low, r.ci_high)}")
+            m = d[(d.outcome == o) & (d.features == "strict+new (size-matched)") & (d.age == 3)].iloc[0]
+            rows.append(f"{name if first else ''} & {NAMES[o]} & {int(f0.project_years)} & {f0.auc:.3f} & " + " & ".join(cells)
+                        + f" & {d3(m.delta)} {ci(m.ci_low, m.ci_high)} \\\\")
+            first = False
+    write("decay", "\n".join(rows) + "\n")
+
+
 def redhat_labels_table():
     """Outcomes and positive rates on the Red Hat cohort, next to TAWOS."""
     from phase2.data import population
@@ -438,6 +460,8 @@ if __name__ == "__main__":
         within_table()
     if (RH / "transfer_differences.csv").exists():
         transfer_table(); redhat_labels_table()
+    if (RH / "decay_differences.csv").exists():
+        decay_table()
     if (jr.RESULTS / "robust_restricted.csv").exists():
         robust_table()
         decision_table()

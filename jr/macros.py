@@ -228,6 +228,25 @@ def main():
         wy = pd.read_csv(RHR / "within_differences.csv")
         diff_macros(wy[wy.stage == "planning"], "P", "redhat within", "Y")
         diff_macros(wy[wy.stage == "in-sprint"], "I", "redhat within", "Y", checkpoint=True)
+        # model ageing (jr/decay.py): G = aged minus fresh, GM = aged minus fresh of the same size
+        AGE = {1: "One", 2: "Two", 3: "Three"}
+        for src, code in (("tawos_all_clean", "T"), ("redhat_clean", "R")):
+            gd = pd.read_csv(jr.ROOT / "results" / src / "decay_differences.csv")
+            ga = pd.read_csv(jr.ROOT / "results" / src / "decay_auc.csv")
+            for r in gd.itertuples():
+                if r.outcome not in ("spillover", "serious_spillover", "late_closure"):
+                    continue
+                tag = {"strict+new": "G", "strict+new (size-matched)": "GM", "new gain": "GN"}.get(r.features)
+                if tag is None or (tag == "GN" and r.age == 0):
+                    continue
+                put(f"d{tag}{code}{OUTC[r.outcome]}{AGE[r.age]}", num(r.delta))
+                put(f"c{tag}{code}{OUTC[r.outcome]}{AGE[r.age]}", f"[{num(r.ci_low)}, {num(r.ci_high)}]")
+            g0 = ga[(ga.features == "strict+new") & (ga.outcome == "serious_spillover")].set_index("age")
+            put(f"GTrain{code}Fresh", f"{int(g0.loc[0, 'n_train_min']):,}")
+            put(f"GTrain{code}Three", f"{int(g0.loc[3, 'n_train_min']):,}")
+            put(f"GUnits{code}Ss", f"{int(g0.loc[0, 'project_years'])}")
+            sp = ga[(ga.features == "strict+new") & (ga.outcome == "spillover") & (ga.age == 0)].iloc[0]
+            put(f"GUnits{code}Sp", f"{int(sp.project_years)}")
         td = pd.read_csv(RHR / "transfer_differences.csv")
         diff_macros(td.assign(checkpoint=np.nan), "P", "transfer", "Z")
         ta = pd.read_csv(RHR / "transfer_from_tawos.csv")
