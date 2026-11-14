@@ -1402,6 +1402,38 @@
 \newcommand{\GTrainRThree}{209}
 \newcommand{\GUnitsRSs}{25}
 \newcommand{\GUnitsRSp}{10}
+\newcommand{\dQTCalLc}{0.033}
+\newcommand{\cQTCalLc}{[0.010, 0.058]}
+\newcommand{\dWTCalLc}{0.032}
+\newcommand{\cWTCalLc}{[$-$0.014, 0.092]}
+\newcommand{\dQTDepSs}{$-$0.008}
+\newcommand{\cQTDepSs}{[$-$0.027, 0.008]}
+\newcommand{\dWTDepSs}{$-$0.008}
+\newcommand{\cWTDepSs}{[$-$0.041, 0.025]}
+\newcommand{\dQTIssSs}{0.005}
+\newcommand{\cQTIssSs}{[$-$0.008, 0.019]}
+\newcommand{\dWTIssSs}{0.009}
+\newcommand{\cWTIssSs}{[$-$0.006, 0.027]}
+\newcommand{\QSeedMinT}{0.001}
+\newcommand{\QSeedMaxT}{0.008}
+\newcommand{\QRankT}{0.575}
+\newcommand{\QAgeT}{0.570}
+\newcommand{\dQRCalLc}{0.009}
+\newcommand{\cQRCalLc}{[$-$0.005, 0.026]}
+\newcommand{\dWRCalLc}{0.003}
+\newcommand{\cWRCalLc}{[$-$0.020, 0.029]}
+\newcommand{\dQRDepSs}{0.027}
+\newcommand{\cQRDepSs}{[0.013, 0.036]}
+\newcommand{\dWRDepSs}{0.032}
+\newcommand{\cWRDepSs}{[0.007, 0.037]}
+\newcommand{\dQRIssSs}{0.012}
+\newcommand{\cQRIssSs}{[$-$0.007, 0.024]}
+\newcommand{\dWRIssSs}{0.021}
+\newcommand{\cWRIssSs}{[$-$0.018, 0.031]}
+\newcommand{\QSeedMinR}{0.011}
+\newcommand{\QSeedMaxR}{0.019}
+\newcommand{\QRankR}{0.625}
+\newcommand{\QAgeR}{0.596}
 \newcommand{\dPZNewLc}{0.003}
 \newcommand{\cPZNewLc}{[$-$0.002, 0.009]}
 \newcommand{\dPZHistLc}{0.031}
@@ -2440,6 +2472,19 @@ Red Hat & Spillover & 10 & 0.868 & $-$0.024 [$-$0.088, +0.016] & $-$0.058 [$-$0.
 \end{tabular}
 \end{table*}
 
+\subsection{A second round of features}
+\label{sec:round2}
+
+After the main study we tried three further ideas on top of strict+new. The plan and a rule for success were fixed before the run: a gain counts only if its interval is above zero both pooled and within projects, in both sources. No idea met the rule.
+
+\emph{Calendar features.} The earlier paper found that sprints planned to end on a Friday or at the weekend close late more often \cite{abusharkh2027}. The weekday of the planned end and of the start, and whether the sprint spans the year end, raise late closure on TAWOS when pooled (\dQTCalLc{} \cQTCalLc) but not within projects (\dWTCalLc{} \cWTCalLc), and not on Red Hat (\dQRCalLc{} \cQRCalLc).
+
+\emph{Depth and haste.} How many earlier sprints each committed issue has been in, and the share of issues added in the last day before the start, help serious spillover on Red Hat (\dQRDepSs{} \cQRDepSs{} pooled, \dWRDepSs{} \cWRDepSs{} within projects) but not on TAWOS (\dQTDepSs{} \cQTDepSs).
+
+\emph{An issue-level model.} A model predicts for each committed issue whether it will be resolved by the planned end, and the sprint model receives the summed risks, in the way issue-level baselines have been aggregated before \cite{sprint2vec}. For serious spillover it adds \dQTIssSs{} \cQTIssSs{} on TAWOS and \dQRIssSs{} \cQRIssSs{} on Red Hat, clear in neither. A first run had shown a larger gain on TAWOS that moved when the rows were merely reordered, so we repeated the step with five seeds: the gain ranges from \QSeedMinT{} to \QSeedMaxT{} on TAWOS and from \QSeedMinR{} to \QSeedMaxR{} on Red Hat. Inside a sprint, the issue model ranks which issue will be left over at an AUC of \QRankT{} on TAWOS and \QRankR{} on Red Hat, little better than issue age alone (\QAgeT{} and \QAgeR).
+
+None of the three changes plain spillover. Together with the small size of the gains above, this suggests that what a tracker records at planning time is close to used up for these labels.
+
 \subsection{Robustness}
 \label{sec:robust}
 
@@ -2475,7 +2520,7 @@ Late closure is the moment someone pressed ``Complete sprint'' in Jira. That dep
 
 \section{Conclusion}
 
-Four cheap features of the committed issues, which earlier sprint-outcome studies did not use, improve planning-time prediction of spillover in two independent sources, within projects and from one source to the other. Under the same leakage-aware protocol, and after checking that the outcomes can be measured, the other kinds of signal differ sharply. Progress counts dominate during a sprint and burndown shape adds nothing. Team history tells teams apart but adds nothing to ranking one team's own sprints. Models age, so a deployed model needs refitting: on Red Hat a three-year-old one ranked every outcome worse than a fresh one. Public Jira also hides part of every project, and no study of public trackers, ours included, can see past that. Of the three new labels, only serious spillover can be ranked beyond scope in both sources, and the decision analysis is sobering: for that label a model beats warning on every sprint only when a warning is costly. Because every AUC in this literature is pooled over projects, results like ours should be reported within projects too, and on more than one source. The formal setting gives simple reasons for these patterns: empty sprints inflate AUC by an exact amount, a fitted threshold carries a hidden cost ratio, the choice between ``any'' and ``serious'' spillover decides whether history can matter, a completion rate that belongs to the team says little about which of that team's sprints will go badly, and issues that do not finish independently explain why a model with no learning ranks well but cannot give trustworthy probabilities. The obvious next step is to ask teams whether the sprints these models flag are the ones they would have wanted to hear about.
+Four cheap features of the committed issues, which earlier sprint-outcome studies did not use, improve planning-time prediction of spillover in two independent sources, within projects and from one source to the other. Under the same leakage-aware protocol, and after checking that the outcomes can be measured, the other kinds of signal differ sharply. Progress counts dominate during a sprint and burndown shape adds nothing. Team history tells teams apart but adds nothing to ranking one team's own sprints. Models age, so a deployed model needs refitting: on Red Hat a three-year-old one ranked every outcome worse than a fresh one. A second round of features and an issue-level model added nothing that held in both sources, so the planning-time signal in a tracker looks close to used up. Public Jira also hides part of every project, and no study of public trackers, ours included, can see past that. Of the three new labels, only serious spillover can be ranked beyond scope in both sources, and the decision analysis is sobering: for that label a model beats warning on every sprint only when a warning is costly. Because every AUC in this literature is pooled over projects, results like ours should be reported within projects too, and on more than one source. The formal setting gives simple reasons for these patterns: empty sprints inflate AUC by an exact amount, a fitted threshold carries a hidden cost ratio, the choice between ``any'' and ``serious'' spillover decides whether history can matter, a completion rate that belongs to the team says little about which of that team's sprints will go badly, and issues that do not finish independently explain why a model with no learning ranks well but cannot give trustworthy probabilities. The obvious next step is to ask teams whether the sprints these models flag are the ones they would have wanted to hear about.
 
 \section*{Data Availability}
 

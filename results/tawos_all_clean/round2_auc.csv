@@ -1,0 +1,19 @@
+cohort,outcome,set,pooled,within,n
+tawos_all_clean,spillover,base,0.8692620147970074,0.8532757051865332,734
+tawos_all_clean,spillover,+calendar,0.8679460344434543,0.8507734303912647,734
+tawos_all_clean,spillover,+depth,0.8708784946013719,0.850090991810737,734
+tawos_all_clean,spillover,+issue model,0.8714691314529666,0.8525932666060054,734
+tawos_all_clean,spillover,+all,0.8750544007626468,0.8575978161965423,734
+tawos_all_clean,spillover,issue model alone,0.8795308063747332,0.881255686988171,734
+tawos_all_clean,serious_spillover,base,0.7688519813519815,0.6855686524370819,734
+tawos_all_clean,serious_spillover,+calendar,0.7663170163170163,0.6881172347881491,734
+tawos_all_clean,serious_spillover,+depth,0.7603875291375293,0.6772857597961134,734
+tawos_all_clean,serious_spillover,+issue model,0.7737470862470863,0.6948072634597006,734
+tawos_all_clean,serious_spillover,+all,0.7756847319347319,0.6979929913985345,734
+tawos_all_clean,serious_spillover,issue model alone,0.7194055944055944,0.6259955399808856,734
+tawos_all_clean,late_closure,base,0.7246400633446095,0.6173203510696654,1118
+tawos_all_clean,late_closure,+calendar,0.7579118901932506,0.6490674712013165,1118
+tawos_all_clean,late_closure,+depth,0.7239348596839132,0.6094007131102578,1118
+tawos_all_clean,late_closure,+issue model,0.7216601802069305,0.6114577619308832,1118
+tawos_all_clean,late_closure,+all,0.7608405179270193,0.6499931431705979,1118
+tawos_all_clean,late_closure,issue model alone,0.4816700071050594,0.4980115194733955,1118

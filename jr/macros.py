@@ -247,6 +247,18 @@ def main():
             put(f"GUnits{code}Ss", f"{int(g0.loc[0, 'project_years'])}")
             sp = ga[(ga.features == "strict+new") & (ga.outcome == "spillover") & (ga.age == 0)].iloc[0]
             put(f"GUnits{code}Sp", f"{int(sp.project_years)}")
+        # second feature round (jr/round2.py): Q pooled, W within; Cal/Dep/Iss; T = TAWOS, R = Red Hat
+        for src, code in (("tawos_all_clean", "T"), ("redhat_clean", "R")):
+            qd = pd.read_csv(jr.ROOT / "results" / src / "round2_diff.csv").set_index(["outcome", "set"])
+            for st, sc, o in (("+calendar", "Cal", "late_closure"), ("+depth", "Dep", "serious_spillover"), ("+issue model", "Iss", "serious_spillover")):
+                r = qd.loc[(o, st)]
+                put(f"dQ{code}{sc}{OUTC[o]}", num(r.pooled_d)); put(f"cQ{code}{sc}{OUTC[o]}", f"[{num(r.p_lo)}, {num(r.p_hi)}]")
+                put(f"dW{code}{sc}{OUTC[o]}", num(r.within_d)); put(f"cW{code}{sc}{OUTC[o]}", f"[{num(r.w_lo)}, {num(r.w_hi)}]")
+            qs = pd.read_csv(jr.ROOT / "results" / src / "round2_issue_seeds.csv")
+            qs = qs[qs.outcome == "serious_spillover"]
+            put(f"QSeedMin{code}", num(qs.pooled_d.min())); put(f"QSeedMax{code}", num(qs.pooled_d.max()))
+            qr = pd.read_csv(jr.ROOT / "results" / src / "round2_issue_rank.csv").set_index("ranker").auc
+            put(f"QRank{code}", num(qr["model"])); put(f"QAge{code}", num(qr["age"]))
         td = pd.read_csv(RHR / "transfer_differences.csv")
         diff_macros(td.assign(checkpoint=np.nan), "P", "transfer", "Z")
         ta = pd.read_csv(RHR / "transfer_from_tawos.csv")

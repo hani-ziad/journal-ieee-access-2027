@@ -36,6 +36,7 @@ Outcomes: late closure and spillover (as before), plus three new labels: serious
 | `jr/within.py` | The main comparisons rescored with within-project AUC (pairs of sprints from the same project only). Added after the full run. |
 | `jr/replicate.py` | Independent replication on Red Hat's public Jira: all 22 hypothesis tests rerun there, and a TAWOS-trained model scored per Red Hat project (`transfer`). Added 14 Nov 2026. |
 | `jr/decay.py` | Model ageing: loss of a model that is one to three years old against a fresh one, with a size-matched control (PLAN.md section 11). |
+| `jr/round2.py` | Second feature round (PLAN.md section 12): calendar features, depth and haste, an issue-level model. A negative result: nothing held in both sources. |
 | `jr/visibility.py` | Share of each project's issue numbers that an anonymous reader cannot see (private, deleted or moved), both sources. |
 | `data_export/redhat/` | Selection rule (`SELECTION.md`) and browser pull script (`pull_jira_cloud.js`) for the Red Hat cohort. |
 | `results/dev_8projects/` | Development run on the current 8-project extract, used to test the code. Not the paper's results. |
@@ -89,6 +90,8 @@ python -m jr.replicate transfer   # (TAWOS settings) trained on TAWOS, scored pe
 python -m jr.visibility           # hidden-issue gaps, both sources
 JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.decay      # model ageing on Red Hat, about 2 min
 python -m jr.decay                # (TAWOS settings) model ageing on TAWOS
+JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.round2     # second feature round on Red Hat, about 5 min
+python -m jr.round2               # (TAWOS settings) second feature round on TAWOS, about 4 min
 python -m jr.tables               # the paper's tables
 python -m jr.macros               # every number in the paper's text
 python -m jr.build_paper          # assembles paper/main.tex from main_body.tex with the verified references

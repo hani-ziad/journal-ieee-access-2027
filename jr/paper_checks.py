@@ -164,6 +164,22 @@ check("at least half of that loss came from age",
       all(G(gR, o, 3, MS) / G(gR, o, 3) >= 0.5 for o in ("spillover", "late_closure")))
 check("the features that carry across are the new ones",
       Z("serious_spillover", "strict+new - strict", "ci_low") > 0 and Z("serious_spillover", "strict - scope", "ci_low") < 0)
+# second feature round (jr/round2.py)
+qT = pd.read_csv(jr.RESULTS / "round2_diff.csv").set_index(["outcome", "set"]); qR = pd.read_csv(RHR / "round2_diff.csv").set_index(["outcome", "set"])
+def passes(q, o, st): return q.loc[(o, st), "p_lo"] > 0 and q.loc[(o, st), "w_lo"] > 0
+R2 = [(o, st) for o in ("spillover", "serious_spillover", "late_closure") for st in ("+calendar", "+depth", "+issue model", "+all")]
+check("No idea met the rule", not any(passes(qT, o, st) and passes(qR, o, st) for o, st in R2))
+check("raise late closure on TAWOS when pooled", qT.loc[("late_closure", "+calendar"), "p_lo"] > 0)
+check("but not within projects", qT.loc[("late_closure", "+calendar"), "w_lo"] < 0)
+check("and not on Red Hat", qR.loc[("late_closure", "+calendar"), "p_lo"] < 0)
+check("help serious spillover on Red Hat", passes(qR, "serious_spillover", "+depth"))
+check("but not on TAWOS", qT.loc[("serious_spillover", "+depth"), "p_lo"] < 0)
+check("clear in neither", qT.loc[("serious_spillover", "+issue model"), "p_lo"] < 0 and qR.loc[("serious_spillover", "+issue model"), "p_lo"] < 0)
+rkT = pd.read_csv(jr.RESULTS / "round2_issue_rank.csv").set_index("ranker").auc; rkR = pd.read_csv(RHR / "round2_issue_rank.csv").set_index("ranker").auc
+check("little better than issue age alone", 0 < rkT["model"] - rkT["age"] < 0.05 and 0 < rkR["model"] - rkR["age"] < 0.05)
+check("None of the three changes plain spillover",
+      all(q.loc[("spillover", st), "p_lo"] <= 0 <= q.loc[("spillover", st), "p_hi"] for q in (qT, qR) for st in ("+calendar", "+depth", "+issue model")))
+check("added nothing that held in both sources", not any(passes(qT, o, st) and passes(qR, o, st) for o, st in R2))
 check("ranks serious spillover better inside each Red Hat project", Z("serious_spillover", "strict+new - strict", "ci_low") > 0)
 check("within a project it adds nothing in either source",
       W("planning", "serious_spillover", "strict - scope", col="ci_low") < 0 and Y("planning", "serious_spillover", "strict - scope", col="ci_low") < 0

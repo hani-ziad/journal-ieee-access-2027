@@ -160,3 +160,27 @@ Sprint2Vec (TSE 2025) names two open problems: cross-project training for teams 
 - **Hypothesis H5.** With strict+new, the three-year-old model ranks spillover and serious spillover worse than the fresh one (interval below zero) in both sources. Secondary, not tested formally: the loss grows with age; scope alone ages less than strict+new; the gain of the new features (strict+new minus strict) is still positive at age 3.
 - **Reporting.** Whatever comes out is reported, including no loss. Code: `jr/decay.py`; results: `results/<cohort>/decay_*.csv`.
 - **Added after the first results (14 Nov 2026).** An aged model also has less training data (for Red Hat, 905 sprints at age 0 against 209 at age 3), so the loss mixes staleness with training size. Control: a fresh model trained on the same number of sprints as the aged one, taken as the most recent sprints known before the test year. Loss against that model isolates staleness. H5 is still judged on the pre-registered comparison; the control is reported beside it.
+
+## 12. Second feature round (added 14 Nov 2026, written before any result of this analysis was computed)
+
+Same data, labels, per-project 70/30 time split, gradient boosting and project-cluster bootstrap as the paper.
+Base set: strict+new. Outcomes: spillover, serious spillover, late closure. Both sources, TAWOS first.
+
+A. Calendar (aimed at late closure): planned end on Friday/Saturday/Sunday (UTC), weekday of planned end,
+   weekday of start, sprint spans 24 Dec to 1 Jan.
+B. Depth and haste (aimed at spillover labels): mean and max number of earlier sprints a committed issue
+   has been in, share of committed issues with two or more earlier sprints, share of committed issues that
+   entered this sprint in the last 24 hours before its start.
+C. Issue-level model: gradient boosting per committed issue (age, earlier sprints, points, unestimated,
+   re-estimated, hours in sprint before start, committed count, sprint length), target "resolved by the
+   planned end". Sprint scores: 1 - prod(p) and mean(1 - p). Reported alone and added to the base set
+   (out-of-fold on training sprints, 5 folds grouped by sprint).
+D. By-product of C: AUC of the issue model inside each test sprint (which issue is left over), against
+   story points alone and age alone.
+
+Success rule: a set "helps" an outcome if (set - base) has a 95% interval above zero pooled AND within
+projects. Claimed only if it holds in both sources. Everything is reported, including failures.
+Issue type and priority are not used: the exports hold only their final values.
+
+- **Result.** Nothing met the rule. Calendar: late closure on TAWOS pooled only. Depth and haste: serious spillover on Red Hat only. Issue-level model: not clear in either source.
+- **Added after the first run.** The first scratch run showed +0.013 for the issue-level model on TAWOS serious spillover. Rerunning with the rows in a different order gave +0.006, so the result depended on row order (fold assignment). The issue table is now sorted and read back from file, and the issue-model step is repeated with five seeds; the spread is in `round2_issue_seeds.csv`. Code: `jr/round2.py`; results: `results/<cohort>/round2_*.csv`; issue table: `data/<cohort>/issue_frame.csv`.

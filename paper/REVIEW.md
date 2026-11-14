@@ -1,5 +1,9 @@
 # Review log
 
+## Ninth pass (14 Nov 2026, midnight): second feature round, a negative result
+
+Three ideas tried on top of strict+new with a rule fixed beforehand (clear pooled and within projects, in both sources): calendar features, depth and haste, an issue-level model. Nothing met it. Scopus check first: calendar and depth features not found in earlier sprint work; issue-level aggregation is not new (Sprint2Vec's baseline). A first scratch run showed +0.013 for the issue model on TAWOS; it did not survive a change of row order (+0.005 [-0.008, 0.019] in the stored run, 0.001 to 0.008 over five seeds), which the paper states. New subsection "A second round of features" and one conclusion sentence. 114 of 114 claim checks pass.
+
 ## Eighth pass (14 Nov 2026, late): two open problems named by Sprint2Vec
 
 1. Cross-project training: the TAWOS to Red Hat transfer test already answers it for tabular features; the transfer paragraph now says so.
