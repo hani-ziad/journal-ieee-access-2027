@@ -155,6 +155,11 @@ check("about half of the loss for late closure and most of it for spillover",
 check("The gain of the new features survives ageing", G(gR, "serious_spillover", 3, "new gain", "ci_low") > 0)
 check("a three-year-old model lost 0.06 to 0.10 AUC",
       round(min(-G(gR, o, 3) for o in AGED3), 2) == 0.06 and round(max(-G(gR, o, 3) for o in AGED3), 2) == 0.10)
+check("on Red Hat a three-year-old model loses 0.06 to 0.10 AUC",
+      round(min(-G(gR, o, 3) for o in AGED3), 2) == 0.06 and round(max(-G(gR, o, 3) for o in AGED3), 2) == 0.10)
+check("part of that loss remains when the fresh model gets no more training data",
+      G(gR, "spillover", 3, MS, "ci_high") < 0 and G(gR, "late_closure", 3, MS, "ci_high") < 0)
+check("on Red Hat a three-year-old one ranked every outcome worse than a fresh one", all(G(gR, o, 3, col="ci_high") < 0 for o in AGED3))
 check("at least half of that loss came from age",
       all(G(gR, o, 3, MS) / G(gR, o, 3) >= 0.5 for o in ("spillover", "late_closure")))
 check("the features that carry across are the new ones",
@@ -209,6 +214,14 @@ check("Here the models do transfer", Z("serious_spillover", "strict+new - scope"
 check("The gain comes from the new features", Z("serious_spillover", "strict+new - strict", "ci_low") > 0 and Z("serious_spillover", "strict - scope", "ci_low") < 0)
 check("The new features also help spillover", Z("spillover", "strict+new - strict", "ci_low") > 0 and Z("seriously_late", "strict+new - strict", "ci_low") > 0)
 check("Scope churn does not transfer", Z("scope_churn", "strict+new - scope", "ci_low") < 0 and Z("scope_churn", "strict+new - strict", "ci_low") < 0)
+check("Of three new labels only serious spillover beats scope in both sources",
+      (P("serious_spillover", "strict+new - scope", col="ci_low") > 0 and X("planning", "serious_spillover", "strict+new - scope", col="ci_low") > 0
+      and not (P("seriously_late", "strict+new - scope", col="ci_low") > 0 and X("planning", "seriously_late", "strict+new - scope", col="ci_low") > 0)
+      and not (P("scope_churn", "strict+new - scope", col="ci_low") > 0 and X("planning", "scope_churn", "strict+new - scope", col="ci_low") > 0)))
+check("only serious spillover can be ranked beyond scope in both sources",
+      (P("serious_spillover", "strict+new - scope", col="ci_low") > 0 and X("planning", "serious_spillover", "strict+new - scope", col="ci_low") > 0
+      and not (P("seriously_late", "strict+new - scope", col="ci_low") > 0 and X("planning", "seriously_late", "strict+new - scope", col="ci_low") > 0)
+      and not (P("scope_churn", "strict+new - scope", col="ci_low") > 0 and X("planning", "scope_churn", "strict+new - scope", col="ci_low") > 0)))
 check("Serious spillover can be ranked beyond committed scope in both sources; seriously late cannot, and scope churn only on Red Hat",
       P("serious_spillover", "strict+new - scope", col="ci_low") > 0 and X("planning", "serious_spillover", "strict+new - scope", col="ci_low") > 0
       and P("seriously_late", "strict+new - scope", col="ci_low") < 0 and X("planning", "seriously_late", "strict+new - scope", col="ci_low") < 0
@@ -304,6 +317,10 @@ if (R / "robust_net_benefit.csv").exists():
     r5, r9 = nb.loc[("serious_spillover", 0.5)], nb.loc[("serious_spillover", 0.9)]
     check("warning on every sprint is almost as good as any model unless warnings are costly",
           max(r5.nb_planning, r5.nb_25, r5.nb_50) - r5.nb_warn_all < 0.03)
+    check("and there a model beats warning on every sprint only when warnings are costly",
+          max(r5.nb_planning, r5.nb_25, r5.nb_50) - r5.nb_warn_all < 0.03 and min(r9.nb_planning, r9.nb_50) > r9.nb_warn_all + 0.01)
+    check("for that label a model beats warning on every sprint only when a warning is costly",
+          max(r5.nb_planning, r5.nb_25, r5.nb_50) - r5.nb_warn_all < 0.03 and min(r9.nb_planning, r9.nb_50) > r9.nb_warn_all + 0.01)
     check("does the model clearly add value", min(r9.nb_planning, r9.nb_50) > r9.nb_warn_all + 0.01)
     lcn = nb.loc["late_closure"]
     prev = float(nb.loc[("late_closure", 0.3), "prevalence"])
