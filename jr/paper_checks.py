@@ -126,6 +126,11 @@ check("on TAWOS, on the held-out subset and on Red Hat",
 check("within projects as well as across them, and burndown shape adds nothing to them",
       all(W("in-sprint", o, "ours - worki", cp, "ci_low") > 0 and Y("in-sprint", o, "ours - worki", cp, "ci_low") > 0 for o in SPILL for cp in CPS)
       and max(max(W("in-sprint", o, "ours+worki - ours", cp), Y("in-sprint", o, "ours+worki - ours", cp)) for o in ALL4 for cp in CPS) < 0.01)
+check(r"also within projects (\dPWNewSp{} on TAWOS, and \dPYNewSs{} for serious spillover on Red Hat)",
+      W("planning", "spillover", "strict+new - strict", col="ci_low") > 0 and Y("planning", "serious_spillover", "strict+new - strict", col="ci_low") > 0)
+check("They add to committed scope and team history in both sources, within projects, and when a model trained on one source is used on the other",
+      P("spillover", "strict+new - strict", col="ci_low") > 0 and X("planning", "spillover", "strict+new - strict", col="ci_low") > 0
+      and W("planning", "spillover", "strict+new - strict", col="ci_low") > 0 and Z("serious_spillover", "strict+new - strict", "ci_low") > 0)
 check("ranks serious spillover better inside each Red Hat project", Z("serious_spillover", "strict+new - strict", "ci_low") > 0)
 check("within a project it adds nothing in either source",
       W("planning", "serious_spillover", "strict - scope", col="ci_low") < 0 and Y("planning", "serious_spillover", "strict - scope", col="ci_low") < 0

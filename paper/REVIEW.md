@@ -1,5 +1,9 @@
 # Review log
 
+## Seventh pass (14 Nov 2026): lead with the positive result
+
+The four new planning-time features are the one gain that holds in both sources, within projects and from TAWOS to Red Hat, but the abstract opened with burndown shape. They now lead the abstract, the contributions (new first item) and the conclusion. Literature check: Choetkiertikul et al. (TSE 2018) used iteration counts and issue metadata (priority, description and fix-version changes, readability) but not issue age, carry-in, unestimated or re-estimated shares; Kula et al. (2021, 2022) used team dynamics; Pasuksmit et al. (EMSE 2022) studied story-point changes for single issues, not sprint outcomes, and is now cited. Sprint2Vec (TSE 2025) already uses issue text, so text features would not be new. Abstract 248 words. 84 of 84 claim checks pass.
+
 ## Sixth pass (14 Nov 2026): independent replication on Red Hat
 
 Weak points from the fifth pass and what was done:
