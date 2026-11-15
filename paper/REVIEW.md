@@ -1,5 +1,9 @@
 # Review log
 
+## Tenth pass (15 Nov 2026): third feature round, a negative result
+
+Status at sprint start plus twelve further ideas, rule and plans fixed before the runs (PLAN.md section 13). 69 comparisons: 2 cleared zero pooled, none within projects, none in both sources, consistent with chance. SonarSource as a third source was too small to confirm anything (mostly one project, no story points). New subsection "A third round of features" and the conclusion sentence now says two further rounds. Weak points left: the numbers of this round are typed, not macros, and the scripts are scratch copies; the Sonar cohort is inconclusive; many looks at the same data, so any single gain from these rounds would not have been trusted anyway. Overall outlook (my judgment, not computed): borderline, major revision likely, about 40 to 50% eventual acceptance; main risks are the small gains, repeated use of the same data, the unrewritten Introduction and Discussion, and overlap with the CCECE papers.
+
 ## Ninth pass (14 Nov 2026, midnight): second feature round, a negative result
 
 Three ideas tried on top of strict+new with a rule fixed beforehand (clear pooled and within projects, in both sources): calendar features, depth and haste, an issue-level model. Nothing met it. Scopus check first: calendar and depth features not found in earlier sprint work; issue-level aggregation is not new (Sprint2Vec's baseline). A first scratch run showed +0.013 for the issue model on TAWOS; it did not survive a change of row order (+0.005 [-0.008, 0.019] in the stored run, 0.001 to 0.008 over five seeds), which the paper states. New subsection "A second round of features" and one conclusion sentence. 114 of 114 claim checks pass.

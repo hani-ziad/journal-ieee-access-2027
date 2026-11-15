@@ -184,3 +184,13 @@ Issue type and priority are not used: the exports hold only their final values.
 
 - **Result.** Nothing met the rule. Calendar: late closure on TAWOS pooled only. Depth and haste: serious spillover on Red Hat only. Issue-level model: not clear in either source.
 - **Added after the first run.** The first scratch run showed +0.013 for the issue-level model on TAWOS serious spillover. Rerunning with the rows in a different order gave +0.006, so the result depended on row order (fold assignment). The issue table is now sorted and read back from file, and the issue-model step is repeated with five seeds; the spread is in `round2_issue_seeds.csv`. Code: `jr/round2.py`; results: `results/<cohort>/round2_*.csv`; issue table: `data/<cohort>/issue_frame.csv`.
+
+
+## 13. Third feature round (added 15 Nov 2026, plans fixed before results: results/round3/PLAN_status.md, PLAN_twelve_ideas.md)
+
+Same protocol as section 12. Rule: gain counts only if its interval is above zero pooled and within projects in both sources, then confirmed on a third source.
+- Issue status at sprint start on Red Hat (active, in review, never touched), rebuilt from the status log. Result: within-project change at most 0.01, every interval includes zero.
+- Twelve ideas on strict+new: recency weighting, pooled training, team-relative size, hidden-issue share (TAWOS only), size distribution, dynamics, ensemble, continuous target, maturity, tuned model, age distribution, compact set (11 and 12 added during the run, same rule).
+- Result: 69 idea x label x source comparisons; 2 cleared zero pooled, 0 within projects, 0 in both sources. Compact set within 0.025 AUC of the full set in every cell.
+- Third source: SonarSource Cloud, 9 projects chosen by a rule fixed before labels (amended once before any label: story-point rule dropped because story points cover under 6% of issues). Mostly one project; four new features +0.016 / +0.046 / +0.006, all intervals include zero. Inconclusive, not a confirmation.
+- Numbers for this round are typed in Section 5.4 of the paper and checked in jr/paper_checks.py, not generated as macros (scratch runs; see jr/round3/README.md).

@@ -354,5 +354,20 @@ if (R / "robust_net_benefit.csv").exists():
     check("the history-aware model raises the hit rate among the top 10\\%",
           pr("serious_spillover_median", "strict+new") > pr("serious_spillover_median", "scope"))
 
+# third round (typed numbers, scratch results in results/round3)
+r4 = pd.read_csv(jr.ROOT / "results" / "round3" / "r4_all_diff.csv")
+r3 = pd.read_csv(jr.ROOT / "results" / "round3" / "r3_rh_diff.csv")
+r5 = pd.read_csv(jr.ROOT / "results" / "round3" / "r5_sonar.csv")
+check("Together that makes 69 idea--label--source comparisons", len(r4) == 69)
+check("Only two had a pooled interval above zero, none had one within projects, and none passed in both sources",
+      (r4.p_lo > 0).sum() == 2 and (r4.w_lo > 0).sum() == 0 and not r4.both.any())
+check("every interval included zero", (r3.w_lo <= 0).all() and (r3.p_lo <= 0).all() and r3[["within_d"]].abs().max().iloc[0] <= 0.01)
+cm = r4[r4.idea.str.contains("compact")]
+check("The compact set stayed within 0.025 AUC of the full set in every comparison", cm[["pooled_d", "within_d"]].abs().max().max() <= 0.025)
+sn = r5[r5.comparison == "strict+new - strict"].set_index("outcome").pooled_d
+check("(pooled AUC) $+0.016$, $+0.046$ and $+0.006$ for spillover, serious spillover and late closure, all intervals including zero",
+      abs(sn["spillover"] - 0.016) < 0.001 and abs(sn["serious_spillover"] - 0.046) < 0.001 and abs(sn["late_closure"] - 0.006) < 0.001
+      and (r5[r5.comparison == "strict+new - strict"].p_lo <= 0).all())
+
 print(f"{n - len(fails)} of {n} checks pass")
 print("FAILS:", fails)
