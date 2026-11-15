@@ -38,6 +38,7 @@ Outcomes: late closure and spillover (as before), plus three new labels: serious
 | `jr/decay.py` | Model ageing: loss of a model that is one to three years old against a fresh one, with a size-matched control (PLAN.md section 11). |
 | `jr/round2.py` | Second feature round (PLAN.md section 12): calendar features, depth and haste, an issue-level model. A negative result: nothing held in both sources. |
 | `jr/round3/` | Third feature round (PLAN.md section 13): issue status at sprint start and twelve more ideas. A negative result; scratch scripts kept for the record, see its README. |
+| `jr/timevalid.py` | Time-valid rerun (PLAN.md section 14): the headline comparisons with every model trained only on sprints whose outcome was known before the test sprint's quarter; restricted transfer, organisation-level interval, weekday rule. Writes `paper/tables/timevalid.tex` and `tvnums.tex`. |
 | `jr/visibility.py` | Share of each project's issue numbers that an anonymous reader cannot see (private, deleted or moved), both sources. |
 | `data_export/redhat/` | Selection rule (`SELECTION.md`) and browser pull script (`pull_jira_cloud.js`) for the Red Hat cohort. |
 | `results/dev_8projects/` | Development run on the current 8-project extract, used to test the code. Not the paper's results. |
@@ -93,6 +94,10 @@ JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.decay      # m
 python -m jr.decay                # (TAWOS settings) model ageing on TAWOS
 JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.round2     # second feature round on Red Hat, about 5 min
 python -m jr.round2               # (TAWOS settings) second feature round on TAWOS, about 4 min
+python -m jr.timevalid            # (TAWOS settings) time-valid rerun on TAWOS, about 15 min
+python -m jr.timevalid transfer   # (TAWOS settings) transfer on Red Hat sprints after the TAWOS cutoff
+JR_TAWOS_DIR=data/raw/redhat JR_EXCLUDE_UNRECORDED=1 python -m jr.timevalid   # the same on Red Hat, about 30 min
+python -m jr.timevalid table      # table and text macros for the paper
 python -m jr.tables               # the paper's tables
 python -m jr.macros               # every number in the paper's text
 python -m jr.build_paper          # assembles paper/main.tex from main_body.tex with the verified references

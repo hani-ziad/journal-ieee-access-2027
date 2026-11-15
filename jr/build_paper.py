@@ -79,6 +79,7 @@ PRE = r"""% Journal draft for IEEE Access, assembled by jr/build_paper.py from m
 \newtheorem{definition}{Definition}
 \input{tables/numbers}
 \input{tables/textnums}
+\input{tables/tvnums}
 % \input is not expandable inside tabular in current LaTeX; the primitive is.
 \makeatletter\newcommand{\tabinput}[1]{\@@input #1 }\makeatother
 

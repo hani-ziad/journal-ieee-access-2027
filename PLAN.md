@@ -194,3 +194,36 @@ Same protocol as section 12. Rule: gain counts only if its interval is above zer
 - Result: 69 idea x label x source comparisons; 2 cleared zero pooled, 0 within projects, 0 in both sources. Compact set within 0.025 AUC of the full set in every cell.
 - Third source: SonarSource Cloud, 9 projects chosen by a rule fixed before labels (amended once before any label: story-point rule dropped because story points cover under 6% of issues). Mostly one project; four new features +0.016 / +0.046 / +0.006, all intervals include zero. Inconclusive, not a confirmation.
 - Numbers for this round are typed in Section 5.4 of the paper and checked in jr/paper_checks.py, not generated as macros (scratch runs; see jr/round3/README.md).
+
+
+## 14. Time-valid rerun and claim corrections after an outside referee report (15 Nov 2026)
+
+An automated referee report (Elicit, "reject, resubmit") made nine major points. Point 1 was checked against the frames and is correct:
+the per-project split pools every project's training part, so 638 of 734 nonempty TAWOS test sprints and 1,021 of 1,536 on Red Hat
+start before some training sprint of another project.
+
+Plan, written before any result (scratch file PLAN_timevalid.md, 21:15): rolling origin by calendar quarter. Test sprints are the paper's
+test split, grouped by the quarter they start in; for each quarter train only on training-split sprints (any project) whose outcome was
+known before the quarter began (known = start + sprint length + days late). Score a quarter only with at least 150 such sprints and both
+classes. Same learner, features, labels and bootstrap. Reading rule fixed beforehand: a claim survives if the time-valid interval is still
+above zero where the paper's was; it is weakened if the sign holds but the interval includes zero; it fails if the sign flips or the
+estimate falls below a third.
+
+Added after the first scratch results (marked as such): the restricted transfer test, the organisation-level interval, and the weekday
+rule for late closure. Code: `jr/timevalid.py`; results: `results/<cohort>/timevalid_*.csv`; table `paper/tables/timevalid.tex`; text
+macros `paper/tables/tvnums.tex`.
+
+Result: the in-sprint findings and the two planning gains (spillover on TAWOS, serious spillover on Red Hat, pooled and within) survive.
+The pooled spillover gain on Red Hat does not. Transfer survives on sprints after the TAWOS cutoff. The main tables keep the per-project
+split; the paper states its limit in the protocol section and rests no claim on a comparison that fails the rerun.
+
+Claim corrections made at the same time (no new analysis): the two within-project gains are for different labels and are no longer called
+a replication; "adds nothing" and "close to used up" replaced by "no clear gain" for the features and learners tested; Proposition 2
+restated as a statement about the objective a carried threshold optimises (the "only if" version was false: a perfect classifier is a
+counterexample); H4 for serious spillover reported as a wrong prediction, not as "holds"; the decision analysis called a scenario
+analysis; ageing described as a difference between training windows; the outcome named as unresolved at the planned end in the export;
+the convention for open and reopened issues stated.
+
+Not done, and why: validation of labels against team records (needs teams); making rolling origin the protocol of every table (would
+regenerate all 22 hypothesis tests and every table; the rerun covers the headline comparisons instead); intervals for the net-benefit
+table; bin counts on the calibration figure; leave-one-organisation-out training.

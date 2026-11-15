@@ -1,8 +1,26 @@
 # Review log
 
+## Eleventh pass (15 Nov 2026, night): outside referee report (Elicit, "reject, resubmit")
+
+Nine major points; all checked against the files before acting.
+1. Future training sprints (correct, reproduced: 638 of 734 TAWOS and 1,021 of 1,536 Red Hat nonempty test sprints start before a training sprint of another project). New `jr/timevalid.py`: rolling origin by quarter, plan and reading rule written before results. In-sprint findings survive (0.07 to 0.20 AUC, every pooled interval above zero). New features: spillover on TAWOS +0.030 [0.015, 0.047] pooled, +0.045 [0.025, 0.071] within; serious spillover on Red Hat +0.068 [0.038, 0.132] pooled, +0.076 [0.003, 0.131] within. Lost: pooled spillover on Red Hat, +0.016 [0.003, 0.027] becomes +0.007 [-0.024, 0.029]. Transfer on Red Hat sprints after the TAWOS cutoff (4,812 of 5,093): +0.060 [0.034, 0.084]. New section "A time-valid rerun" with its own table; protocol section states the limit.
+2. Labels not validated: cannot be fixed without teams. Outcome now named as unresolved at the planned end in the export; convention for open and reopened issues stated; said in Threats.
+3. Within-project gains are for different labels: abstract, contributions, within section, discussion and conclusion now say "one gain in each source", not a replication.
+4. Null results as proof: "adds nothing" and "close to used up" replaced by "no clear gain" for the features and learners tested.
+5. Proposition 2 false as stated (perfect classifier is a counterexample): restated as a statement about the objective a carried threshold optimises.
+6. Adapted baselines: abstract says "partial adaptations" and "our burndown-shape features".
+7. Hypothesis wording: "holds" defined as a description, Holm as the stricter reading; H4 for serious spillover reported as a wrong prediction.
+8. Decision analysis called a scenario analysis; the 0.7 threshold mentioned; ageing described as a difference between training windows.
+9. Organisations: TAWOS has 9; organisation-level interval for the spillover gain [0.011, 0.043]; Red Hat is one organisation and the paper says so.
+Extra: weekday rule for late closure (from the CCECE thread): on TAWOS the model has no clear edge within projects (-0.014 [-0.053, 0.035]); on Red Hat it does (+0.048 [0.004, 0.097]). First sentence of the abstract reworded (it was the only sentence shared with the CCECE paper; 7-gram overlap now about 0.1%). Abstract 250 words. 128 of 128 claim checks.
+
+Still weak: no label validation; the main tables still use the per-project split (the rerun covers the headline comparisons, not all 22 hypothesis tests, the decision analysis or calibration); net-benefit table has no intervals; calibration figure has no bin counts; Red Hat within-project serious-spillover interval starts at 0.003. Outlook (judgment): back to roughly 40 to 50%, not higher.
+
 ## Tenth pass (15 Nov 2026): third feature round, a negative result
 
 Status at sprint start plus twelve further ideas, rule and plans fixed before the runs (PLAN.md section 13). 69 comparisons: 2 cleared zero pooled, none within projects, none in both sources, consistent with chance. SonarSource as a third source was too small to confirm anything (mostly one project, no story points). New subsection "A third round of features" and the conclusion sentence now says two further rounds. Weak points left: the numbers of this round are typed, not macros, and the scripts are scratch copies; the Sonar cohort is inconclusive; many looks at the same data, so any single gain from these rounds would not have been trusted anyway. Overall outlook (my judgment, not computed): borderline, major revision likely, about 40 to 50% eventual acceptance; main risks are the small gains, repeated use of the same data, the unrewritten Introduction and Discussion, and overlap with the CCECE papers.
+
+Later the same day: the Introduction now states exactly what this paper shares with the CCECE paper (the reconstruction code, 7 of its 8 TAWOS projects, the ten MariaDB and MongoDB outside projects) and lists what is new. Checked against the cohort files: Confluence Cloud is the one earlier project not in the cohort here. Dual affiliation (HCT, UAEU) added. Not done: a sentence-level similarity check against the CCECE text.
 
 ## Ninth pass (14 Nov 2026, midnight): second feature round, a negative result
 

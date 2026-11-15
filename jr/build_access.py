@@ -113,7 +113,7 @@ def main():
     src = (PAPER / "main.tex").read_text()
     pre, rest = src.split(r"\begin{document}", 1)
     # number macros
-    macros = inline("tables/numbers.tex") + "\n" + inline("tables/textnums.tex") + "\n"
+    macros = inline("tables/numbers.tex") + "\n" + inline("tables/textnums.tex") + "\n" + inline("tables/tvnums.tex") + "\n"
     # body: from the abstract to the end of the bibliography
     body = rest[rest.index(r"\begin{abstract}"):rest.index(r"\end{thebibliography}") + len(r"\end{thebibliography}")]
     body = body.replace(r"\begin{IEEEkeywords}", r"\begin{keywords}").replace(r"\end{IEEEkeywords}", r"\end{keywords}")
