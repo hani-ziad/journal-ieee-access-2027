@@ -55,9 +55,10 @@ FRONT = r"""\begin{document}
 
 \title{What Predicts Sprint Spillover Without Hindsight? A Two-Source Benchmark of Feature Families on Public Jira Data}
 
-\author{\uppercase{Hani AbuSharkh}\authorrefmark{1}}
+\author{\uppercase{Hani AbuSharkh}\authorrefmark{1,2}}
 
 \address[1]{Higher Colleges of Technology, Al Ain, United Arab Emirates (e-mail: habusharkh@hct.ac.ae)}
+\address[2]{United Arab Emirates University, Al Ain, United Arab Emirates}
 %% Funding statement, if any. Delete the line if the work had no funding.
 %% \tfootnote{This work was supported in part by ...}
 
